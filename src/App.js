@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
-
+import NavigationBar from './components/appBar';
+// import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
 
+/*
 class App extends Component {
   render() {
     return (
@@ -21,6 +24,14 @@ class App extends Component {
       </div>
     );
   }
+}
+*/
+class App extends Component {
+    render() {
+        return (
+            <NavigationBar/>
+        )
+    }
 }
 
 export default App;
