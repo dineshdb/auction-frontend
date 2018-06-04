@@ -2,12 +2,11 @@ import React, {Component} from 'react';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-
+//import Search from './search.js'
+import Menu from './menu.js'
+import SearchBar from './searchbar.js'
 const styles = {
     root: {
         flexGrow: 1,
@@ -15,14 +14,11 @@ const styles = {
     flex: {
         flex: 1,
     },
-    menuButton: {
-        marginLeft: -25,
-        marginRight: 20,
-    },
-
     typography: {
-        marginRight: 30,
+        marginLeft: 200,
+        height: 40
     }
+
 };
 
 class NavigationBar extends Component {
@@ -32,16 +28,12 @@ class NavigationBar extends Component {
             <div className={classes.root}>
                 <AppBar position="sticky" color="primary">
                     <Toolbar>
-                        <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-                            <MenuIcon/>
-                        </IconButton>
+                        <Menu/>
                         <Typography variant="title" color="inherit" className={classes.typography}>
-                            E-Commerce Solution
+                           Jumanji
                         </Typography>
-                        <TextField
-                            color="inherit"
-                            label="Search"
-                            type="search" />
+                        <SearchBar/>
+
                     </Toolbar>
                 </AppBar>
             </div>
