@@ -5,7 +5,6 @@ import AppBar from '@material-ui/core/AppBar';
 import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 //import Search from './search.js'
-import Menu from './menu.js'
 import SearchBar from './searchbar.js'
 const styles = {
     root: {
@@ -28,7 +27,6 @@ class NavigationBar extends Component {
             <div className={classes.root}>
                 <AppBar position="sticky" color="primary">
                     <Toolbar>
-                        <Menu/>
                         <Typography variant="title" color="inherit" className={classes.typography}>
                            Jumanji
                         </Typography>

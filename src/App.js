@@ -1,12 +1,10 @@
 import React from 'react'
-import NavigationBar from './components/appBar/appBar.js'
-import UserList from './containers/userlist'
+import ProductDetails from './containers/home/productDetails/productDetails'
 class App extends React.Component {
     render() {
         return (
             <div>
-            <NavigationBar/>
-            <UserList/>
+                <ProductDetails/>
             </div>
 
 

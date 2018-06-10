@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {selectUser} from '../actions/index'
+import {selectUser} from '../../actions/index'
 import {bindActionCreators} from 'redux'
 import UserInfo from './userInfo'
 
