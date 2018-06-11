@@ -6,6 +6,7 @@
     "@material-ui/core": "^1.1.0",
     "@material-ui/icons": "^1.1.0",
     "@material/layout-grid": "^0.34.0",
+    "material-ui": "^0.20.1",
     "prop-types": "^15.6.1",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",

@@ -6,11 +6,8 @@ class ProductDetails extends React.Component{
     render()
     {
         return <div>
-            {this.props.products.map((product) => {
-
-                    <Property type = {product.Name} value = {product.Bid}/>
-
-                })}
+                <Property type = "Name" value = "Rupesh Shrestha"/>
+                <Property type = "Name" value = "Rupesh Shrestha"/>
         </div>
     }
 }

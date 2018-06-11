@@ -6,20 +6,19 @@ import Typography from '@material-ui/core/Typography'
 
 class Property extends React.Component {
     render() {
-
         return (
 
             <Paper elevation={4} style={{height: "100%",width: "20%"}}>
                 <Grid container>
                     <Grid item lg>
-                        <Typography variant="headline" component="h1">
+                        <Typography variant="headline" component="h6">
                             {this.props.type}
                         </Typography>
                     </Grid>
                     <Grid item lg>
                         <Typography component="h7"  style = {
                             {
-                                marginLeft: 40
+                                marginLeft: 20
                             }
                         }>
                             {this.props.value}
