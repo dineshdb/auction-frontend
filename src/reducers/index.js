@@ -1,7 +1,7 @@
 
 import {combineReducers} from 'redux'
-import userStatus from './userStatus'
+import appBarStatus from './appBarStatus'
 
 export default combineReducers({
-    userStatus
+    appBarStatus
 })

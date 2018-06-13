@@ -6,7 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {connect} from 'react-redux'
-import {logIn} from "./actions";
+import {logInClicked} from "./actions/logIn";
 
 class LoginDialogBox extends React.Component {
     constructor(props){
@@ -18,7 +18,7 @@ class LoginDialogBox extends React.Component {
 
     handleClose(event){
         this.setState({
-            open: this.props.dispatch(logIn(false))
+            open: this.props.dispatch(logInClicked(false))
         })
 
 
@@ -28,7 +28,7 @@ class LoginDialogBox extends React.Component {
             <div>
 
                 <Dialog
-                    open={this.props.userStatus.loggedIn}
+                    open={this.props.appBarStatus.logInClicked}
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
                 >
@@ -66,7 +66,7 @@ class LoginDialogBox extends React.Component {
 }
 function mapStateToProps(state){
     return {
-        userStatus: state.userStatus
+       appBarStatus: state.appBarStatus
 
     }
 }

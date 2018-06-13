@@ -7,7 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import {logIn} from './actions'
+import SearchIcon from '@material-ui/icons/Search';
+import {logInClicked} from './actions/logIn'
+import {searchClicked} from "./actions/search";
 import LoginDialogBox from './loginDialogBox'
 import {connect} from 'react-redux'
 
@@ -30,15 +32,22 @@ class LoginBar extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            logInClicked: false
+            logInClicked: false,
+            searchClicked: false
         }
     }
 
     handleLogin(event) {
         this.setState({
-            logInClicked: this.props.dispatch(logIn(true))
+            logInClicked: this.props.dispatch(logInClicked(true))
         })
     }
+    handleSearch(event) {
+        this.setState({
+            searchClicked: this.props.dispatch(searchClicked(true))
+        })
+    }
+
 
     render() {
         const {classes} = this.props;
@@ -50,8 +59,11 @@ class LoginBar extends React.Component {
                             <MenuIcon/>
                         </IconButton>
                         <Typography variant="title" color="inherit" className={classes.flex}>
-                            Title
+                            Auction
                         </Typography>
+                        <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+                            <SearchIcon onClick = {this.handleSearch.bind(this)} />
+                        </IconButton>
                         <Button onClick={this.handleLogin.bind(this)} color="inherit">Login</Button>
                     </Toolbar>
                 </AppBar>
@@ -68,7 +80,7 @@ LoginBar.propTypes = {
 
 function mapStateToProps(state){
     return {
-        userStatus: state.userStatus
+        appBarStatus: state.appBarStatus
 
     }
 }
