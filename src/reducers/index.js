@@ -1,6 +1,7 @@
-import {combineReducers} from 'redux';
-import ProductReducer from './product-reducer'
-const allReducers =  combineReducers({
-    products: ProductReducer
-});
-export default allReducers;
+
+import {combineReducers} from 'redux'
+import userStatus from './userStatus'
+
+export default combineReducers({
+    userStatus
+})

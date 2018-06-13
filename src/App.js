@@ -1,7 +1,5 @@
 import React from 'react'
-import ProductDetails from './containers/home/productDetails/productDetails'
-import image from "./images/login/x.gif"
-import Login from './components/home/login/login'
+import Login from './components/login/index'
 class App extends React.Component {
     render() {
         return (
