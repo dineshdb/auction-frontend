@@ -6,7 +6,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {connect} from 'react-redux'
-import {logInClicked} from "./actions/logIn";
+import {logInButton} from "./actions/logIn";
+import {Link} from 'react-router-dom'
 
 class LoginDialogBox extends React.Component {
     constructor(props){
@@ -16,9 +17,9 @@ class LoginDialogBox extends React.Component {
         }
     }
 
-    handleClose(event){
+    handleClose(){
         this.setState({
-            open: this.props.dispatch(logInClicked(false))
+            open: this.props.dispatch(logInButton(false))
         })
 
 
@@ -26,7 +27,7 @@ class LoginDialogBox extends React.Component {
     render() {
         return (
             <div>
-
+                {console.log(this.props.appBarStatus.logInClicked+"value")}
                 <Dialog
                     open={this.props.appBarStatus.logInClicked}
                     onClose={this.handleClose}
@@ -53,7 +54,10 @@ class LoginDialogBox extends React.Component {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClose.bind(this)} color="primary">
-                            Cancel
+                            <Link to="/" style = {{
+
+
+                            }}>Cancel</Link>
                         </Button>
                         <Button onClick={this.handleClose.bind(this)} color="primary">
                             Login

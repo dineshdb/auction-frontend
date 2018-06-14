@@ -8,10 +8,10 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import {logInClicked} from './actions/logIn'
-import {searchClicked} from "./actions/search";
-import LoginDialogBox from './loginDialogBox'
+import {logInButton} from './actions/logIn'
+import {searchButton} from "./actions/search";
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
 
 const styles = {
     root: {
@@ -37,14 +37,14 @@ class LoginBar extends React.Component {
         }
     }
 
-    handleLogin(event) {
+    handleLogin() {
         this.setState({
-            logInClicked: this.props.dispatch(logInClicked(true))
+            logInClicked: this.props.dispatch(logInButton(true))
         })
     }
-    handleSearch(event) {
+    handleSearch() {
         this.setState({
-            searchClicked: this.props.dispatch(searchClicked(true))
+            searchClicked: this.props.dispatch(searchButton(true))
         })
     }
 
@@ -64,10 +64,12 @@ class LoginBar extends React.Component {
                         <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
                             <SearchIcon onClick = {this.handleSearch.bind(this)} />
                         </IconButton>
-                        <Button onClick={this.handleLogin.bind(this)} color="inherit">Login</Button>
+                        <Button onClick={this.handleLogin.bind(this)} color="inherit">
+                            <Link to="/login" style = {{
+
+                            }}>Login</Link></Button>
                     </Toolbar>
                 </AppBar>
-                <LoginDialogBox/>
 
 
             </div>
