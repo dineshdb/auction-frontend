@@ -1,9 +1,9 @@
 import React from 'react'
 import LoginBar from './components/appBar/index'
-import { BrowserRouter as Router, Link, NavLink} from 'react-router-dom'
+import { BrowserRouter as Router} from 'react-router-dom'
 import Route from 'react-router-dom/Route'
 import LoginDialogBox from './components/appBar/loginDialogBox'
-
+import SignUpDialogBox from './components/appBar/signUp'
 class App extends React.Component {
     render() {
         return (
@@ -16,6 +16,14 @@ class App extends React.Component {
                         () => (
                             <div>
                             <LoginDialogBox/>
+                            </div>
+                        )
+                        }
+                    />
+                    <Route path = "/signup" exact strict component={
+                        () => (
+                            <div>
+                            <SignUpDialogBox/>
                             </div>
                         )
                         }

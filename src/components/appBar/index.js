@@ -68,6 +68,10 @@ class LoginBar extends React.Component {
                             <Link to="/login" style = {{
 
                             }}>Login</Link></Button>
+                        <Button onClick={this.handleLogin.bind(this)} color="inherit">
+                        <Link to="/signup" style = {{
+
+                        }}>Sign Up</Link></Button>
                     </Toolbar>
                 </AppBar>
 

@@ -1,6 +1,7 @@
 export default function appBarStatus(state={
     logInClicked: false,
-    searchClicked: false
+    searchClicked: false,
+    signUpClicked: false
     }, action){
     switch(action.type){
         case "LOG_IN_CLICKED": {
@@ -8,6 +9,9 @@ export default function appBarStatus(state={
                 }
         case "SEARCH_CLICKED":{
             return {...state,searchClicked: action.payload}
+        }
+        case "SIGNUP_CLICKED":{
+            return {...state,signUpClicked: action.payload}
         }
 
 

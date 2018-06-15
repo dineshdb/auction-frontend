@@ -6,10 +6,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {connect} from 'react-redux'
-import {logInButton} from "./actions/logIn";
+import {signUpButton} from "./actions/signUp";
 import {Link} from 'react-router-dom'
 
-class LoginDialogBox extends React.Component {
+class SignUpDialogBox extends React.Component {
     constructor(props){
         super(props)
         this.state={
@@ -19,7 +19,7 @@ class LoginDialogBox extends React.Component {
 
     handleClose(){
         this.setState({
-            open: this.props.dispatch(logInButton(false))
+            open: false
         })
 
 
@@ -27,13 +27,12 @@ class LoginDialogBox extends React.Component {
     render() {
         return (
             <div>
-                {console.log(this.props.appBarStatus.logInClicked+"value")}
                 <Dialog
                     open={true}
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="form-dialog-title">Login</DialogTitle>
+                    <DialogTitle id="form-dialog-title">Sign UPp</DialogTitle>
                     <DialogContent>
                         <TextField
                             autoFocus
@@ -60,7 +59,9 @@ class LoginDialogBox extends React.Component {
                             }}>Cancel</Link>
                         </Button>
                         <Button onClick={this.handleClose.bind(this)} color="primary">
-                            Login
+                            <Link to="/">
+                            Sign Up
+                            </Link>
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -74,4 +75,4 @@ function mapStateToProps(state){
 
     }
 }
-export default connect(mapStateToProps)(LoginDialogBox)
+export default connect(mapStateToProps)(SignUpDialogBox)
