@@ -10,36 +10,25 @@ import {signUpButton} from "./actions/signUp";
 import {Link} from 'react-router-dom'
 
 class SignUpDialogBox extends React.Component {
-    constructor(props){
-        super(props)
-        this.state={
-            open: false
-        }
-    }
-
-    handleClose(){
-        this.setState({
-            open: false
-        })
-
-
-    }
     render() {
         return (
             <div>
-                <Dialog
-                    open={true}
-                    onClose={this.handleClose}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="form-dialog-title">Sign UPp</DialogTitle>
+                    <DialogTitle id="form-dialog-title">Sign Up</DialogTitle>
                     <DialogContent>
                         <TextField
                             autoFocus
                             margin="dense"
-                            id="name"
-                            label="Email Address"
-                            type="email"
+                            id="firstName"
+                            label="First Name"
+                            type="text"
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="lastName"
+                            label="Last Name"
+                            type="text"
                             fullWidth
                         />
                         <TextField
@@ -52,19 +41,18 @@ class SignUpDialogBox extends React.Component {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.handleClose.bind(this)} color="primary">
+                        <Button color="primary">
                             <Link to="/" style = {{
 
 
                             }}>Cancel</Link>
                         </Button>
-                        <Button onClick={this.handleClose.bind(this)} color="primary">
+                        <Button color="primary">
                             <Link to="/">
                             Sign Up
                             </Link>
                         </Button>
                     </DialogActions>
-                </Dialog>
             </div>
         );
     }

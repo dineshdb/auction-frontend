@@ -12,6 +12,9 @@ import {logInButton} from './actions/logIn'
 import {searchButton} from "./actions/search";
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
+import Grid from '@material-ui/core/Grid'
+import Search from './searchBar'
+import Home from '@material-ui/icons/Home'
 
 const styles = {
     root: {
@@ -24,6 +27,9 @@ const styles = {
         marginLeft: -12,
         marginRight: 20,
     },
+    pad:{
+        paddingTop: 10
+    }
 };
 
 
@@ -32,53 +38,100 @@ class LoginBar extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            logInClicked: false,
-            searchClicked: false
+           isLoggedIn: false
         }
-    }
-
-    handleLogin() {
-        this.setState({
-            logInClicked: this.props.dispatch(logInButton(true))
-        })
-    }
-    handleSearch() {
-        this.setState({
-            searchClicked: this.props.dispatch(searchButton(true))
-        })
     }
 
 
     render() {
         const {classes} = this.props;
-        return (
-            <div >
-                <AppBar position="static">
-                    <Toolbar>
-                        <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-                            <MenuIcon/>
-                        </IconButton>
-                        <Typography variant="title" color="inherit" className={classes.flex}>
-                            Auction
-                        </Typography>
-                        <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-                            <SearchIcon onClick = {this.handleSearch.bind(this)} />
-                        </IconButton>
-                        <Button onClick={this.handleLogin.bind(this)} color="inherit">
-                            <Link to="/login" style = {{
+        if(!this.state.isLoggedIn){
+            return (
+                <div >
+                    <AppBar position="static">
+                        <Toolbar>
+                            <Grid container spacing = {24} spacing={40}>
+                                <Grid item xs={1}>
+                                <IconButton color="inherit" aria-label="Menu">
+                                    <MenuIcon/>
+                                </IconButton>
+                                </Grid>
+                                <Grid item xs={1}>
+                                
+                                <Button className={classes.pad} color= "inherit">
+                                    <Link to="/" className={classes.pad}>Home
+                                    </Link>
+                                </Button>
+                                
+                                </Grid>
+                                <Grid item xs={1}>
+                                <Button color="inherit">
+                                    <Link to="/" className={classes.pad}>About</Link>
+                                </Button>
+                                </Grid>
+                                <Grid item xs={7}>
+                                <Search/>
+                                </Grid>
+                                <Grid item xs = {1}>
+                                <Button color="inherit" style={{paddingTop: 15}} >
+                                    <Link to="/login">Login</Link></Button>
+                                </Grid>
+                                <Grid item xs={1}>
+                                <Button color="inherit">
+                                <Link to="/signup" style = {{
 
-                            }}>Login</Link></Button>
-                        <Button onClick={this.handleLogin.bind(this)} color="inherit">
-                        <Link to="/signup" style = {{
-
-                        }}>Sign Up</Link></Button>
-                    </Toolbar>
-                </AppBar>
+                                }}>Sign Up</Link></Button>
+                                </Grid>
+                                </Grid>
+                        </Toolbar>
+                    </AppBar>
 
 
-            </div>
-        );
-    }
+                </div>
+            );
+        }
+        else{
+            return (
+                 <div >
+                    
+                    <AppBar position="static">
+                        <Toolbar>
+                            <Grid container spacing = {24} spacing={40}>
+                                <Grid item xs={1}>
+                                <IconButton color="inherit" aria-label="Menu">
+                                    <MenuIcon/>
+                                </IconButton>
+                                </Grid>
+                                <Grid item xs={1}>
+                                
+                                <Button className={classes.pad} color= "inherit">
+                                    <Link to="/" className={classes.pad}>Home
+                                    </Link>
+                                </Button>
+                                
+                                </Grid>
+                                <Grid item xs={1}>
+                                <Button color="inherit">
+                                    <Link to="/" className={classes.pad}>About</Link>
+                                </Button>
+                                </Grid>
+                                <Grid item xs={7}>
+                                <Search/>
+                                </Grid>
+                                <Grid item xs = {2}>
+                                <Button color="inherit" style={{paddingTop: 15}} >
+                                    <Link to="/login">Logout</Link></Button>
+                                </Grid>
+                                
+                                </Grid>
+                        </Toolbar>
+                    </AppBar>
+
+
+                </div>
+            )
+        }
+}
 }
 LoginBar.propTypes = {
     classes: PropTypes.object.isRequired,
