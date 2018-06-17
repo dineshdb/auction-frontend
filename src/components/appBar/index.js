@@ -74,10 +74,10 @@ class LoginBar extends React.Component {
                                 </Grid>
                                 <Grid item xs = {1}>
                                 <Button color="inherit" style={{paddingTop: 15}} >
-                                    <Link to="/login">Login</Link></Button>
+                                    <Link to="/login">Sign in</Link></Button>
                                 </Grid>
                                 <Grid item xs={1}>
-                                <Button color="inherit">
+                                <Button color="secondary" variant="outlined">
                                 <Link to="/signup" style = {{
 
                                 }}>Sign Up</Link></Button>

@@ -4,6 +4,7 @@ import Route from 'react-router-dom/Route'
 import Home from './views/home'
 import Login from './views/login'
 import SignUp from './views/signup'
+
 class App extends React.Component {
     render() {
         return (
