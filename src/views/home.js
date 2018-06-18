@@ -14,12 +14,35 @@ class Home extends React.Component
     }
     handleNext()
         {
+            if(this.state.index < 8)
+            {
             this.setState({
                 index: this.state.index+4
             })
             console.log(this.state.index)
-
+            }
+            else{
+                this.setState({
+                    index: 0
+                })
+            }
         }
+
+        
+    handleBack()
+        {
+            if(this.state.index > 4){
+            this.setState({
+                index: this.state.index-4
+            })}
+            else{
+                this.setState({
+                    index: 0
+                })
+            }
+        }
+
+        
    
     render(){
         return (
@@ -31,6 +54,12 @@ class Home extends React.Component
                 onClick = {this.handleNext.bind(this)}
             >
             Next
+                
+            </Button>
+            <Button 
+                onClick = {this.handleBack.bind(this)}
+            >
+            Back
                 
             </Button>
             </div>

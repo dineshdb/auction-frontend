@@ -64,6 +64,27 @@
                 Category: "Movie Props, Board Games xcv",
                 Description: "The original replicas of the famous xcv",
                 Bid: "$1200"
+            },
+            {
+                id: 11,
+                Name: "Jumanjisdfsd",
+                Category: "Movie Props, Board Games xcv",
+                Description: "The original replicas of the famous xcv",
+                Bid: "$1200"
+            },
+            {
+                id: 12,
+                Name: "Jumanjisdfsd",
+                Category: "Movie Props, Board Games xcv",
+                Description: "The original replicas of the famous xcv",
+                Bid: "$1200"
+            },
+            {
+                id: 13,
+                Name: "Jumanjisdfsd",
+                Category: "Movie Props, Board Games xcv",
+                Description: "The original replicas of the famous xcv",
+                Bid: "$1200"
             }
         
     ] 
