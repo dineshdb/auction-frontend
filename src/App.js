@@ -27,9 +27,7 @@ class App extends React.Component {
                         }
                     />
                      <Route path = "/productDetails/:id" component={
-                        () => (
-                            <ProductDetails/>
-                        )
+                       ProductDetails
                         }
                     />
                 </div>

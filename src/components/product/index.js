@@ -52,7 +52,7 @@ class Products extends React.Component {
         <div>
             <Grid container spacing={24}>
                 {this.state.localProducts.map((product)=>
-                
+                   
                 <Grid key = {product.id} item xs={3}>
                 <Link to = {`/productDetails/${product.id}`} >
                 <Paper className={classes.root} elevation={0} square style={{marginBottom: 0
