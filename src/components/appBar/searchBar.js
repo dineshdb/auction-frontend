@@ -48,6 +48,9 @@ class SearchBar extends React.Component{
         else{
             return(
                 <div>
+                     <IconButton className={classes.pad} onClick = {this.handleSearchIcon.bind(this)} color="inherit" aria-label="Search">
+                    <SearchIcon/>
+                    </IconButton>
                     <TextField className = {classes.pad}
                             autoFocus
                             className = {classes.searchText}

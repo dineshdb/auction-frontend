@@ -4,6 +4,7 @@ import Route from 'react-router-dom/Route'
 import Home from './views/home'
 import Login from './views/login'
 import SignUp from './views/signup'
+import ProductDetails from './views/productDetail'
 
 class App extends React.Component {
     render() {
@@ -22,6 +23,12 @@ class App extends React.Component {
                     <Route path = "/signup" exact strict component={
                         () => (
                             <SignUp/>
+                        )
+                        }
+                    />
+                     <Route path = "/productDetails/:id" component={
+                        () => (
+                            <ProductDetails/>
                         )
                         }
                     />
