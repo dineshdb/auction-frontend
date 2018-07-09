@@ -26,7 +26,6 @@ class App extends React.Component {
                 <div >
                     <Route path = "/" exact strict render = {() => {
                         var userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
-                        console.log("User token is ",userToken)
                         if(!userToken){
                             return <PublicHome/>
                         }
@@ -36,7 +35,6 @@ class App extends React.Component {
                                 return <Home/>
                             }
                             if(userToken.userRole == "ADMIN"){
-                                console.log("In home")
                                 return <AdminHome/>
                             }
                         }
@@ -79,7 +77,7 @@ class App extends React.Component {
                     />
                     <Route path = "/error" exact strict render = {() => <PageNotFound errorMessage = "Invalid page" />}
                     />
-                    <Route path = "/newEvent" render = {() => {
+                    {/* <Route path = "/newEvent" render = {() => {
                         var userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
                         if(!userToken){
                             return <PublicHome/>
@@ -148,7 +146,7 @@ class App extends React.Component {
                              }
                         }
 
-                        }} />
+                        }} /> */}
 
                      
                     

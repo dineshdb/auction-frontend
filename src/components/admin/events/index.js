@@ -141,11 +141,11 @@ class Events extends React.Component {
                             <TableCell>Pending</TableCell>
                         )}
                         {(n.organizer !== null) && ( 
-                        <TableCell >{n.organizer.organizerName}</TableCell>
+                        <TableCell >{n.organizer.name}</TableCell>
                         )
                         }
                         {(n.organizer !== null) && ( 
-                        <TableCell >{n.organizer.organizerEmail}</TableCell>
+                        <TableCell >{n.organizer.email}</TableCell>
                         )
                         }
                         {(n.organizer === null) && ( 

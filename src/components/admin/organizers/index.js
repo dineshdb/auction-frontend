@@ -62,10 +62,10 @@ class Organizers extends React.Component {
                         <TableCell component="th" scope="row">
                         {n.userName}
                         </TableCell>
-                        <TableCell >{n.organizerName}</TableCell>
-                        <TableCell >{n.organizerEmail}</TableCell>
-                        <TableCell >{n.organizerPhone}</TableCell>
-                        <TableCell >{n.organizerAddress}</TableCell>
+                        <TableCell >{n.name}</TableCell>
+                        <TableCell >{n.email}</TableCell>
+                        <TableCell >{n.phone}</TableCell>
+                        <TableCell >{n.address}</TableCell>
                     </TableRow>
                     );
                 })}

@@ -201,7 +201,7 @@ class LoginForm extends React.Component{
                         variant="display2"
                         style={{color: "white",fontSize: "30"}}
                         >
-                        Welcome to ICT
+                        Welcome To Auction
                     </Typography>
                     <br/>
                     <br/>
@@ -218,7 +218,6 @@ class LoginForm extends React.Component{
                         style={{color: "white",fontSize: "20px"}}
                         
                         >
-                        Login with your <b>ICT ID</b>
                     </Typography>
                     <br/>
                    

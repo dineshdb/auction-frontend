@@ -9,6 +9,7 @@ import {Link} from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
 import {USER_TOKEN} from '../../definitions/index'
 import {Redirect} from 'react-router-dom'
+import Typography from '@material-ui/core/Typography'
 
 
 
@@ -18,7 +19,7 @@ const styles = {
 
     root: {
         flexGrow: 1,
-        backgroundColor: "#b4ce84",
+        backgroundColor: "#66adce",
        
     },
     flex: {
@@ -107,7 +108,7 @@ class HomeBar extends React.Component {
                                     color="inherit"
                                     variant="contained"
                                     >
-                                    SignUp
+                                    Register
                                     </Button>
                                 </Link>
                                 </Grid>
@@ -134,7 +135,7 @@ class HomeBar extends React.Component {
                 <div >
                     <AppBar position="static" className={classes.root}>
                         <Toolbar>
-                            <Grid container spacing = {24} spacing={40}>
+                            <Grid container spacing = {24} >
                                 <Grid item xs={1}>
                                 <Link to="/" className={classes.pad}>
                                     <Button color="inherit">

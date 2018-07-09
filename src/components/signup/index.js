@@ -17,19 +17,19 @@ class SignUpForm extends React.Component{
         super(props)
         this.state={
                 userName: "",
-                organizerName: "",
+                name: "",
                 email: "",
                 password: "",
                 phone: "",
                 address:"",
                 userNameValid: true,
-                organizerNameValid: true,
+                nameValid: true,
                 emailValid: true,
                 passwordValid: true,
                 phoneValid: true,
                 addressValid: true,
                 userNameLabel: "Username",
-                organizerNameLabel: "Organizer Name",
+                nameLabel: "Full Name",
                 emailLabel: "Email",
                 passwordLabel: "Password",
                 phoneLabel: "Phone",
@@ -43,8 +43,8 @@ class SignUpForm extends React.Component{
     
         validateSubmit(){
      
-            const {userNameValid,organizerNameValid,emailValid,passwordValid,phoneValid,addressValid} = this.state
-            return !(userNameValid && organizerNameValid && emailValid && passwordValid && phoneValid && addressValid)
+            const {userNameValid,nameValid,emailValid,passwordValid,phoneValid,addressValid} = this.state
+            return !(userNameValid && nameValid && emailValid && passwordValid && phoneValid && addressValid)
             
              
         }
@@ -56,11 +56,11 @@ class SignUpForm extends React.Component{
             this.validateUserName()
            
         }
-        handleOrganizerName(event){
+        handleName(event){
             this.setState({
-                organizerName: event.target.value
+                name: event.target.value
             })
-            this.validateOrganizerName()
+            this.validateName()
            
         }
         handleEmail(event){
@@ -106,18 +106,18 @@ class SignUpForm extends React.Component{
                 })
             }
         }
-        validateOrganizerName(){
-            const {organizerName} = this.state
-            if(organizerName.length > 0){
+        validateName(){
+            const {name} = this.state
+            if(name.length > 0){
                 this.setState({
-                    organizerNameValid: true,
-                    organizerNameLabel: "Organizer Name"
+                    nameValid: true,
+                    nameLabel: "Full Name"
                 })
             }
             else{
                 this.setState({
-                    organizerNameValid: false,
-                    organizerNameLabel: "Invalid"
+                    nameValid: false,
+                    nameLabel: "Invalid"
                 })
             }
         }
@@ -190,20 +190,20 @@ class SignUpForm extends React.Component{
        
         handleSubmit(event){
             event.preventDefault()
-            const {userName,organizerName,password,email,phone,address} = this.state
+            const {userName,name,password,email,phone,address} = this.state
             const signUpObject = {
                 userName: userName,
-                organizerName: organizerName,
+                name: name,
                 userPassword: password,
-                organizerEmail: email,
-                organizerPhone: phone,
-                organizerAddress: address
+                email: email,
+                phone: phone,
+                address: address
             }
-            axios.post('http://localhost:8080/organizers'
-            ,(signUpObject),{crossDomain: true})
-            .then(response => {
-        
-            })
+            // axios.post('http://localhost:8080/organizers'
+            // ,(signUpObject),{crossDomain: true})
+            // .then(response => {
+            //
+            // })
             this.setState({
                 triggerSubmit: true
             })
@@ -225,7 +225,7 @@ class SignUpForm extends React.Component{
                         align="center"
                         variant = "display1"
                     >
-                    Welcome To ICT 
+                    Welcome To Auction
                     </Typography>
                    
                     <Typography 
@@ -233,7 +233,7 @@ class SignUpForm extends React.Component{
                         variant = "body1"
                         
                     >
-                    Create your id to register event 
+                    Create your id
                     </Typography>
                     <form onSubmit={this.handleSubmit.bind(this)} style={{marginLeft:20,marginRight: 20,marginTop: 20,marginBottom: 20}}>
                     <div>
@@ -250,13 +250,13 @@ class SignUpForm extends React.Component{
                         </div>
                         <div>
                     <TextField
-                            error={!this.state.organizerNameValid}
+                            error={!this.state.nameValid}
                             margin="dense"
                             type="text"
-                            placeholder="Organizer Name"
-                            label={this.state.organizerNameLabel}
-                            onChange={this.handleOrganizerName.bind(this)}
-                            onBlur = {this.validateOrganizerName.bind(this)}
+                            placeholder="FullName"
+                            label={this.state.nameLabel}
+                            onChange={this.handleName.bind(this)}
+                            onBlur = {this.validateName.bind(this)}
                             fullWidth
                           
                         />

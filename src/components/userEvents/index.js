@@ -91,7 +91,7 @@ class Events extends React.Component {
                         {(n.accepted == false) && (
                             <TableCell>Pending</TableCell>
                         )}
-                        <TableCell>{n.organizer.organizerName}</TableCell>
+                        <TableCell>{n.organizer.name}</TableCell>
                         <TableCell >{n.eventStartDate}</TableCell>
                         <TableCell >{n.eventEndDate}</TableCell>
                         <TableCell >{n.eventDurationInDays}</TableCell>
