@@ -1,19 +1,19 @@
 import React from 'react'
 import HomeBar from '../components/appBar/index'
 import Footer from '../components/footer/index'
-import LoginBar from '../components/login/index'
-
-class Login extends React.Component
+import NewEvent from '../components/event/index'
+class Event extends React.Component
 {
+    
     render(){
         return (
             <div>
                
             <HomeBar/>
-            <LoginBar/>
-            <Footer/>
+            <NewEvent/>
+            <Footer style={{sticky: bottom}}/>
             </div>
             )
 }
 }
-export default Login;
+export default Event;
