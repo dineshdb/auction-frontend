@@ -25,21 +25,23 @@ class App extends React.Component {
             <Router>
                 <div >
                     <Route path = "/" exact strict render = {() => {
-                        var userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
-                        if(!userToken){
-                            return <PublicHome/>
-                        }
-                       
-                        else{
-                            if(userToken.userRole == "ORG"){
-                                return <Home/>
-                            }
-                            if(userToken.userRole == "ADMIN"){
-                                return <AdminHome/>
-                            }
-                        }
+
+                        // var userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
+                        // if(!userToken){
+                        //     return <PublicHome/>
+                        // }
+                        //
+                        // else{
+                        //     if(userToken.userRole == "ORG"){
+                        //         return <Home/>
+                        //     }
+                        //     if(userToken.userRole == "ADMIN"){
+                        //         return <AdminHome/>
+                        //     }
+                        // }
+                        return <Home/>
                     }
-                }
+                    }
                     />
                     <Route path = "/login" exact strict render = {() => {
                          var userToken = JSON.parse(localStorage.getItem(USER_TOKEN))

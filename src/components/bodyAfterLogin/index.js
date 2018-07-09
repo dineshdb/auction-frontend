@@ -9,81 +9,19 @@ import {STYLES} from '../../definitions/index'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
+import ImageUploader from 'react-images-upload';
 
 class Body extends React.Component{
     constructor(props){
         super(props)
-        this.state={
-            createEventButton: false
-
-        }
 
     }
-    handleNewEvent(){
-        this.setState({
-            createEventButton: true
-        })
-    }
+
     render(){
-        const {classes} = this.props
-        if(!this.state.createEventButton){
-            return (
-                    <div>
-                       
-                        <br/>
-                    
-                    <Grid container spacing={24}>
-                    <Grid item xs={12}>
-                   
-                    </Grid>
-                   
-                   
-                    <Grid item xs={12}>
-                    <Link to = "/newEvent">
-                        <Button 
-                         variant = "contained" 
-                        size = "large" 
-                        className = {classes.button} 
-                        onClick = {this.handleNewEvent.bind(this)}
-                        >
-                        Create New Event
-                    </Button>
-                    </Link>
-                    </Grid>
-                    <Grid item xs={4}>
-                    <Link to = "/showEvents">
-                        <Button 
-                         variant = "contained" 
-                        size = "large" 
-                        className = {classes.button} 
-                        onClick = {this.handleNewEvent.bind(this)}
-                        >
-                        Show Events
-                    </Button>
-                    </Link>
-                    </Grid>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                   
-                    </Grid>
-                
-                   
+        return <div>
 
-                </div>
-                
-                
-            )
-        }
-        else{
-            return (
-                <EventForm/>
-            )
-        }
+        </div>
+
     }
 
 }

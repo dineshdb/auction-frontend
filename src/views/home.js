@@ -4,6 +4,7 @@ import Renderer from '../components/newUserDetails'
 import {USER_TOKEN} from '../components/../definitions/index'
 import Body from '../components/bodyAfterLogin/index'
 import Footer from '../components/footer/index'
+import SearchBar from '../components/searchbar/index'
 class Home extends React.Component
 {
     
@@ -11,9 +12,12 @@ class Home extends React.Component
         return (
             <div>
             <HomeBar/>
+                <SearchBar/>
             <Body/>
-            <Renderer/>
+
             <br/>
+                <br/>
+                <br/>
                 <br/>
                 <br/>
                 <br/>

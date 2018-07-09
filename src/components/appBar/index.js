@@ -10,6 +10,10 @@ import Grid from '@material-ui/core/Grid'
 import {USER_TOKEN} from '../../definitions/index'
 import {Redirect} from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
+import ShoppingCart from '@material-ui/icons/ShoppingCart'
+import Notifications from '@material-ui/icons/Notifications'
+import IconButton from '@material-ui/core/IconButton'
+import Icon from '@material-ui/core/Icon'
 
 
 
@@ -48,14 +52,22 @@ class HomeBar extends React.Component {
     }
     componentDidMount(){
         var userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
-        
-        if(userToken){
-            this.setState({
-                isOnline: userToken.isOnline,
-                userId: userToken.id,
-                userName: userToken.userName
-            })
-        }
+        //TODO userToken
+        // if(userToken){
+        //     this.setState({
+        //         isOnline: userToken.isOnline,
+        //         userId: userToken.id,
+        //         userName: userToken.userName
+        //     })
+        // }
+        /*
+            Remove the following code after the api has been made
+         */
+        this.setState({
+                    isOnline: true,
+                    userId: 12,
+                    userName: "Rupesh"
+                })
 
         
     }
@@ -134,37 +146,42 @@ class HomeBar extends React.Component {
             return (
                 <div >
                     <AppBar position="static" className={classes.root}>
-                        <Toolbar>
+
                             <Grid container spacing = {24} >
-                                <Grid item xs={1}>
-                                <Link to="/" className={classes.pad}>
+                                <Grid item xs={6}>
+
                                     <Button color="inherit">
-                                    Home
+                                    Hi {this.state.userName}
                                     </Button>
-                                </Link>
+                                    |
+                                    <Button color="inherit">
+                                        Daily Deals
+                                    </Button>
+                                    |
+                                    <Button color="inherit">
+                                        Sell
+                                    </Button>
+                                    |
+                                    <Button color="inherit">
+                                        Help & Support
+                                    </Button>
 
                                 </Grid>
-                                <Grid item xs={8}>
-                               
+                                <Grid item xs={4}>
                                 </Grid>
-                                <Grid item xs={1}>
-                                
-                                    <Button color="inherit" onClick={this.handleLogOut.bind(this)}>
-                                    LogOut
-                                    </Button>
-                               
+                                <Grid>
+                                    <IconButton>
+                                        <Notifications/>
+
+                                    </IconButton>
+                                    <IconButton>
+                                        <ShoppingCart/>
+                                    </IconButton>
                                 </Grid>
-                                <Grid item xs={1}>
-                                
-                                <Button color="inherit">
-                                    {this.state.userName}
-                                </Button>
-                           
-                            </Grid>
-                            
+                                    item xs={2}
                                 </Grid>
                                
-                        </Toolbar>
+
                     </AppBar>
                     
              

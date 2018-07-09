@@ -13,6 +13,7 @@
     "react": "^16.4.1",
     "react-datepicker": "^1.5.0",
     "react-dom": "^16.4.1",
+    "react-images-upload": "^1.1.99",
     "react-multiple-datepicker": "^0.1.0",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
