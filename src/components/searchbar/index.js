@@ -2,32 +2,41 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
 import axios from 'axios'
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 import Divider from '@material-ui/core/Divider'
 import {Redirect} from 'react-router-dom'
-
-
-
+import Paper from '@material-ui/core/Paper'
+import DialogContent from '@material-ui/core/DialogContent'
+import ExpandMore from '@material-ui/icons/ExpandMore'
+import ExpandLess from '@material-ui/icons/ExpandLess'
 
 const styles = theme => ({
     root: {
-        flexGrow: 1,
+        flexGrow: 0,
         backgroundColor: "#66adce",
         marginTop: "0px"
 
 
+    },
+    paper:{
+      paddingTop: "30px",
+      paddingBottom: "30px",
+      paddingLeft: "30px",
+      paddingRight: "30px",
+      backgroundColor: "#66adce",
+    },
+    link: {
+        color: "white"
+    },
+    button: {
+        marginTop: "10px",
+        color: "white"
     },
     bootstrapRoot: {
         padding: 0,
@@ -62,6 +71,7 @@ const styles = theme => ({
     },
     nested: {
         paddingLeft: theme.spacing.unit * 4,
+
     }
 });
 
@@ -77,13 +87,33 @@ class SearchBar extends React.Component {
             search: false,
             categoryOpen: false,
             categories: [],
-            selectedCategory: "select category"
+            selectedCategory: "Categories"
 
         }
     }
     componentDidMount()
         {
             let categories = [
+                "watches",
+                "jewellery",
+                "artifacts",
+                "arts",
+                "watches",
+                "jewellery",
+                "artifacts",
+                "arts",
+                "watches",
+                "jewellery",
+                "artifacts",
+                "arts",
+                "watches",
+                "jewellery",
+                "artifacts",
+                "arts",
+                "watches",
+                "jewellery",
+                "artifacts",
+                "arts",
                 "watches",
                 "jewellery",
                 "artifacts",
@@ -138,12 +168,38 @@ class SearchBar extends React.Component {
             return (
                 <div >
                     <Divider/>
-                    <AppBar position="static" className={classes.root}>
+                    <AppBar
+                        position="static"
+                        className={classes.root}
+                        elevation="0px"
+                    >
                         <Grid container spacing={24}>
-                            <Grid item xs={4}>
-                            </Grid>
-                            <Grid item xs={4}>
+                            <Grid
+                                item
+                                xs={6}
+                            >
+                                <Button
+                                    onClick = {this.handleCategoryClick.bind(this)}
+                                    className={classes.button}
+                                >
+                                    {this.state.selectedCategory}
+                                    {this.state.categoryOpen?<ExpandLess/>:<ExpandMore/>}
 
+                                </Button>
+                                <Button
+                                    className={classes.button}
+                                >
+                                    Ending Today
+                                </Button>
+                                <Button
+                                    className={classes.button}
+                                >
+                                    New Today
+                                </Button>
+                            </Grid>
+
+
+                            <Grid item xs={4}>
                                 <TextField
                                     style={{color: "white"}}
                                     name="Search"
@@ -166,50 +222,12 @@ class SearchBar extends React.Component {
                                 />
                             </Grid>
                             <Grid item xs={2}>
-                                <List>
-                                <ListItem button
-                                          color="inherit"
-                                          onClick={this.handleCategoryClick}
-                                          style={{
-                                              color: "black",
-                                              backgroundColor: "#e0e0e0",
-                                              borderRadius: "5px"
-                                          }}
-                                >
-
-                                    {this.state.selectedCategory}
-                                    {this.state.categoryOpen ? <ExpandLess /> : <ExpandMore />}
-                                </ListItem>
-                                <Collapse in={this.state.categoryOpen} timeout="auto" unmountOnExit>
-                                    <List
-                                        component="div"
-                                        disablePadding
-                                    >
-                                        {this.state.categories.map((category,key) => {
-                                            return <div>
-                                                    <ListItem
-                                                        key={key}
-                                                        button
-                                                        className={classes.nested}
-                                                        onClick = {this.handleSelectedCategory(category)}
-                                                    >
-                                                        {category}
-                                                    </ListItem>
-                                                </div>
-                                        })}
-
-                                    </List>
-                                </Collapse>
-                                </List>
-                            </Grid>
-                            <Grid item xs={2}>
                                 <Button
                                     variant="contained"
-                                    color="inherit"
                                     onClick={this.handleSearchButton.bind(this)}
-                                    style={{
-                                        marginTop: "10px"
-                                    }}
+                                    className={classes.button}
+                                    style={{color: "black"}}
+
                                 >
                                     Search
                                 </Button>
@@ -222,6 +240,75 @@ class SearchBar extends React.Component {
                         </Grid>
 
                     </AppBar>
+                    <Collapse
+                        in={this.state.categoryOpen}
+                        >
+                        <Paper
+                            className={classes.paper}
+                        >
+                            <Grid container spacing = {24}>
+                                <Grid item xs="3">
+                                    {this.state.categories.map((category,key)=> {
+                                        if (key < 5)
+                                        return(
+                                            <div>
+                                                <Link to = "#" className = {classes.link}>
+                                                    {category}
+                                                </Link>
+                                                <br/>
+                                            </div>
+                                        )
+
+                                    })}
+                                </Grid>
+                                <Grid item xs = "3">
+                                    {this.state.categories.map((category,key)=> {
+                                        if (key >= 5 && key < 10)
+                                            return(
+                                                <div>
+                                                    <Link to = "#" className = {classes.link}>
+                                                        {category}
+                                                    </Link>
+                                                    <br/>
+                                                </div>
+                                            )
+
+                                    })}
+                                </Grid>
+                                <Grid item xs = "3">
+
+                                    {this.state.categories.map((category,key)=> {
+                                        if (key >= 10 && key < 15)
+                                            return(
+                                                <div>
+                                                    <Link to = "#" className = {classes.link}>
+                                                        {category}
+                                                    </Link>
+                                                    <br/>
+                                                </div>
+                                            )
+
+                                    })}
+                                </Grid>
+                                <Grid item xs = "3">
+
+                                    {this.state.categories.map((category,key)=> {
+                                        if (key >= 15 && key < 20)
+                                            return(
+                                                <div>
+                                                    <Link to = "#" className = {classes.link}>
+                                                        {category}
+                                                    </Link>
+                                                    <br/>
+                                                </div>
+                                            )
+
+                                    })}
+                                </Grid>
+
+                            </Grid>
+                        </Paper>
+                    </Collapse>
                     {
                         //TODO The link below should be for /search/category=""
                     }

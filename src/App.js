@@ -6,14 +6,11 @@ import PublicHome from './views/public/home'
 import Login from './views/login'
 import SignUp from './views/signup'
 import {Redirect} from 'react-router-dom'
-import NewEvent from './views/newEvent'
 import PageNotFound from './views/404'
 import {USER_TOKEN} from './definitions/index'
 import AdminHome from './views/admin/index'
-import Events from './views/admin/events'
-import UserEvent from './views/events'
 import Organizers from './views/admin/users'
-
+import Sell from './views/sell'
 class App extends React.Component {
     constructor(props){
         super(props)
@@ -44,7 +41,7 @@ class App extends React.Component {
                     }
                     />
                     <Route path = "/login" exact strict render = {() => {
-                         var userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
+                         let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
                          if(!userToken){
                             return <Login/>
                         }
@@ -61,12 +58,22 @@ class App extends React.Component {
                                 <AdminHome/>
                             )
                       }
-                    
+
                     }
-                
+
+                    />
+                    <Route path = "/sell" exact strict render = {() => {
+
+                        return (
+                            <Sell/>
+                        )
+                    }
+
+                    }
+
                     />
                     <Route path = "/signup" exact strict render = {() => {
-                        var userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
+                        let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
                         if(!userToken){
                             return <SignUp/>
                         }

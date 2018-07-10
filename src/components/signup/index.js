@@ -4,13 +4,48 @@ import PropTypes from 'prop-types'
 import {Link } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
-import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
-import {connect} from 'react-redux'
-import {addUser} from './action'
 import axios from 'axios'
 import Typography from '@material-ui/core/Typography'
 import {Redirect} from 'react-router-dom'
+
+const styles = theme => ({
+    bootstrapRoot: {
+        padding: 0,
+        'label + &': {
+            marginTop: theme.spacing.unit * 3,
+        },
+    },
+    bootstrapInput: {
+        borderRadius: 4,
+        backgroundColor: theme.palette.common.white,
+        border: '1px solid #ced4da',
+        fontSize: 16,
+        padding: '10px 12px',
+        width: 'calc(100% - 24px)',
+        transition: theme.transitions.create(['border-color', 'box-shadow']),
+        fontFamily: [
+            '-apple-system',
+            'BlinkMacSystemFont',
+            '"Segoe UI"',
+            'Roboto',
+            '"Helvetica Neue"',
+            'Arial',
+            'sans-serif',
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
+        ].join(','),
+        '&:focus': {
+            borderColor: '#80bdff',
+            boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+        },
+    },
+    bootstrapFormLabel: {
+        fontSize: 18,
+    },
+});
+
 
 class SignUpForm extends React.Component{
     constructor(props){
@@ -213,27 +248,34 @@ class SignUpForm extends React.Component{
         }
 
         render(){
+            const {classes} = this.props
             return(
                 <div style={{marginTop: 40}}>
                     <Grid container spacing = {24}>
-                    <Grid item xs={3}>
+                    <Grid item xs={4}>
                     </Grid>
-                    <Grid item xs={6}>
-                    <Paper elevation={6} square>
+                    <Grid item xs={4}>
+
                     <br/>
                     <Typography 
                         align="center"
-                        variant = "display1"
+                        style={{
+                            fontWeight: "lighter",
+                            fontSize: "30px"
+                        }}
                     >
-                    Welcome To Auction
+                    Welcome To BidStellar
                     </Typography>
                    
                     <Typography 
                         align="center"
-                        variant = "body1"
+                        style={{
+                            fontWeight: "lighter",
+                            fontSize: "15px"
+                        }}
                         
                     >
-                    Create your id
+                    This will only take less than a minute !!!
                     </Typography>
                     <form onSubmit={this.handleSubmit.bind(this)} style={{marginLeft:20,marginRight: 20,marginTop: 20,marginBottom: 20}}>
                     <div>
@@ -246,6 +288,17 @@ class SignUpForm extends React.Component{
                             onChange={this.handleUserName.bind(this)}
                             onBlur = {this.validateUserName.bind(this)}
                             fullWidth
+                            InputProps={{
+                                disableUnderline: true,
+                                classes: {
+                                    root: classes.bootstrapRoot,
+                                    input: classes.bootstrapInput,
+                                },
+                            }}
+                            InputLabelProps={{
+                                shrink: true,
+                                className: classes.bootstrapFormLabel,
+                            }}
                         />
                         </div>
                         <div>
@@ -258,6 +311,17 @@ class SignUpForm extends React.Component{
                             onChange={this.handleName.bind(this)}
                             onBlur = {this.validateName.bind(this)}
                             fullWidth
+                            InputProps={{
+                                disableUnderline: true,
+                                classes: {
+                                    root: classes.bootstrapRoot,
+                                    input: classes.bootstrapInput,
+                                },
+                            }}
+                            InputLabelProps={{
+                                shrink: true,
+                                className: classes.bootstrapFormLabel,
+                            }}
                           
                         />
                          </div>
@@ -271,7 +335,17 @@ class SignUpForm extends React.Component{
                             label={this.state.emailLabel}
                             onChange={this.handleEmail.bind(this)}
                             onBlur ={this.validateEmail.bind(this)}
-                            
+                            InputProps={{
+                                disableUnderline: true,
+                                classes: {
+                                    root: classes.bootstrapRoot,
+                                    input: classes.bootstrapInput,
+                                },
+                            }}
+                            InputLabelProps={{
+                                shrink: true,
+                                className: classes.bootstrapFormLabel,
+                            }}
                             fullWidth
                         />
                          </div>
@@ -287,7 +361,17 @@ class SignUpForm extends React.Component{
                            label= {this.state.passwordLabel}
                            onChange={this.handlePassword.bind(this)}
                            onBlur = {this.validatePassword.bind(this)}
-                           
+                        InputProps={{
+                            disableUnderline: true,
+                            classes: {
+                                root: classes.bootstrapRoot,
+                                input: classes.bootstrapInput,
+                            },
+                        }}
+                        InputLabelProps={{
+                            shrink: true,
+                            className: classes.bootstrapFormLabel,
+                        }}
                            fullWidth
                         />
                          </div>
@@ -302,7 +386,17 @@ class SignUpForm extends React.Component{
                             label={this.state.phoneLabel}
                             onChange={this.handlePhone.bind(this)}
                             onBlur= {this.validatePhone.bind(this)}
-                            
+                            InputProps={{
+                                disableUnderline: true,
+                                classes: {
+                                    root: classes.bootstrapRoot,
+                                    input: classes.bootstrapInput,
+                                },
+                            }}
+                            InputLabelProps={{
+                                shrink: true,
+                                className: classes.bootstrapFormLabel,
+                            }}
                             fullWidth
                         />
                          </div>
@@ -318,6 +412,17 @@ class SignUpForm extends React.Component{
                             onChange={this.handleAddress.bind(this)}
                             onBlur={this.validateAddress.bind(this)}
                             fullWidth
+                            InputProps={{
+                                disableUnderline: true,
+                                classes: {
+                                    root: classes.bootstrapRoot,
+                                    input: classes.bootstrapInput,
+                                },
+                            }}
+                            InputLabelProps={{
+                                shrink: true,
+                                className: classes.bootstrapFormLabel,
+                            }}
                         />
                          </div>
                     
@@ -346,7 +451,7 @@ class SignUpForm extends React.Component{
                     </Grid>
                 
                     </form> 
-                    </Paper>
+
                     </Grid>
                     <Grid item xs={3}>
                     </Grid>
@@ -360,9 +465,8 @@ class SignUpForm extends React.Component{
         }
     
 }
-function mapStateToProps(state){
-    return {
-        newUsers: state.newUsers
-    }
-}
-export default connect(mapStateToProps)(SignUpForm);
+
+SignUpForm.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+export default withStyles(styles)(SignUpForm);

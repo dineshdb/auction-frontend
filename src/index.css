@@ -2,8 +2,9 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  background: #a09e96;
+  background: #e0e0e0;
   text-decoration-color: #b4ce84;
+  font-weight: lighter;
 }
 a{
   text-decoration: none;

@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper'
 export default function(){
     return <div>
         <Paper position="sticky" color="secondary" square elevation={4}
-            style={{color: "white",backgroundColor: "#dfffcc"}}
+            style={{color: "white",backgroundColor: "#9d9d9d"}}
         >
         <Grid container spacing= {24}>
             <Grid item xs={4}>

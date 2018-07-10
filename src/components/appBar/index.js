@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
-import Button from '@material-ui/core/Button'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
@@ -12,8 +11,8 @@ import {Redirect} from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
 import ShoppingCart from '@material-ui/icons/ShoppingCart'
 import Notifications from '@material-ui/icons/Notifications'
-import IconButton from '@material-ui/core/IconButton'
-import Icon from '@material-ui/core/Icon'
+import Button from '@material-ui/core/Button'
+
 
 
 
@@ -33,9 +32,6 @@ const styles = {
         marginLeft: -12,
         marginRight: 20,
     },
-    pad:{
-        paddingTop: 10
-    }
 };
 
 
@@ -64,7 +60,7 @@ class HomeBar extends React.Component {
             Remove the following code after the api has been made
          */
         this.setState({
-                    isOnline: true,
+                    isOnline: false,
                     userId: 12,
                     userName: "Rupesh"
                 })
@@ -106,7 +102,7 @@ class HomeBar extends React.Component {
                                 <Grid item xs={1}>
                                 </Grid>
                                 <Grid item xs={1}>
-                                <Link to="/" className={classes.pad}>
+                                <Link to="/">
                                     <Button color="inherit">
                                     Home
                                     </Button>
@@ -115,7 +111,7 @@ class HomeBar extends React.Component {
                                 <Grid item xs={8}>
                                 </Grid>
                                 <Grid item xs={1}>
-                                <Link to="/signup" className={classes.pad}>
+                                <Link to="/signup">
                                     <Button 
                                     color="inherit"
                                     variant="contained"
@@ -123,9 +119,9 @@ class HomeBar extends React.Component {
                                     Register
                                     </Button>
                                 </Link>
-                                </Grid>
+                                </Grid >
                                 <Grid item xs={1}>
-                                <Link to="/login" className={classes.pad}>
+                                <Link to="/login">
                                     <Button color="inherit">
                                     Login
                                     </Button>
@@ -158,9 +154,11 @@ class HomeBar extends React.Component {
                                         Daily Deals
                                     </Button>
                                     |
+                                    <Link to = "/sell">
                                     <Button color="inherit">
                                         Sell
                                     </Button>
+                                    </Link>
                                     |
                                     <Button color="inherit">
                                         Help & Support
@@ -169,18 +167,17 @@ class HomeBar extends React.Component {
                                 </Grid>
                                 <Grid item xs={4}>
                                 </Grid>
-                                <Grid>
-                                    <IconButton>
+                                <Grid item xs = {2}>
+                                    <Button>
                                         <Notifications/>
 
-                                    </IconButton>
-                                    <IconButton>
+                                    </Button>
+                                    <Button>
                                         <ShoppingCart/>
-                                    </IconButton>
+                                    </Button>
                                 </Grid>
-                                    item xs={2}
                                 </Grid>
-                               
+
 
                     </AppBar>
                     
@@ -198,7 +195,7 @@ HomeBar.propTypes = {
 
 function mapStateToProps(state){
     return {
-        
+
 
     }
 }
