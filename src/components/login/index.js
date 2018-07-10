@@ -198,10 +198,9 @@ class LoginForm extends React.Component{
                     <br/>
                     <Typography 
                         align="center"
-                        variant="display2"
-                        style={{color: "white",fontSize: "30"}}
+                        style={{color: "black",fontSize: "50px",fontWeight: "lighter"}}
                         >
-                        Welcome To Auction
+                        Welcome To BidStellar
                     </Typography>
                     <br/>
                     <br/>

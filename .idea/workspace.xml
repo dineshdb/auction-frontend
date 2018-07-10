@@ -2,28 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="87643b62-0b13-41ea-82bc-8f17add18fd4" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/logobar/index.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/sellProductForm/index.js" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/calendar/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/event/dateInfo.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/event/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/newUserDetails.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/userEvents/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/views/event.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/views/events.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/views/newEvent.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/App.js" afterPath="$PROJECT_DIR$/src/App.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/appBar/index.js" afterPath="$PROJECT_DIR$/src/components/appBar/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/bodyAfterLogin/index.js" afterPath="$PROJECT_DIR$/src/components/bodyAfterLogin/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/footer/index.js" afterPath="$PROJECT_DIR$/src/components/footer/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/searchbar/index.js" afterPath="$PROJECT_DIR$/src/components/searchbar/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/signup/index.js" afterPath="$PROJECT_DIR$/src/components/signup/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/index.css" afterPath="$PROJECT_DIR$/src/index.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/views/admin/index.js" afterPath="$PROJECT_DIR$/src/views/admin/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/views/home.js" afterPath="$PROJECT_DIR$/src/views/home.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/views/public/home.js" afterPath="$PROJECT_DIR$/src/views/public/home.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/views/signup.js" afterPath="$PROJECT_DIR$/src/views/signup.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/login/index.js" afterPath="$PROJECT_DIR$/src/components/login/index.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -73,7 +53,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/searchbar/index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="156">
@@ -85,11 +65,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/components/login/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="239">
+              <caret line="200" column="62" lean-forward="false" selection-start-line="200" selection-start-column="62" selection-end-line="200" selection-end-column="62" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="home.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/views/public/home.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="90">
-              <caret line="6" column="1" lean-forward="true" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
+              <caret line="6" column="1" lean-forward="false" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
               </folding>
@@ -101,7 +91,7 @@
         <entry file="file://$PROJECT_DIR$/src/components/appBar/index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-180">
-              <caret line="108" column="39" lean-forward="true" selection-start-line="108" selection-start-column="39" selection-end-line="108" selection-end-column="39" />
+              <caret line="108" column="39" lean-forward="false" selection-start-line="108" selection-start-column="39" selection-end-line="108" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -115,7 +105,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/components/login/index.js" />
         <option value="$PROJECT_DIR$/src/components/bodyAfterLogin/index.js" />
         <option value="$PROJECT_DIR$/src/views/signup.js" />
         <option value="$PROJECT_DIR$/src/views/admin/index.js" />
@@ -130,6 +119,7 @@
         <option value="$PROJECT_DIR$/src/App.js" />
         <option value="$PROJECT_DIR$/src/views/home.js" />
         <option value="$PROJECT_DIR$/src/components/searchbar/index.js" />
+        <option value="$PROJECT_DIR$/src/components/login/index.js" />
       </list>
     </option>
   </component>
@@ -145,8 +135,8 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-13" />
-    <option name="y" value="249" />
+    <option name="x" value="174" />
+    <option name="y" value="647" />
     <option name="width" value="1260" />
     <option name="height" value="688" />
   </component>
@@ -212,6 +202,13 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
               <item name="footer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ecommerce-frontend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ecommerce-frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="login" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ecommerce-frontend" type="b2602c69:ProjectViewProjectNode" />
@@ -289,15 +286,15 @@
       <option name="presentableId" value="Default" />
       <updated>1531145268207</updated>
       <workItem from="1531145280656" duration="12056000" />
-      <workItem from="1531193355697" duration="13734000" />
+      <workItem from="1531193355697" duration="14164000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25790000" />
+    <option name="totallyTimeSpent" value="26220000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-13" y="249" width="1260" height="688" extended-state="0" />
+    <frame x="174" y="647" width="1260" height="688" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14124294" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -378,16 +375,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/login/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1497">
-          <caret line="231" column="58" lean-forward="false" selection-start-line="231" selection-start-column="58" selection-end-line="231" selection-end-column="58" />
-          <folding>
-            <element signature="e#0#25#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/views/signup.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -439,7 +426,7 @@
         <state relative-caret-position="247">
           <caret line="25" column="41" lean-forward="false" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
           <folding>
-            <element signature="e#0#26#0" expanded="true" />
+            <element signature="e#0#26#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -485,7 +472,7 @@
         <state relative-caret-position="309">
           <caret line="277" column="35" lean-forward="false" selection-start-line="277" selection-start-column="35" selection-end-line="277" selection-end-column="35" />
           <folding>
-            <element signature="e#0#25#0" expanded="true" />
+            <element signature="e#0#25#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -503,7 +490,7 @@
     <entry file="file://$PROJECT_DIR$/src/components/appBar/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-180">
-          <caret line="108" column="39" lean-forward="true" selection-start-line="108" selection-start-column="39" selection-end-line="108" selection-end-column="39" />
+          <caret line="108" column="39" lean-forward="false" selection-start-line="108" selection-start-column="39" selection-end-line="108" selection-end-column="39" />
           <folding />
         </state>
       </provider>
@@ -531,7 +518,7 @@
     <entry file="file://$PROJECT_DIR$/src/views/public/home.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
-          <caret line="6" column="1" lean-forward="true" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
+          <caret line="6" column="1" lean-forward="false" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>
@@ -545,6 +532,14 @@
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/login/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="239">
+          <caret line="200" column="62" lean-forward="false" selection-start-line="200" selection-start-column="62" selection-end-line="200" selection-end-column="62" />
+          <folding />
         </state>
       </provider>
     </entry>
