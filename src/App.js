@@ -10,7 +10,9 @@ import PageNotFound from './views/404'
 import {USER_TOKEN} from './definitions/index'
 import AdminHome from './views/admin/index'
 import Organizers from './views/admin/users'
+import {MuiThemeProvider} from '@material-ui/core/styles'
 import Sell from './views/sell'
+import theme from './theme'
 class App extends React.Component {
     constructor(props){
         super(props)
@@ -19,6 +21,7 @@ class App extends React.Component {
 
     render() {
         return (
+            <MuiThemeProvider theme={theme}>
             <Router>
                 <div >
                     <Route path = "/" exact strict render = {() => {
@@ -42,7 +45,10 @@ class App extends React.Component {
                     />
                     <Route path = "/login" exact strict render = {() => {
                          let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
-                         if(!userToken){
+                        /*
+                        complement the logic below
+                         */
+                        if(userToken){
                             return <Login/>
                         }
                         else{
@@ -74,7 +80,11 @@ class App extends React.Component {
                     />
                     <Route path = "/signup" exact strict render = {() => {
                         let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
-                        if(!userToken){
+                        /*
+                            Complement the login below
+                         */
+
+                        if(userToken){
                             return <SignUp/>
                         }
                         else{
@@ -162,6 +172,7 @@ class App extends React.Component {
                     
                 </div>
             </Router>
+            </MuiThemeProvider>
 
 
         )

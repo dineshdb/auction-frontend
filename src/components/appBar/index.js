@@ -22,8 +22,6 @@ const styles = {
 
     root: {
         flexGrow: 1,
-        backgroundColor: "#66adce",
-       
     },
     flex: {
         flex: 1,
@@ -34,6 +32,15 @@ const styles = {
     },
     link:{
         textDecoration: "none"
+    },
+
+    typoButton: {
+        fontSize: "20px",
+        fontWeight: "lighter",
+        color: "#ffffff"
+
+
+
     }
 };
 
@@ -50,7 +57,7 @@ class HomeBar extends React.Component {
         }
     }
     componentDidMount(){
-        var userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
+        let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
         //TODO userToken
         // if(userToken){
         //     this.setState({
@@ -71,7 +78,7 @@ class HomeBar extends React.Component {
         
     }
     handleLogOut(){
-        var userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
+        let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
         if(userToken){
            localStorage.removeItem(USER_TOKEN)
            this.setState({
@@ -93,7 +100,10 @@ class HomeBar extends React.Component {
         
         console.log("new state",this.state)
         const {classes} = this.props;
-        if(!this.state.isOnline){
+        /*
+        complement the logic below of if
+         */
+        if(this.state.isOnline){
             return (
                 <div >
                     {
@@ -108,10 +118,9 @@ class HomeBar extends React.Component {
                                 <Link to="/" className={classes.link}>
                                     <Typography
                                         style={{
-                                            fontSize: "30px",
-                                            color: "white",
-                                            fontWeight: "lighter"
+                                            fontSize: "34px",
                                         }}
+                                        className={classes.typoButton}
                                     >
                                     {Site}
                                     </Typography>
@@ -121,18 +130,18 @@ class HomeBar extends React.Component {
                                 </Grid>
                                 <Grid item xs={1}>
                                 <Link to="/signup">
-                                    <Button 
-                                    color="inherit"
-                                    variant="contained"
-                                    >
-                                    Register
+                                    <Button
+                                        color="secondary"
+                                        className={classes.typoButton}
+                                    >Register
                                     </Button>
                                 </Link>
                                 </Grid >
                                 <Grid item xs={1}>
                                 <Link to="/login">
-                                    <Button color="inherit">
-                                    Login
+                                    <Button color="secondary"
+                                            className={classes.typoButton}>
+                                       Login
                                     </Button>
                                 </Link>
                                 </Grid>
@@ -155,21 +164,21 @@ class HomeBar extends React.Component {
                             <Grid container spacing = {24} >
                                 <Grid item xs={6}>
 
-                                    <Button color="inherit">
+                                    <Button color="inherit" className={classes.typoButton}>
                                     Hi {this.state.userName}
                                     </Button>
                                     |
-                                    <Button color="inherit">
+                                    <Button color="inherit" className={classes.typoButton}>
                                         Daily Deals
                                     </Button>
                                     |
                                     <Link to = "/sell">
-                                    <Button color="inherit">
+                                    <Button color="inherit" className={classes.typoButton}>
                                         Sell
                                     </Button>
                                     </Link>
                                     |
-                                    <Button color="inherit">
+                                    <Button color="inherit" className={classes.typoButton}>
                                         Help & Support
                                     </Button>
 
