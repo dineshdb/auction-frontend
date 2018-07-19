@@ -2,7 +2,6 @@ import React from 'react'
 
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
-import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import {withStyles} from '@material-ui/core/styles'
@@ -18,6 +17,14 @@ const styles = theme => ({
       paddingTop: theme.spacing.unit * 2,
       paddingBottom: theme.spacing.unit * 2,
       
+    },
+    button:{
+        backgroundColor: "#9d9d9d",
+        color: "white",
+        '&:hover':{
+            opacity: "0.7",
+            color: "black"
+        }
     },
     bootstrapRoot: {
         padding: 0,
@@ -187,115 +194,93 @@ class LoginForm extends React.Component{
             const {classes} = this.props
             return(
                 <div style={{marginTop: 40, marginBottom: 40, marginRight: 20, marginLeft: 20}}>
-                    <br/>
-                    <br/>
-
-                   
-                    <Grid container spacing = {24}>
-                    <Grid item xs={8}>
-                    </Grid>
-                    <Grid item xs={4}>
-                    <br/>
-                    <Typography 
-                        align="center"
-                        style={{color: "black",fontSize: "50px",fontWeight: "lighter"}}
-                        >
-                        Welcome To BidStellar
-                    </Typography>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    
-                    <br/>
-                    <Typography 
-                        align="center"
-                        style={{color: "white",fontSize: "20px"}}
-                        
-                        >
-                    </Typography>
-                    <br/>
-                   
                     <form onSubmit={this.handleSubmit.bind(this)} >
                     <div>
-                    <TextField
-                            style={{color: "white"}}
-                            name="UserName"
-                            margin="dense"
-                            id="UserName"
-                            type="text"
-                            error={!this.state.userNameValid}
-                            placeholder="Username"
-                            onChange={this.handleUserName.bind(this)}
-                            onBlur = {this.validateUserName.bind(this)}
-                            
-                            fullWidth
-                            InputProps={{
-                                disableUnderline: true,
-                                classes: {
-                                  root: classes.bootstrapRoot,
-                                  input: classes.bootstrapInput,
-                                },
-                              }}
-                              InputLabelProps={{
-                                shrink: true,
-                                className: classes.bootstrapFormLabel,
-                              }}
-                        />
+                        <Grid container spacing={24}>
+                            <Grid item xs="4">
+                            </Grid>
+                            <Grid item xs="4">
+                                <div>
+                                <TextField
+                                    style={{color: "white"}}
+                                    name="UserName"
+                                    margin="dense"
+                                    id="UserName"
+                                    type="text"
+                                    error={!this.state.userNameValid}
+                                    placeholder="Username"
+                                    onChange={this.handleUserName.bind(this)}
+                                    onBlur = {this.validateUserName.bind(this)}
+
+                                    fullWidth
+                                    InputProps={{
+                                        disableUnderline: true,
+                                        classes: {
+                                            root: classes.bootstrapRoot,
+                                            input: classes.bootstrapInput,
+                                        },
+                                    }}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                        className: classes.bootstrapFormLabel,
+                                    }}
+                                />
+                                </div>
+
+                        <div>
+                            <TextField
+                                error={!this.state.userPasswordValid}
+                                margin="dense"
+                                id="Password"
+                                type="password"
+                                placeholder="Password"
+                                onChange={this.handleUserPassword.bind(this)}
+                                onBlur = {this.validateUserPassword.bind(this)}
+                                fullWidth
+                                InputProps={{
+                                    disableUnderline: true,
+                                    classes: {
+                                        root: classes.bootstrapRoot,
+                                        input: classes.bootstrapInput,
+                                    },
+                                }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                    className: classes.bootstrapFormLabel,
+                                }}
+
+                            />
+                        </div>
+                                <Grid container spacing={24}>
+                                    <Grid item xs = {9}>
+                                    </Grid>
+                                    <Grid item xs = {3}>
+                                        <Button
+
+                                            disabled = {!this.validateSubmit.bind(this)}
+                                            variant = "contained"
+                                            type="submit"
+                                            color="inherit"
+                                            className={classes.button}
+
+                                        >
+                                            Login
+
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+
+                            </Grid>
+
+                                <Grid item xs = {4}>
+
+                                </Grid>
+                            </Grid>
+
                     </div>
-                    <div>
-                    <TextField
-                            error={!this.state.userPasswordValid}
-                            margin="dense"
-                            id="Password"
-                            type="password"
-                            placeholder="Password"
-                            onChange={this.handleUserPassword.bind(this)}
-                            onBlur = {this.validateUserPassword.bind(this)}
-                            fullWidth
-                            InputProps={{
-                                disableUnderline: true,
-                                classes: {
-                                  root: classes.bootstrapRoot,
-                                  input: classes.bootstrapInput,
-                                },
-                              }}
-                              InputLabelProps={{
-                                shrink: true,
-                                className: classes.bootstrapFormLabel,
-                              }}
-                          
-                        />
-                    </div>    
-                    <Grid container spacing={24} style={{marginTop: 10}}
-                        >
-                        <Grid item xs={8}>
-                        </Grid>
-                       <Grid item xs = {4}>
-                        <Button 
-
-                        disabled = {!this.validateSubmit.bind(this)}
-                        variant = "contained" 
-                        type="submit" 
-                        color="inherit" 
-                        style = {{marginBottom: 15,marginTop: 5}}
-        
-                        >
-                        Login
-                        
-                        </Button>
-                       </Grid>
-
-                    </Grid>
-                
                     </form> 
                    
-                    </Grid>
-                    </Grid>  
+
                 
                 {this.state.fireRedirect && (
                     <Redirect to = "/" />

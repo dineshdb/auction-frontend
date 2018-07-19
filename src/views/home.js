@@ -5,6 +5,7 @@ import Body from '../components/bodyAfterLogin/index'
 import Footer from '../components/footer/index'
 import SearchBar from '../components/searchbar/index'
 import HomeImage from '../assets/images/home.jpg'
+import ProductsBody from '../components/body/index'
 class Home extends React.Component
 {
     
@@ -14,7 +15,8 @@ class Home extends React.Component
             <HomeBar/>
                 <SearchBar/>
             <Body/>
-                <img src = {HomeImage} style={{width: "100%",height: "100%"}}/>
+                {/*<img src = {HomeImage} style={{width: "100%",height: "30%"}}/>*/}
+                <ProductsBody/>
                 <Footer/>
         
         

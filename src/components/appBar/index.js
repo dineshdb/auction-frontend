@@ -32,9 +32,12 @@ const styles = {
         marginLeft: -12,
         marginRight: 20,
     },
+    link:{
+        textDecoration: "none"
+    }
 };
 
-
+const Site = "BidStellar.com"
 class HomeBar extends React.Component {
 
     constructor(props){
@@ -102,10 +105,16 @@ class HomeBar extends React.Component {
                                 <Grid item xs={1}>
                                 </Grid>
                                 <Grid item xs={1}>
-                                <Link to="/">
-                                    <Button color="inherit">
-                                    Home
-                                    </Button>
+                                <Link to="/" className={classes.link}>
+                                    <Typography
+                                        style={{
+                                            fontSize: "30px",
+                                            color: "white",
+                                            fontWeight: "lighter"
+                                        }}
+                                    >
+                                    {Site}
+                                    </Typography>
                                 </Link>
                                 </Grid>
                                 <Grid item xs={8}>

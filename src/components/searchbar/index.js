@@ -32,7 +32,11 @@ const styles = theme => ({
       backgroundColor: "#66adce",
     },
     link: {
-        color: "white"
+        color: "white",
+        '&:hover': {
+            textDecoration: "underline"
+        }
+
     },
     button: {
         marginTop: "10px",
@@ -252,7 +256,8 @@ class SearchBar extends React.Component {
                                         if (key < 5)
                                         return(
                                             <div>
-                                                <Link to = "#" className = {classes.link}>
+                                                <Link to = "#"
+                                                    className = {classes.link}>
                                                     {category}
                                                 </Link>
                                                 <br/>
@@ -296,7 +301,10 @@ class SearchBar extends React.Component {
                                         if (key >= 15 && key < 20)
                                             return(
                                                 <div>
-                                                    <Link to = "#" className = {classes.link}>
+                                                    <Link
+                                                        to = "#"
+                                                        className={classes.link}
+                                                        >
                                                         {category}
                                                     </Link>
                                                     <br/>
