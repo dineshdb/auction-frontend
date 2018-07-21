@@ -13,25 +13,24 @@ import Divider from '@material-ui/core/Divider'
 import {Redirect} from 'react-router-dom'
 import Paper from '@material-ui/core/Paper'
 import DialogContent from '@material-ui/core/DialogContent'
+import AppBar from '@material-ui/core/AppBar'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import ExpandLess from '@material-ui/icons/ExpandLess'
-
+import IconButton from '@material-ui/core/IconButton'
+import Icon from '@material-ui/core/Icon'
+import Search from '@material-ui/icons/Search'
 
 const styles = theme => ({
     root: {
         flexGrow: 0,
         marginTop: "0px",
         fontWeight: "lighter",
-        backgroundColor: "#2bc6ea"
 
 
     },
     paper:{
-      paddingTop: "30px",
-      paddingBottom: "30px",
-      paddingLeft: "30px",
-      paddingRight: "30px",
-        backgroundColor: "#2bc6ea"
+      padding: "30px",
+        backgroundColor: "#2196F3"
     },
     link: {
         fontWeight: "lighter",
@@ -42,7 +41,7 @@ const styles = theme => ({
 
     },
     button: {
-        marginTop: "10px",
+        margin: "10px",
         color: "white",
         fontWeight: "lighter",
         fontSize: "15px"
@@ -178,16 +177,18 @@ class SearchBar extends React.Component {
             return (
                 <div >
                     <Divider/>
-                    <Toolbar
+                    <AppBar
                         position="static"
                         className={classes.root}
                         elevation="0px"
+
                     >
-                        <Grid container spacing={24}>
+                        <Grid container spacing={24} >
                             <Grid
                                 item
                                 xs={6}
                             >
+                                <Toolbar>
                                 <Button
                                     onClick = {this.handleCategoryClick.bind(this)}
                                     className={classes.button}
@@ -206,10 +207,12 @@ class SearchBar extends React.Component {
                                 >
                                     New Today
                                 </Button>
+                                </Toolbar>
                             </Grid>
 
 
-                            <Grid item xs={4}>
+                            <Grid item xs={5}>
+                                <Toolbar>
                                 <TextField
                                     style={{color: "white"}}
                                     name="Search"
@@ -230,32 +233,23 @@ class SearchBar extends React.Component {
                                         className: classes.bootstrapFormLabel,
                                     }}
                                 />
+
+                                    <IconButton>
+                                        <Search/>
+                                    </IconButton>
+
+                                </Toolbar>
                             </Grid>
-                            <Grid item xs={2}>
-                                <Button
-                                    variant="contained"
-                                    onClick={this.handleSearchButton.bind(this)}
-                                    className={classes.button}
-                                    color="primary"
-
-                                >
-                                    Search
-                                </Button>
-                            </Grid>
-
-
-
-
-
                         </Grid>
 
-                    </Toolbar>
+                    </AppBar>
                     <Collapse
                         in={this.state.categoryOpen}
                         >
                         <Paper
                             className={classes.paper}
-                            color="secondary"
+
+
                         >
                             <Grid container spacing = {24}>
                                 <Grid item xs="3">

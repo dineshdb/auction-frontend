@@ -2,10 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import green from '@material-ui/core/colors/green';
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
+import axios from 'axios'
+import moment from 'moment'
+import DatePicker from 'react-datepicker'
+import ToolBar from '@material-ui/core/Toolbar'
+import 'react-datepicker/dist/react-datepicker-cssmodules.css'
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
 
 const styles = theme => ({
     root: {
@@ -17,8 +26,31 @@ const styles = theme => ({
       marginLeft: "20px",
         marginTop: "40px"
     },
+    button: {
+        margin: theme.spacing.unit*15,
+
+    },
+    card: {
+
+        marginTop: "8%",
+        height: "100%"
+    },
+    media: {
+
+        paddingTop: '56.25%',
+        height: "52.57%"// 16:9
+    },
+    date:{
+      margin: theme.spacing.unit*2
+    },
     margin: {
         margin: theme.spacing.unit,
+    },
+    leftName: {
+        marginTop: "10px",
+        marginBottom: "30px",
+        fontSize: "25px",
+        fontWeight: "lighter"
     },
     bootstrapRoot: {
         padding: 0,
@@ -54,10 +86,74 @@ const styles = theme => ({
     bootstrapFormLabel: {
         fontSize: 18,
     },
+    cardTitle: {
+        fontSize: "30px",
+        fontWeight: "lighter"
+    },
+    cardP: {
+        fontSize: "15px",
+        fontWeight: "lighter"
+    },
+    typo:{
+      width: "65%"
+    }
 });
 
 
 class SellProductForm extends React.Component {
+
+
+    constructor(props){
+        super(props)
+        this.state={
+            selectedImage: null,
+            imageUrl: null,
+            category: "",
+            title: "",
+            description: "",
+            eventDate: moment(),
+            eventTime: "",
+            eventDuration: "",
+            categories: {}
+
+        }
+        this.fileInput = React.createRef()
+    }
+    componentDidMount(){
+        /*
+        Fetch the categories available
+         */
+
+        /*
+            Uncomment the following code
+         */
+
+        // const {url} = "" //url is the api's url to get the categories
+        // axios.get(url,{crossDomain: true})
+        //     .then((res) => {
+        //     this.setState({
+        //         categories: res.data.categories
+        //     })
+        //     })
+        //     .catch((err)=>{
+        //     console.log("Hey got error",err)
+        //     })
+
+        /*
+            Remove the below code after the api has been made
+         */
+        let categories = ["Artifact","Art","Fashion","Vehicle","Instrument"]
+        this.setState({
+            categories: categories
+        })
+    }
+
+    handleSelectionOfImage = (event) => {
+        this.setState({
+            selectedImage: event.target.files[0],
+            imageUrl: URL.createObjectURL(event.target.files[0])
+        })
+    }
 
     render(){
         const {classes} = this.props
@@ -70,113 +166,193 @@ class SellProductForm extends React.Component {
                         color: "black",
                         fontWeight: "lighter"
                     }}
+                    align="center"
                 >
-                    Product details
+                    Product Details
+
                 </Typography>
 
-                <Paper>
-                    <div
-                        className={classes.paper}
-                    >
-                        <Grid container spacing="24">
-                            <Grid item xs = "2">
-                                <div
-                                    style={{
-                                        marginTop: "10px",
-                                        marginBottom: "30px"
-                                    }}
-                                >
-                               <Typography
+                    <Grid container spacing="24">
+                        <Grid item xs={12}>
+                            <Paper className={classes.paper}>
+                                <Grid container spacing={24} className={classes.margin}>
+                                    <Grid item xs={4} style={{ borderRight: '0.1em solid ',borderRightColor: "#bfbfbf", padding: '0.5em'}}>
+                                        <div>
+                                            <Typography className={classes.cardTitle}>
+                                                Preview
+                                            </Typography>
+                                            <Card className={classes.card}>
+                                                <CardMedia
+                                                    className={classes.media}
+                                                    image={this.state.imageUrl}
+                                                    title={this.state.title}
+                                                />
+                                                <CardContent>
+                                                    <Typography gutterBottom variant="headline" component="h2" style={{fontWeight: "lighter"}}>
+                                                        {this.state.title}
+                                                    </Typography>
+                                                    <Typography className={classes.cardP}>
+                                                        {this.state.description}
+                                                    </Typography>
+                                                </CardContent>
+                                            </Card>
+                                        </div>
+                                        <input style={{display: 'none'}}
+                                               ref = {fileInput => this.fileInput = fileInput}
+                                               type="file"
+                                               onChange={this.handleSelectionOfImage}
+                                        />
+                                        <Button
+                                            onClick = {()=>this.fileInput.click()}
+                                            variant="outlined"
+                                            color={"primary"}
+                                            className={classes.button}
+                                            size="large"
+                                        >
+                                            Upload Image
+                                        </Button>
 
-                                   style={{
-                                       fontSize: "25px",
-                                       fontWeight: "lighter"
 
-                                   }}
-                               >Title</Typography>
-                                </div>
-                                <div
-                                    style={{
-                                        marginTop: "10px",
-                                        marginBottom: "30px"
-                                    }}
-                                >
-                                    <Typography
 
-                                        style={{
-                                            fontSize: "25px",
-                                            fontWeight: "lighter"
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <ToolBar >
+                                            <Grid container spacing="24">
+                                                <Grid item xs="3" >
+                                                    <Typography
+                                                        className={classes.leftName}>
+                                                        Title*
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item xs="9">
+                                                    <TextField
+                                                        margin="dense"
+                                                        type="text"
+                                                        placeholder="Name"
+                                                        className={classes.typo}
+                                                        onChange={(event) => {
+                                                            this.setState({
+                                                                title: event.target.value
+                                                            })
+                                                        }}
+                                                        InputProps={{
+                                                            disableUnderline: true,
+                                                            classes: {
+                                                                root: classes.bootstrapRoot,
+                                                                input: classes.bootstrapInput,
+                                                            },
 
-                                        }}
-                                    >Subtitle</Typography>
-                                </div>
-                                <div
-                                    style={{
-                                        marginTop: "10px",
-                                        marginBottom: "30px"
-                                    }}
-                                >
-                                    <Typography
+                                                        }}
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                            className: classes.bootstrapFormLabel,
+                                                        }}
 
-                                        style={{
-                                            fontSize: "25px",
-                                            fontWeight: "lighter"
 
-                                        }}
-                                    >Category</Typography>
-                                </div>
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </ToolBar>
 
-                            </Grid>
-                            <Grid item xs = "6">
-                                <div
-                                    style={{
-                                        marginTop: "10px",
-                                        marginBottom: "30px"
-                                    }}
-                                >
-                                <TextField
-                                    id="bootstrap-input"
-                                    InputProps={{
-                                        disableUnderline: true,
-                                        classes: {
-                                            root: classes.bootstrapRoot,
-                                            input: classes.bootstrapInput,
-                                        },
-                                    }}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                        className: classes.bootstrapFormLabel,
-                                    }}
-                                    fullWidth
-                                />
-                                </div>
-                                <div>
-                                    <TextField
-                                        id="bootstrap-input"
-                                        InputProps={{
-                                            disableUnderline: true,
-                                            classes: {
-                                                root: classes.bootstrapRoot,
-                                                input: classes.bootstrapInput,
-                                            },
-                                        }}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                            className: classes.bootstrapFormLabel,
-                                        }}
-                                        fullWidth
-                                    />
-                                </div>
 
-                            </Grid>
-                            <Grid item xs = "4">
+                                        <ToolBar  >
+                                            <Grid container spacing="24">
+                                                <Grid item xs="3">
+                                                    <Typography
+                                                        className={classes.leftName}>
+                                                        Description*
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item xs="9">
+                                                    <TextField
+                                                        margin="dense"
+                                                        type="text"
+                                                        placeholder="Description"
+                                                        multiline
+                                                        className={classes.typo}
+                                                        style={{marginBottom: "20px"}}
+                                                        onChange={(event) => {
+                                                            this.setState({
+                                                                description: event.target.value
+                                                            })
+                                                        }}
+                                                        InputProps={{
+                                                            disableUnderline: true,
+                                                            classes: {
+                                                                root: classes.bootstrapRoot,
+                                                                input: classes.bootstrapInput,
+                                                            },
 
-                            </Grid>
+                                                        }}
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                            className: classes.bootstrapFormLabel,
+                                                        }}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </ToolBar>
+                                        <ToolBar >
+                                            <Grid container spacing="24">
+                                                <Grid item xs="3">
+                                                    <Typography
+                                                        className={classes.leftName}>
+                                                        Date*
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item xs="9">
+                                                    <DatePicker
+                                                        selected={this.state.eventDate}
+                                                        onChange={(date)=>{
+                                                            this.setState({
+                                                                eventDate: date
+                                                            })
+                                                        }}
+                                                        className={classes.date}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </ToolBar>
+                                        <ToolBar >
+                                            <Grid container spacing="24">
+                                                <Grid item xs="3" >
+                                                    <Typography
+                                                        className={classes.leftName}>
+                                                        s
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item xs="9">
+                                                    <TextField
+                                                        margin="dense"
+                                                        type="text"
+                                                        placeholder="Name"
+                                                        className={classes.typo}
+                                                        InputProps={{
+                                                            disableUnderline: true,
+                                                            classes: {
+                                                                root: classes.bootstrapRoot,
+                                                                input: classes.bootstrapInput,
+                                                            },
 
+                                                        }}
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                            className: classes.bootstrapFormLabel,
+                                                        }}
+
+
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </ToolBar>
+                                    </Grid>
+                                </Grid>
+
+                            </Paper>
                         </Grid>
-
-                    </div>
-                </Paper>
+                        <Grid item xs={4}>
+                        </Grid>
+                    </Grid>
             </div>
         )
     }

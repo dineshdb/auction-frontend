@@ -60,7 +60,7 @@ class Organizers extends React.Component {
                     return (
                     <TableRow key={i}>
                         <TableCell component="th" scope="row">
-                        {n.userName}
+                        {n.userEmail}
                         </TableCell>
                         <TableCell >{n.name}</TableCell>
                         <TableCell >{n.email}</TableCell>

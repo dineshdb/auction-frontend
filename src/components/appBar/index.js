@@ -22,6 +22,7 @@ const styles = {
 
     root: {
         flexGrow: 1,
+
     },
     flex: {
         flex: 1,
@@ -35,7 +36,7 @@ const styles = {
     },
 
     typoButton: {
-        fontSize: "20px",
+        fontSize: "15px",
         fontWeight: "lighter",
         color: "#ffffff"
 
@@ -58,22 +59,14 @@ class HomeBar extends React.Component {
     }
     componentDidMount(){
         let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
-        //TODO userToken
-        // if(userToken){
-        //     this.setState({
-        //         isOnline: userToken.isOnline,
-        //         userId: userToken.id,
-        //         userName: userToken.userName
-        //     })
-        // }
-        /*
-            Remove the following code after the api has been made
-         */
-        this.setState({
-                    isOnline: false,
-                    userId: 12,
-                    userName: "Rupesh"
-                })
+        if(userToken){
+            this.setState({
+                isOnline: userToken.isOnline,
+                userId: userToken.id,
+                userEmail: userToken.userEmail
+            })
+        }
+
 
         
     }
@@ -97,13 +90,9 @@ class HomeBar extends React.Component {
 
 
     render() {
-        
-        console.log("new state",this.state)
+
         const {classes} = this.props;
-        /*
-        complement the logic below of if
-         */
-        if(this.state.isOnline){
+        if(!this.state.isOnline){
             return (
                 <div >
                     {
@@ -163,9 +152,9 @@ class HomeBar extends React.Component {
 
                             <Grid container spacing = {24} >
                                 <Grid item xs={6}>
-
+                                    <Toolbar>
                                     <Button color="inherit" className={classes.typoButton}>
-                                    Hi {this.state.userName}
+                                    Hi {this.state.userEmail}
                                     </Button>
                                     |
                                     <Button color="inherit" className={classes.typoButton}>
@@ -181,18 +170,19 @@ class HomeBar extends React.Component {
                                     <Button color="inherit" className={classes.typoButton}>
                                         Help & Support
                                     </Button>
-
+                                    </Toolbar>
                                 </Grid>
                                 <Grid item xs={4}>
                                 </Grid>
                                 <Grid item xs = {2}>
+                                    <Toolbar>
                                     <Button>
                                         <Notifications/>
-
                                     </Button>
                                     <Button>
                                         <ShoppingCart/>
                                     </Button>
+                                    </Toolbar>
                                 </Grid>
                                 </Grid>
 

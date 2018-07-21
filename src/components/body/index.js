@@ -22,11 +22,8 @@ const styles = {
         paddingLeft: "100px"
     },
     paper:{
-        marginTop: "0px",
-        backgroundColor: "#ffffff",
-        marginLeft: "100px",
-        marginRight: "100px",
-        marginBottom: "100px"
+        color: "inherit",
+        margin: "2%"
     }
 };
 

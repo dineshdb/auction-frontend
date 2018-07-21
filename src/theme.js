@@ -2,30 +2,30 @@ import { createMuiTheme } from '@material-ui/core/styles';
 
 export default createMuiTheme({
     palette: {
+
         primary: {
             light: '#536bea',
-            main: '#2bc6ea',
-            dark: '#ea4a8c',
+            main: '#2196F3',
+            dark: '#ff74ad',
             contrastText: '#ffffff',
         },
         secondary: {
             light: '#4fffa5',
-            main: '#eaeff1',
-            dark: '#ff74ad',
+            main: "#ea007e",
+            dark: '#ea007e',
             contrastText: '#000',
         },
 
     },
     overrides: {
-        Button: {
+        MuiButton: {
+            // Name of the rule
             root: {
-                color: "#fe4e81",
-                '&:hover': {
-                    backgroundColor: '#bfe8e4'
-                }
-            }
-        }
-    },
+                border: 0,
+                color: 'white',
+                height: 48,
+                padding: '0 30px',
+            }}},
     typography: {
         fontFamily: [
             '-apple-system',

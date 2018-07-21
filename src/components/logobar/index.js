@@ -8,21 +8,18 @@ const styles = {
     root: {
         flexGrow: 1,
     },
-    appbar: {
-        backgroundColor: "#66adce"
-    }
 };
 
 function LogoBar(props) {
     const { classes } = props;
     return (
         <div className={classes.root}>
-            <AppBar position="static" className={classes.appbar}>
+            <AppBar position="static" className={classes.root}>
                 <Toolbar>
                     <Typography
                         color="inherit"
                         style={{
-                            fontSize: "40px",
+                            fontSize: "30px",
                             fontWeight: "lighter"
                         }}
                     >

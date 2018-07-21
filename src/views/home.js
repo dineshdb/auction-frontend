@@ -12,10 +12,9 @@ class Home extends React.Component
     render(){
         return (
             <div>
-            <HomeBar/>
+                <HomeBar/>
                 <SearchBar/>
-            <Body/>
-                {/*<img src = {HomeImage} style={{width: "100%",height: "30%"}}/>*/}
+                <Body/>
                 <ProductsBody/>
                 <Footer/>
         

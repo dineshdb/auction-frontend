@@ -5,7 +5,9 @@
   "dependencies": {
     "@material-ui/core": "^1.2.3",
     "@material-ui/icons": "^1.1.0",
+    "auth0-js": "^9.7.2",
     "axios": "^0.18.0",
+    "jwt-decode": "^2.2.0",
     "lint-staged": "^7.2.0",
     "moment": "^2.22.2",
     "prettier": "^1.13.5",

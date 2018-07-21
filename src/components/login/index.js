@@ -19,7 +19,6 @@ const styles = theme => ({
       
     },
     button:{
-        backgroundColor: "#9d9d9d",
         color: "white",
         '&:hover':{
             opacity: "0.7",
@@ -69,11 +68,11 @@ class LoginForm extends React.Component{
     constructor(props){
         super(props)
         this.state={
-                userName: "",
+                userEmail: "",
                 userPassword: "",
-                userNameLabel: "",
+                userEmailLabel: "",
                 userPasswordLabel: "",
-                userNameValid: true,
+                userEmailValid: true,
                 userPasswordValid: true,
                 submitValid: false,
                 userId: "",
@@ -88,7 +87,7 @@ class LoginForm extends React.Component{
         handleUserName(event){
            
             this.setState({
-                userName: event.target.value
+                userEmail: event.target.value
             })
            
         }
@@ -101,17 +100,17 @@ class LoginForm extends React.Component{
         }
 
         validateUserName(){
-            const {userName} = this.state
-            if(userName.length > 0){
+            const {userEmail} = this.state
+            if(userEmail.length > 0){
                 this.setState({
-                    userNameValid: true,
-                    userNameLabel: "Username"
+                    userEmailValid: true,
+                    userEmailLabel: "Username"
                 })
             }
             else{
                 this.setState({
-                    userNameValid: false,
-                    userNameLabel: "Invalid"
+                    userEmailValid: false,
+                    userEmailLabel: "Invalid"
                 })
             }
         }
@@ -132,9 +131,9 @@ class LoginForm extends React.Component{
         }
        
         validateSubmit(){
-            const {userNameValid,userPasswordValid} = this.state
+            const {userEmailValid,userPasswordValid} = this.state
            this.setState({
-               submitValid: (userNameValid && userPasswordValid)
+               submitValid: (userEmailValid && userPasswordValid)
            })
             
              
@@ -144,19 +143,21 @@ class LoginForm extends React.Component{
            
             event.preventDefault()
             const postingData = {
-                userName: this.state.userName,
+                userEmail: this.state.userEmail,
                 userPassword: this.state.userPassword
             }
-            axios.post(`http://localhost:8080/login` 
+
+            axios.post(`http://localhost:8080/login`
             ,(postingData),
             {crossDomain: true})
-            .then(response => {
+            .then((response) => {
+                console.log("Res",response)
                 if(response.data.responseCode != "404"){
                    
                     localStorage.setItem(USER_TOKEN,JSON.stringify({
                     isOnline: true,
                     id: response.data.userId,
-                    userName: response.data.userName,
+                    userEmail: response.data.userEmail,
                     userPassword: response.data.userPassword,
                     userRole: response.data.userRole
                 }))
@@ -164,6 +165,7 @@ class LoginForm extends React.Component{
                 this.setState({
                     loginFailed: false
                 })
+                    this.handleRedirect()
              }
              else{
                 this.setState({
@@ -179,9 +181,7 @@ class LoginForm extends React.Component{
                 })
                 throw err
             })
-            if(localStorage.getItem(USER_TOKEN)){
-                this.handleRedirect()
-            }
+
         }
         handleRedirect()
         {
@@ -203,12 +203,12 @@ class LoginForm extends React.Component{
                                 <div>
                                 <TextField
                                     style={{color: "white"}}
-                                    name="UserName"
+                                    name="Email"
                                     margin="dense"
-                                    id="UserName"
+                                    id="Email"
                                     type="text"
-                                    error={!this.state.userNameValid}
-                                    placeholder="Username"
+                                    error={!this.state.userEmailValid}
+                                    placeholder="Email"
                                     onChange={this.handleUserName.bind(this)}
                                     onBlur = {this.validateUserName.bind(this)}
 

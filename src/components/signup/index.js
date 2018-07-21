@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField'
 import axios from 'axios'
 import Typography from '@material-ui/core/Typography'
 import {Redirect} from 'react-router-dom'
+import Toolbar from '@material-ui/core/Toolbar'
+import Paper from '@material-ui/core/Paper'
 
 const styles = theme => ({
     bootstrapRoot: {
@@ -52,19 +54,16 @@ class SignUpForm extends React.Component{
         super(props)
         this.state={
                 userName: "",
-                name: "",
                 email: "",
                 password: "",
                 phone: "",
                 address:"",
                 userNameValid: true,
-                nameValid: true,
                 emailValid: true,
                 passwordValid: true,
                 phoneValid: true,
                 addressValid: true,
                 userNameLabel: "Username",
-                nameLabel: "Full Name",
                 emailLabel: "Email",
                 passwordLabel: "Password",
                 phoneLabel: "Phone",
@@ -78,8 +77,8 @@ class SignUpForm extends React.Component{
     
         validateSubmit(){
      
-            const {userNameValid,nameValid,emailValid,passwordValid,phoneValid,addressValid} = this.state
-            return !(userNameValid && nameValid && emailValid && passwordValid && phoneValid && addressValid)
+            const {userNameValid,emailValid,passwordValid,phoneValid,addressValid} = this.state
+            return !(userNameValid && emailValid && passwordValid && phoneValid && addressValid)
             
              
         }
@@ -91,13 +90,7 @@ class SignUpForm extends React.Component{
             this.validateUserName()
            
         }
-        handleName(event){
-            this.setState({
-                name: event.target.value
-            })
-            this.validateName()
-           
-        }
+
         handleEmail(event){
             this.setState({
                 email: event.target.value
@@ -141,24 +134,10 @@ class SignUpForm extends React.Component{
                 })
             }
         }
-        validateName(){
-            const {name} = this.state
-            if(name.length > 0){
-                this.setState({
-                    nameValid: true,
-                    nameLabel: "Full Name"
-                })
-            }
-            else{
-                this.setState({
-                    nameValid: false,
-                    nameLabel: "Invalid"
-                })
-            }
-        }
+
         validateEmail(){
             const {email} = this.state
-            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if(!re.test(String(email).toLowerCase())){
                 this.setState({
                     emailValid: false,
@@ -228,17 +207,16 @@ class SignUpForm extends React.Component{
             const {userName,name,password,email,phone,address} = this.state
             const signUpObject = {
                 userName: userName,
-                name: name,
                 userPassword: password,
-                email: email,
-                phone: phone,
-                address: address
+                userEmail: email,
+                userPhone: phone,
+                userAddress: address
             }
-            // axios.post('http://localhost:8080/organizers'
-            // ,(signUpObject),{crossDomain: true})
-            // .then(response => {
-            //
-            // })
+            axios.post('http://localhost:8080/users/sign-up'
+            ,(signUpObject),{crossDomain: true})
+            .then(response => {
+                console.log('response',response)
+            })
             this.setState({
                 triggerSubmit: true
             })
@@ -273,21 +251,70 @@ class SignUpForm extends React.Component{
                             fontWeight: "lighter",
                             fontSize: "15px"
                         }}
-                        
                     >
                     This will only take less than a minute !!!
                     </Typography>
-                    <form onSubmit={this.handleSubmit.bind(this)} style={{marginLeft:20,marginRight: 20,marginTop: 20,marginBottom: 20}}>
-                    <div>
-                    <TextField
-                            margin="dense"
-                            type="text"
-                            error={!this.state.userNameValid}
-                            placeholder="Username"
-                            label= {this.state.userNameLabel}
-                            onChange={this.handleUserName.bind(this)}
-                            onBlur = {this.validateUserName.bind(this)}
-                            fullWidth
+                        <Paper>
+                        <form onSubmit={this.handleSubmit.bind(this)} style={{margin: "20px"}}>
+                        <div>
+                        <TextField
+                                margin="dense"
+                                type="text"
+                                error={!this.state.userEmailValid}
+                                placeholder="Username"
+                                label= {this.state.userEmailLabel}
+                                onChange={this.handleUserName.bind(this)}
+                                onBlur = {this.validateUserName.bind(this)}
+                                fullWidth
+                                InputProps={{
+                                    disableUnderline: true,
+                                    classes: {
+                                        root: classes.bootstrapRoot,
+                                        input: classes.bootstrapInput,
+                                    },
+                                }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                    className: classes.bootstrapFormLabel,
+                                }}
+                            />
+                            </div>
+                            <div>
+                        <TextField
+                                error={!this.state.emailValid}
+                                margin="dense"
+                                id="email"
+                                type="email"
+                                placeholder="Email"
+                                label={this.state.emailLabel}
+                                onChange={this.handleEmail.bind(this)}
+                                onBlur ={this.validateEmail.bind(this)}
+                                InputProps={{
+                                    disableUnderline: true,
+                                    classes: {
+                                        root: classes.bootstrapRoot,
+                                        input: classes.bootstrapInput,
+                                    },
+                                }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                    className: classes.bootstrapFormLabel,
+                                }}
+                                fullWidth
+                            />
+                             </div>
+                            <div>
+                        <TextField
+                            error={!this.state.passwordValid}
+                               name="password"
+                               margin="dense"
+                               id="password"
+                               type="password"
+
+                               placeholder="Password"
+                               label= {this.state.passwordLabel}
+                               onChange={this.handlePassword.bind(this)}
+                               onBlur = {this.validatePassword.bind(this)}
                             InputProps={{
                                 disableUnderline: true,
                                 classes: {
@@ -299,159 +326,89 @@ class SignUpForm extends React.Component{
                                 shrink: true,
                                 className: classes.bootstrapFormLabel,
                             }}
-                        />
-                        </div>
-                        <div>
-                    <TextField
-                            error={!this.state.nameValid}
-                            margin="dense"
-                            type="text"
-                            placeholder="FullName"
-                            label={this.state.nameLabel}
-                            onChange={this.handleName.bind(this)}
-                            onBlur = {this.validateName.bind(this)}
-                            fullWidth
-                            InputProps={{
-                                disableUnderline: true,
-                                classes: {
-                                    root: classes.bootstrapRoot,
-                                    input: classes.bootstrapInput,
-                                },
-                            }}
-                            InputLabelProps={{
-                                shrink: true,
-                                className: classes.bootstrapFormLabel,
-                            }}
-                          
-                        />
-                         </div>
-                        <div>
-                    <TextField
-                            error={!this.state.emailValid}
-                            margin="dense"
-                            id="email"
-                            type="email"
-                            placeholder="Email"
-                            label={this.state.emailLabel}
-                            onChange={this.handleEmail.bind(this)}
-                            onBlur ={this.validateEmail.bind(this)}
-                            InputProps={{
-                                disableUnderline: true,
-                                classes: {
-                                    root: classes.bootstrapRoot,
-                                    input: classes.bootstrapInput,
-                                },
-                            }}
-                            InputLabelProps={{
-                                shrink: true,
-                                className: classes.bootstrapFormLabel,
-                            }}
-                            fullWidth
-                        />
-                         </div>
-                        <div>
-                    <TextField
-                        error={!this.state.passwordValid}
-                           name="password"
-                           margin="dense"
-                           id="password"
-                           type="password"
-                          
-                           placeholder="Password"
-                           label= {this.state.passwordLabel}
-                           onChange={this.handlePassword.bind(this)}
-                           onBlur = {this.validatePassword.bind(this)}
-                        InputProps={{
-                            disableUnderline: true,
-                            classes: {
-                                root: classes.bootstrapRoot,
-                                input: classes.bootstrapInput,
-                            },
-                        }}
-                        InputLabelProps={{
-                            shrink: true,
-                            className: classes.bootstrapFormLabel,
-                        }}
-                           fullWidth
-                        />
-                         </div>
-                        <div>
-                     <TextField
-                            error={!this.state.phoneValid}
-                            name="phone"
-                            margin="dense"
-                            id="phone"
-                            type="text"
-                            placeholder="Phone"
-                            label={this.state.phoneLabel}
-                            onChange={this.handlePhone.bind(this)}
-                            onBlur= {this.validatePhone.bind(this)}
-                            InputProps={{
-                                disableUnderline: true,
-                                classes: {
-                                    root: classes.bootstrapRoot,
-                                    input: classes.bootstrapInput,
-                                },
-                            }}
-                            InputLabelProps={{
-                                shrink: true,
-                                className: classes.bootstrapFormLabel,
-                            }}
-                            fullWidth
-                        />
-                         </div>
-                        <div>
+                               fullWidth
+                            />
+                             </div>
+                            <div>
                          <TextField
-                            error={!this.state.addressValid}
-                            margin="dense"
-                            name="address"
-                            id="address"
-                            type="text"
-                            placeholder="Address"
-                            label={this.state.addressLabel}
-                            onChange={this.handleAddress.bind(this)}
-                            onBlur={this.validateAddress.bind(this)}
-                            fullWidth
-                            InputProps={{
-                                disableUnderline: true,
-                                classes: {
-                                    root: classes.bootstrapRoot,
-                                    input: classes.bootstrapInput,
-                                },
-                            }}
-                            InputLabelProps={{
-                                shrink: true,
-                                className: classes.bootstrapFormLabel,
-                            }}
-                        />
-                         </div>
-                    
-                    <Grid container spacing={24} style={{marginTop: 10}}
-                        >
-                        <Grid item xs={6}>
-                        </Grid>
-                        <Grid item xs = {3}>
-                        <Link to = "/">
-                            <Button>
-                                Cancel
-                                </Button>
-                        </Link>
-                        </Grid>
-                        <Button
-                        disabled = {this.validateSubmit()}
-                        variant = "contained" 
-                        type="submit" 
-                        color="inherit" 
-                        style = {{marginBottom: 15,marginTop: 5}}
-        
-                        >
-                        Submit
-                        </Button>
+                                error={!this.state.phoneValid}
+                                name="phone"
+                                margin="dense"
+                                id="phone"
+                                type="text"
+                                placeholder="Phone"
+                                label={this.state.phoneLabel}
+                                onChange={this.handlePhone.bind(this)}
+                                onBlur= {this.validatePhone.bind(this)}
+                                InputProps={{
+                                    disableUnderline: true,
+                                    classes: {
+                                        root: classes.bootstrapRoot,
+                                        input: classes.bootstrapInput,
+                                    },
+                                }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                    className: classes.bootstrapFormLabel,
+                                }}
+                                fullWidth
+                            />
+                             </div>
+                            <div>
+                             <TextField
+                                error={!this.state.addressValid}
+                                margin="dense"
+                                name="address"
+                                id="address"
+                                type="text"
+                                placeholder="Address"
+                                label={this.state.addressLabel}
+                                onChange={this.handleAddress.bind(this)}
+                                onBlur={this.validateAddress.bind(this)}
+                                fullWidth
+                                InputProps={{
+                                    disableUnderline: true,
+                                    classes: {
+                                        root: classes.bootstrapRoot,
+                                        input: classes.bootstrapInput,
+                                    },
+                                }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                    className: classes.bootstrapFormLabel,
+                                }}
+                            />
+                             </div>
 
-                    </Grid>
-                
-                    </form> 
+                        <Grid container spacing={24} style={{marginTop: 10}}
+                            >
+                            <Grid item xs={4}>
+                            </Grid>
+                            <Grid item xs = {8}>
+                                <Toolbar>
+                                    <Link to = "/">
+                                        <Button
 
+                                            color="secondary"
+                                            style={{margin: "5px"}}
+                                        >
+                                            Cancel
+                                            </Button>
+                                    </Link>
+                                    <Button
+                                    variant = "contained"
+                                    type="submit"
+                                    color="primary"
+                                    style={{margin: "5px"}}
+                                    >
+                                    Submit
+                                    </Button>
+                                </Toolbar>
+                            </Grid>
+                        </Grid>
+
+                        </form>
+                        </Paper>
                     </Grid>
                     <Grid item xs={3}>
                     </Grid>

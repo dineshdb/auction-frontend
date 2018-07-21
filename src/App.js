@@ -13,6 +13,7 @@ import Organizers from './views/admin/users'
 import {MuiThemeProvider} from '@material-ui/core/styles'
 import Sell from './views/sell'
 import theme from './theme'
+import CssBaseline from '@material-ui/core/CssBaseline'
 class App extends React.Component {
     constructor(props){
         super(props)
@@ -22,33 +23,27 @@ class App extends React.Component {
     render() {
         return (
             <MuiThemeProvider theme={theme}>
+                <CssBaseline/>
             <Router>
                 <div >
                     <Route path = "/" exact strict render = {() => {
 
-                        // var userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
-                        // if(!userToken){
-                        //     return <PublicHome/>
-                        // }
-                        //
-                        // else{
-                        //     if(userToken.userRole == "ORG"){
-                        //         return <Home/>
-                        //     }
-                        //     if(userToken.userRole == "ADMIN"){
-                        //         return <AdminHome/>
-                        //     }
-                        // }
-                        return <Home/>
+                        let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
+                        if(!userToken){
+                            return <PublicHome/>
+                        }
+
+                        else{
+                           return <Home/>
+                        }
+
                     }
                     }
                     />
                     <Route path = "/login" exact strict render = {() => {
                          let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
-                        /*
-                        complement the logic below
-                         */
-                        if(userToken){
+                        console.log("user",userToken)
+                        if(!userToken){
                             return <Login/>
                         }
                         else{
@@ -80,11 +75,8 @@ class App extends React.Component {
                     />
                     <Route path = "/signup" exact strict render = {() => {
                         let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
-                        /*
-                            Complement the login below
-                         */
 
-                        if(userToken){
+                        if(!userToken){
                             return <SignUp/>
                         }
                         else{
