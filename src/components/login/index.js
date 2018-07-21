@@ -250,31 +250,21 @@ class LoginForm extends React.Component{
                                 }}
 
                             />
+                            <div style={{float: "right", margin: "5px"}}>
+                            <Button
+                                variant = "contained"
+                                type="submit"
+                                color="primary"
+                                className={classes.button}
+                            ><Typography style={{fontWeight: "lighter"}}>
+                                Login
+                            </Typography>
+                            </Button>
+                            </div>
                         </div>
-                                <Grid container spacing={24}>
-                                    <Grid item xs = {9}>
-                                    </Grid>
-                                    <Grid item xs = {3}>
-                                        <Button
-
-                                            disabled = {!this.validateSubmit.bind(this)}
-                                            variant = "contained"
-                                            type="submit"
-                                            color="inherit"
-                                            className={classes.button}
-
-                                        >
-                                            Login
-
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-
                             </Grid>
 
-                                <Grid item xs = {4}>
 
-                                </Grid>
                             </Grid>
 
                     </div>

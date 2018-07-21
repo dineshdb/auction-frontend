@@ -172,9 +172,9 @@ class HomeBar extends React.Component {
                                     </Button>
                                     </Toolbar>
                                 </Grid>
-                                <Grid item xs={4}>
+                                <Grid item xs={3}>
                                 </Grid>
-                                <Grid item xs = {2}>
+                                <Grid item xs = {3}>
                                     <Toolbar>
                                     <Button>
                                         <Notifications/>
@@ -182,12 +182,30 @@ class HomeBar extends React.Component {
                                     <Button>
                                         <ShoppingCart/>
                                     </Button>
+                                        <Button
+                                            color="inherit"
+                                            className={classes.typoButton}
+                                            onClick={ ()=> {
+                                                localStorage.removeItem(USER_TOKEN)
+                                                this.setState({
+                                                    isOnline: false
+                                                })
+
+                                            }
+
+                                            }
+                                        >
+                                            Logout
+                                        </Button>
                                     </Toolbar>
                                 </Grid>
                                 </Grid>
 
 
                     </AppBar>
+                    {
+                        !this.state.isOnline && <Redirect to = "/"/>
+                    }
                     
              
 
