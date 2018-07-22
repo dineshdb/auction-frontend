@@ -62,8 +62,6 @@ class HomeBar extends React.Component {
         if(userToken){
             this.setState({
                 isOnline: userToken.isOnline,
-                userId: userToken.id,
-                userEmail: userToken.userEmail
             })
         }
 
@@ -76,7 +74,6 @@ class HomeBar extends React.Component {
            localStorage.removeItem(USER_TOKEN)
            this.setState({
                isOnline: false,
-               userId: ""
            })
         }
         this.fireHome()

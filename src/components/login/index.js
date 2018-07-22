@@ -10,6 +10,7 @@ import {connect} from 'react-redux'
 import axios from 'axios'
 import {USER_TOKEN} from '../../definitions/index'
 import {Redirect } from 'react-router-dom'
+import jwtDecode from 'jwt-decode'
 
 const styles = theme => ({
     root: {
@@ -151,29 +152,24 @@ class LoginForm extends React.Component{
             ,(postingData),
             {crossDomain: true})
             .then((response) => {
-                console.log("Resssss",response)
-                if(response.data.responseCode != "404"){
-                   
-                    localStorage.setItem(USER_TOKEN,JSON.stringify({
-                    isOnline: true,
-                    id: response.data.userId,
-                    userEmail: response.data.userEmail,
-                    userPassword: response.data.userPassword,
-                    userRole: response.data.userRole
+
+                let token = (response.headers.authorization)
+                //TODO
+                /*
+                uncomment
+                 */
+                console.log("response ",response)
+                localStorage.setItem(USER_TOKEN,JSON.stringify({
+                    header: token,
+                    isOnline: true
                 }))
-                
                 this.setState({
-                    loginFailed: false
+                    fireRedirect: true
                 })
-                    this.handleRedirect()
+
              }
-             else{
-                this.setState({
-                    loginFailed: true
-                })
-             }
-             
-             })
+
+        )
             .catch(err => {
                 console.log("Error")
                 this.setState({
