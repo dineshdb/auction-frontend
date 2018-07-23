@@ -198,9 +198,8 @@ class SellProductForm extends React.Component {
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
                                 <Grid container spacing={24} className={classes.margin}>
-                                    <Grid item xs={4} style={{ borderRight: '0.1em solid ',borderRightColor: "#bfbfbf", padding: '0.5em'}}>
-                                    </Grid>
-                                    <Grid item xs={8}>
+                                    
+                                    <Grid item xs={9}>
                                         <ToolBar >
                                             <Grid container spacing="24">
                                                 <Grid item xs="3" >
@@ -344,7 +343,8 @@ class SellProductForm extends React.Component {
                                                    }}
                                                    title="Pick Item"/>
                                     </Grid>
-
+                                     <Grid item xs={3}>
+                                    </Grid>
                                 </Grid>
 
                             </Paper>
