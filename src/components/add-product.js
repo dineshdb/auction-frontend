@@ -12,16 +12,11 @@ import DatePicker from 'react-datepicker'
 import ToolBar from '@material-ui/core/Toolbar'
 import 'react-datepicker/dist/react-datepicker-cssmodules.css'
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Add from '@material-ui/icons/Add'
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
 
 const styles = theme => ({
     root: {
@@ -111,13 +106,8 @@ const styles = theme => ({
     }
 });
 
-function Transition(props) {
-    return <Slide direction="up" {...props} />;
-}
 
-class SellProductForm extends React.Component {
-
-
+class AddProduct extends React.Component {
     constructor(props){
         super(props)
         this.state={
@@ -136,14 +126,6 @@ class SellProductForm extends React.Component {
         this.fileInput = React.createRef()
     }
     componentDidMount(){
-        /*
-        Fetch the categories available
-         */
-
-        /*
-            Uncomment the following code
-         */
-
         // const {url} = "" //url is the api's url to get the categories
         // axios.get(url,{crossDomain: true})
         //     .then((res) => {
@@ -181,17 +163,13 @@ class SellProductForm extends React.Component {
         return (
             <div className={classes.root}>
                 <Typography
-
                     style={{
                         fontSize: "30px",
                         color: "black",
                         fontWeight: "lighter"
                     }}
                     align="center"
-                >
-                    Product Details
-
-                </Typography>
+                >Product Details </Typography>
 
                     <Grid container spacing="24">
                         <Grid item xs={12}>
@@ -390,7 +368,7 @@ class SellProductForm extends React.Component {
                                         </Button>
                                         <Dialog
                                             open={this.state.openItemMenu}
-                                            TransitionComponent={Transition}
+//                                            TransitionComponent={Transition}
                                             aria-labelledby="item-dialog"
                                             aria-describedby="item-dialog-description"
                                         >
@@ -414,8 +392,8 @@ class SellProductForm extends React.Component {
 
 }
 
-SellProductForm.propTypes = {
+AddProduct.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SellProductForm);
+export default withStyles(styles)(AddProduct);

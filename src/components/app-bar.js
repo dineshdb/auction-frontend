@@ -5,23 +5,16 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import Grid from '@material-ui/core/Grid'
-import {USER_TOKEN} from '../../definitions/index'
-import {Redirect} from 'react-router-dom'
+import {USER_TOKEN} from '../definitions/index'
 import Typography from '@material-ui/core/Typography'
-
 import Button from '@material-ui/core/Button'
-
 import {Icon, IconButton} from '@material-ui/core'
-import ShoppingCart from '@material-ui/icons/ShoppingCart'
-import Notifications from '@material-ui/icons/Notifications'
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import Search from '@material-ui/icons/Search'
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import Badge from '@material-ui/core/Badge';
 
-import TextField from '@material-ui/core/TextField'
-const styles = {
+const styles = theme => ({
     root: {
         flexGrow: 1,
     },
@@ -40,8 +33,11 @@ const styles = {
         fontSize: "15px",
         fontWeight: "lighter",
         color: "#ffffff"
-    }
-};
+    },
+    margin: {
+        margin: theme.spacing.unit * 2,
+    },
+});
 
 const Site = "BidStellar.com"
 class HomeBar extends React.Component {
@@ -91,6 +87,13 @@ class HomeBar extends React.Component {
     handleClose = () => {
         this.setState({ anchorEl: null });
     };
+
+    gotoHelp(){
+        this.handleClose()
+    }
+    openProfile(){
+        this.handleClose()
+    }
     render() {
         const {classes} = this.props;
         const {anchorEl} = this.state
@@ -102,13 +105,28 @@ class HomeBar extends React.Component {
                             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
                                 <Icon>menu</Icon>
                             </IconButton>
-                            <Typography variant="title" color="inherit" className={classes.flex}>
+                            
+                                <Typography variant="title" color="inherit" className={classes.flex}>
+                                <Link to="/">
                                 BidSteller.com
-                            </Typography>
+                                </Link>
+                                </Typography>
+                            
                             {this.state.isOnline && (
                                 <div>
-                                    <Button color="inherit"><Notifications/></Button>
-                                    <Button> <ShoppingCart/> </Button>
+                                    <Link to="/add">
+                                        <Icon>add</Icon>
+                                    </Link>
+                                    <Link to="/notifications">
+                                        <Badge className={classes.margin} badgeContent={4} color="primary">
+                                            <Icon>notifications</Icon>
+                                        </Badge>
+                                    </Link>
+                                    <Link to="/cart">
+                                        <Badge className={classes.margin} badgeContent={4} color="primary">
+                                            <Icon>shopping_cart</Icon>
+                                        </Badge>
+                                    </Link>
 
                                     <IconButton
                                     aria-owns={open ? 'menu-appbar' : null}
@@ -132,7 +150,8 @@ class HomeBar extends React.Component {
                                     anchorEl={anchorEl}
                                     open={open}
                                     >
-                                    <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                                    <MenuItem onClick={this.openProfile}>Profile</MenuItem>
+                                    <MenuItem onClick={this.gotoHelp}> Help </MenuItem>
                                     <MenuItem onClick={ ()=> {
                                                 localStorage.removeItem(USER_TOKEN)
                                                 this.handleClose()
