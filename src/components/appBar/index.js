@@ -9,20 +9,21 @@ import Grid from '@material-ui/core/Grid'
 import {USER_TOKEN} from '../../definitions/index'
 import {Redirect} from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
-import ShoppingCart from '@material-ui/icons/ShoppingCart'
-import Notifications from '@material-ui/icons/Notifications'
+
 import Button from '@material-ui/core/Button'
 
+import {Icon, IconButton} from '@material-ui/core'
+import ShoppingCart from '@material-ui/icons/ShoppingCart'
+import Notifications from '@material-ui/icons/Notifications'
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import Search from '@material-ui/icons/Search'
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
 
-
-
-
-
+import TextField from '@material-ui/core/TextField'
 const styles = {
-
     root: {
         flexGrow: 1,
-
     },
     flex: {
         flex: 1,
@@ -39,9 +40,6 @@ const styles = {
         fontSize: "15px",
         fontWeight: "lighter",
         color: "#ffffff"
-
-
-
     }
 };
 
@@ -64,9 +62,6 @@ class HomeBar extends React.Component {
                 isOnline: userToken.isOnline,
             })
         }
-
-
-        
     }
     handleLogOut(){
         let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
@@ -81,136 +76,97 @@ class HomeBar extends React.Component {
     }
     fireHome(){
         this.setState({
-            fireHome: true
+            fireHome: true,
+            anchorEl: null
         })
     }
-
-
+    handleSearch(event){
+        this.setState({
+            searchName: event.target.value
+        })
+    }
+    handleMenu = event => {
+        this.setState({ anchorEl: event.currentTarget });
+    };
+    handleClose = () => {
+        this.setState({ anchorEl: null });
+    };
     render() {
-
         const {classes} = this.props;
-        if(!this.state.isOnline){
-            return (
+        const {anchorEl} = this.state
+        const open = Boolean(anchorEl);
+        return (
                 <div >
-                    {
-                    (this.state.fireHome) && (<Redirect to = "/" />)
-                     }
                     <AppBar position="static" className={classes.root}>
                         <Toolbar>
-                            <Grid container spacing = {24}>
-                                <Grid item xs={1}>
-                                </Grid>
-                                <Grid item xs={1}>
-                                <Link to="/" className={classes.link}>
-                                    <Typography
-                                        style={{
-                                            fontSize: "34px",
-                                        }}
-                                        className={classes.typoButton}
+                            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+                                <Icon>menu</Icon>
+                            </IconButton>
+                            <Typography variant="title" color="inherit" className={classes.flex}>
+                                BidSteller.com
+                            </Typography>
+                            {this.state.isOnline && (
+                                <div>
+                                    <Button color="inherit"><Notifications/></Button>
+                                    <Button> <ShoppingCart/> </Button>
+
+                                    <IconButton
+                                    aria-owns={open ? 'menu-appbar' : null}
+                                    aria-haspopup="true"
+                                    onClick={this.handleMenu}
+                                    color="inherit"
                                     >
-                                    {Site}
-                                    </Typography>
-                                </Link>
-                                </Grid>
-                                <Grid item xs={8}>
-                                </Grid>
-                                <Grid item xs={1}>
-                                <Link to="/signup">
-                                    <Button
-                                        color="secondary"
-                                        className={classes.typoButton}
-                                    >Register
-                                    </Button>
-                                </Link>
-                                </Grid >
-                                <Grid item xs={1}>
-                                <Link to="/login">
-                                    <Button color="secondary"
-                                            className={classes.typoButton}>
-                                       Login
-                                    </Button>
-                                </Link>
-                                </Grid>
-                            
-                                </Grid>
-                        </Toolbar>
-                    </AppBar>
-                    
-
-                
-                </div>
-            );
-        }
-        else{
-           
-            return (
-                <div >
-                    <AppBar position="static" className={classes.root}>
-
-                            <Grid container spacing = {24} >
-                                <Grid item xs={6}>
-                                    <Toolbar>
-                                    <Button color="inherit" className={classes.typoButton}>
-                                    Hi {this.state.userEmail}
-                                    </Button>
-                                    |
-                                    <Button color="inherit" className={classes.typoButton}>
-                                        Daily Deals
-                                    </Button>
-                                    |
-                                    <Link to = "/sell">
-                                    <Button color="inherit" className={classes.typoButton}>
-                                        Sell
-                                    </Button>
-                                    </Link>
-                                    |
-                                    <Button color="inherit" className={classes.typoButton}>
-                                        Help & Support
-                                    </Button>
-                                    </Toolbar>
-                                </Grid>
-                                <Grid item xs={3}>
-                                </Grid>
-                                <Grid item xs = {3}>
-                                    <Toolbar>
-                                    <Button>
-                                        <Notifications/>
-                                    </Button>
-                                    <Button>
-                                        <ShoppingCart/>
-                                    </Button>
-                                        <Button
-                                            color="inherit"
-                                            className={classes.typoButton}
-                                            onClick={ ()=> {
+                                    <AccountCircle />
+                                    </IconButton>
+                                    <Menu
+                                    id="menu-appbar"
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    onClose={this.handleClose}
+                                    anchorEl={anchorEl}
+                                    open={open}
+                                    >
+                                    <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                                    <MenuItem onClick={ ()=> {
                                                 localStorage.removeItem(USER_TOKEN)
+                                                this.handleClose()
                                                 this.setState({
                                                     isOnline: false
                                                 })
-
                                             }
-
-                                            }
-                                        >
-                                            Logout
+                                            }>Logout</MenuItem>
+                                    </Menu>
+                                </div>
+                            )}
+                            {   !this.state.isOnline && (
+                                <div>
+                                    <Link to="/signup">
+                                        <Button
+                                            color="secondary"
+                                            className={classes.typoButton}
+                                            >Register
                                         </Button>
-                                    </Toolbar>
-                                </Grid>
-                                </Grid>
+                                    </Link>
+                                    <Link to="/login">
+                                        <Button color="secondary"
+                                            className={classes.typoButton}>
+                                            Login
+                                        </Button>
+                                    </Link>
+                                </div>
+                            )}                           
 
-
+                        </Toolbar>
                     </AppBar>
-                    {
-                        !this.state.isOnline && <Redirect to = "/"/>
-                    }
-                    
-             
-
                 </div>
-            );
-
-        }
-}
+        )
+    }
 }
 HomeBar.propTypes = {
     classes: PropTypes.object.isRequired,
@@ -218,8 +174,6 @@ HomeBar.propTypes = {
 
 function mapStateToProps(state){
     return {
-
-
     }
 }
 export default connect(mapStateToProps)(withStyles(styles)(HomeBar))

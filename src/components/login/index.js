@@ -10,7 +10,6 @@ import {connect} from 'react-redux'
 import axios from 'axios'
 import {USER_TOKEN} from '../../definitions/index'
 import {Redirect } from 'react-router-dom'
-import jwtDecode from 'jwt-decode'
 
 const styles = theme => ({
     root: {

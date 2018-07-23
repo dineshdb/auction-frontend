@@ -6,9 +6,7 @@ import Footer from '../components/footer/index'
 import SearchBar from '../components/searchbar/index'
 import HomeImage from '../assets/images/home.jpg'
 import ProductsBody from '../components/body/index'
-class Home extends React.Component
-{
-    
+class Home extends React.Component {
     render(){
         return (
             <div>
@@ -16,9 +14,7 @@ class Home extends React.Component
                 <SearchBar/>
                 <Body/>
                 <ProductsBody/>
-                <Footer/>
-        
-        
+                <Footer/>        
             </div>
             )
     }

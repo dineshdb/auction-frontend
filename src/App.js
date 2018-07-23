@@ -30,14 +30,10 @@ class App extends React.Component {
                         let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
                         if(!userToken){
                             return <PublicHome/>
-                        }
-
-                        else{
+                        } else {
                            return <Home/>
                         }
-
-                    }
-                    }
+                    }}
                     />
                     <Route path = "/login" exact strict render = {() => {
                          let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
@@ -53,7 +49,6 @@ class App extends React.Component {
                         }
                     />
                       <Route path = "/admin" exact strict render = {() => {
-
                             return (
                                 <AdminHome/>
                             )
@@ -63,7 +58,6 @@ class App extends React.Component {
 
                     />
                     <Route path = "/sell" exact strict render = {() => {
-
                         return (
                             <Sell/>
                         )
