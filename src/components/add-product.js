@@ -12,11 +12,14 @@ import DatePicker from 'react-datepicker'
 import ToolBar from '@material-ui/core/Toolbar'
 import 'react-datepicker/dist/react-datepicker-cssmodules.css'
 import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Add from '@material-ui/icons/Add'
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
+import {CustomButton} from "./buttons";
+import {SimpleTextField} from "./textFields";
+import BootStrappedTextField from './textFields'
+import SelectItem from "./dialogs";
 
 const styles = theme => ({
     root: {
@@ -102,12 +105,17 @@ const styles = theme => ({
         fontWeight: "lighter"
     },
     typo:{
-      width: "65%"
-    }
+      width: "300%"
+    },
+    initialTypo:{
+        width: "100%"
+    },
+
 });
 
+class SellProductForm extends React.Component {
 
-class AddProduct extends React.Component {
+
     constructor(props){
         super(props)
         this.state={
@@ -120,12 +128,23 @@ class AddProduct extends React.Component {
             eventTime: "",
             eventDuration: "",
             categories: {},
-            openItemMenu: false
+            openItemMenu: false,
+            itemName: "",
+            itemDescription: "",
+            startingBid: "",
 
         }
         this.fileInput = React.createRef()
     }
     componentDidMount(){
+        /*
+        Fetch the categories available
+         */
+
+        /*
+            Uncomment the following code
+         */
+
         // const {url} = "" //url is the api's url to get the categories
         // axios.get(url,{crossDomain: true})
         //     .then((res) => {
@@ -163,56 +182,23 @@ class AddProduct extends React.Component {
         return (
             <div className={classes.root}>
                 <Typography
+
                     style={{
                         fontSize: "30px",
                         color: "black",
                         fontWeight: "lighter"
                     }}
                     align="center"
-                >Product Details </Typography>
+                >
+                    Auction Details
+
+                </Typography>
 
                     <Grid container spacing="24">
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
                                 <Grid container spacing={24} className={classes.margin}>
                                     <Grid item xs={4} style={{ borderRight: '0.1em solid ',borderRightColor: "#bfbfbf", padding: '0.5em'}}>
-                                        <div>
-                                            <Typography className={classes.cardTitle}>
-                                                Preview
-                                            </Typography>
-                                            <Card className={classes.card}>
-                                                <CardMedia
-                                                    className={classes.media}
-                                                    image={this.state.imageUrl}
-                                                    title={this.state.title}
-                                                />
-                                                <CardContent>
-                                                    <Typography gutterBottom variant="headline" component="h2" style={{fontWeight: "lighter"}}>
-                                                        {this.state.title}
-                                                    </Typography>
-                                                    <Typography className={classes.cardP}>
-                                                        {this.state.description}
-                                                    </Typography>
-                                                </CardContent>
-                                            </Card>
-                                        </div>
-                                        <input style={{display: 'none'}}
-                                               ref = {fileInput => this.fileInput = fileInput}
-                                               type="file"
-                                               onChange={this.handleSelectionOfImage}
-                                        />
-                                        <Button
-                                            onClick = {()=>this.fileInput.click()}
-                                            variant="outlined"
-                                            color={"primary"}
-                                            className={classes.button}
-                                            size="large"
-                                        >
-                                            Upload Image
-                                        </Button>
-
-
-
                                     </Grid>
                                     <Grid item xs={8}>
                                         <ToolBar >
@@ -224,29 +210,16 @@ class AddProduct extends React.Component {
                                                     </Typography>
                                                 </Grid>
                                                 <Grid item xs="9">
-                                                    <TextField
+                                                    <BootStrappedTextField
                                                         margin="dense"
                                                         type="text"
                                                         placeholder="Name"
-                                                        className={classes.typo}
-                                                        onChange={(event) => {
+                                                        property={classes.initialTypo}
+                                                        handler={(event) => {
                                                             this.setState({
                                                                 title: event.target.value
                                                             })
                                                         }}
-                                                        InputProps={{
-                                                            disableUnderline: true,
-                                                            classes: {
-                                                                root: classes.bootstrapRoot,
-                                                                input: classes.bootstrapInput,
-                                                            },
-
-                                                        }}
-                                                        InputLabelProps={{
-                                                            shrink: true,
-                                                            className: classes.bootstrapFormLabel,
-                                                        }}
-
 
                                                     />
                                                 </Grid>
@@ -263,29 +236,16 @@ class AddProduct extends React.Component {
                                                     </Typography>
                                                 </Grid>
                                                 <Grid item xs="9">
-                                                    <TextField
+                                                    <BootStrappedTextField
                                                         margin="dense"
                                                         type="text"
                                                         placeholder="Description"
-                                                        multiline
-                                                        className={classes.typo}
-                                                        style={{marginBottom: "20px"}}
-                                                        onChange={(event) => {
+                                                        textArea="true"
+                                                        property={classes.initialTypo}
+                                                        handler={(event) => {
                                                             this.setState({
                                                                 description: event.target.value
                                                             })
-                                                        }}
-                                                        InputProps={{
-                                                            disableUnderline: true,
-                                                            classes: {
-                                                                root: classes.bootstrapRoot,
-                                                                input: classes.bootstrapInput,
-                                                            },
-
-                                                        }}
-                                                        InputLabelProps={{
-                                                            shrink: true,
-                                                            className: classes.bootstrapFormLabel,
                                                         }}
                                                     />
                                                 </Grid>
@@ -313,21 +273,17 @@ class AddProduct extends React.Component {
                                                         className={classes.leftName}>
                                                         Starting*
                                                     </Typography>
-                                                    <TextField
+                                                    <SimpleTextField
                                                         id="time"
                                                         label="Event Start"
                                                         type="time"
                                                         defaultValue="12:00"
-                                                        style={{
-                                                            maxWidth: "300%",
+                                                        handler={(event)=>{
+                                                            this.setState({
+                                                                eventTime: event.target.value
+                                                            })
                                                         }}
-
-                                                        InputLabelProps={{
-                                                            shrink: true,
-                                                        }}
-                                                        inputProps={{
-                                                            step: 300, // 5 min
-                                                        }}
+                                                        property={classes.typo}
                                                     />
                                                 </Grid>
                                                 <Grid item xs="2">
@@ -337,46 +293,56 @@ class AddProduct extends React.Component {
                                                         className={classes.leftName}>
                                                         Duration*
                                                     </Typography>
-                                                    <TextField
+                                                    <SimpleTextField
                                                         id="time"
                                                         label="Duration"
                                                         type="time"
                                                         defaultValue="02:00"
-                                                        style={{
-                                                            maxWidth: "300%",
+                                                        handler={(event)=>{
+                                                            this.setState({
+                                                                eventDuration: event.target.value
+                                                            })
                                                         }}
+                                                        property={classes.typo}
 
-                                                        InputLabelProps={{
-                                                            shrink: true,
-                                                        }}
-                                                        inputProps={{
-                                                            step: 300, // 5 min
-                                                        }}
                                                     />
                                                 </Grid>
                                             </Grid>
                                         </ToolBar>
-                                        <Button
+                                        <CustomButton
                                             color="primary"
-                                            className={classes.button}
                                             variant="outlined"
-                                            aria-label="Add"
-                                            onClick={this.handleAddItem}
-                                        >
-                                            Add Event
-                                            <Add/>
-                                        </Button>
-                                        <Dialog
-                                            open={this.state.openItemMenu}
-//                                            TransitionComponent={Transition}
-                                            aria-labelledby="item-dialog"
-                                            aria-describedby="item-dialog-description"
-                                        >
-                                            <DialogContent>
+                                            name="Add Event"
+                                            handler={this.handleAddItem}
+                                            property={classes.button}
+                                        />
+                                       <SelectItem open={this.state.openItemMenu}
+                                                   handleClose={()=>{
+                                                       this.setState({
+                                                           openItemMenu: false
+                                                       })
+                                                   }}
+                                                   imageUrl={this.state.imageUrl}
+                                                   handleSubmit={()=>{
 
-                                        </DialogContent>
-
-                                        </Dialog>
+                                                   }}
+                                                   handleImage={this.handleSelectionOfImage.bind(this)}
+                                                   handleDescription={(event)=>{
+                                                       this.setState({
+                                                        itemDescription: event.target.value
+                                                       })
+                                                   }}
+                                                   handleName={(event)=>{
+                                                       this.setState({
+                                                           itemName: event.target.value
+                                                       })
+                                                   }}
+                                                   handleStartingBid={(event)=>{
+                                                       this.setState({
+                                                           itemStartingBid: event.target.value
+                                                       })
+                                                   }}
+                                                   title="Pick Item"/>
                                     </Grid>
 
                                 </Grid>
@@ -392,8 +358,8 @@ class AddProduct extends React.Component {
 
 }
 
-AddProduct.propTypes = {
+SellProductForm.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(AddProduct);
+export default withStyles(styles)(SellProductForm);
