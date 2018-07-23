@@ -15,6 +15,13 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import Add from '@material-ui/icons/Add'
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
 
 const styles = theme => ({
     root: {
@@ -27,7 +34,7 @@ const styles = theme => ({
         marginTop: "40px"
     },
     button: {
-        margin: theme.spacing.unit*15,
+        margin: theme.spacing.unit*3,
 
     },
     card: {
@@ -41,10 +48,14 @@ const styles = theme => ({
         height: "52.57%"// 16:9
     },
     date:{
-      margin: theme.spacing.unit*2
+        fontSize: "20px",
+        fontWeight: "lighter",
+        marginTop: "5px",
+        marginBottom: "30px",
     },
     margin: {
         margin: theme.spacing.unit,
+
     },
     leftName: {
         marginTop: "10px",
@@ -52,6 +63,7 @@ const styles = theme => ({
         fontSize: "25px",
         fontWeight: "lighter"
     },
+
     bootstrapRoot: {
         padding: 0,
         'label + &': {
@@ -99,6 +111,9 @@ const styles = theme => ({
     }
 });
 
+function Transition(props) {
+    return <Slide direction="up" {...props} />;
+}
 
 class SellProductForm extends React.Component {
 
@@ -114,7 +129,8 @@ class SellProductForm extends React.Component {
             eventDate: moment(),
             eventTime: "",
             eventDuration: "",
-            categories: {}
+            categories: {},
+            openItemMenu: false
 
         }
         this.fileInput = React.createRef()
@@ -145,6 +161,11 @@ class SellProductForm extends React.Component {
         let categories = ["Artifact","Art","Fashion","Vehicle","Instrument"]
         this.setState({
             categories: categories
+        })
+    }
+    handleAddItem = (event) => {
+        this.setState({
+            openItemMenu: true
         })
     }
 
@@ -294,13 +315,11 @@ class SellProductForm extends React.Component {
                                         </ToolBar>
                                         <ToolBar >
                                             <Grid container spacing="24">
-                                                <Grid item xs="3">
+                                                <Grid item xs="5">
                                                     <Typography
                                                         className={classes.leftName}>
                                                         Date*
                                                     </Typography>
-                                                </Grid>
-                                                <Grid item xs="9">
                                                     <DatePicker
                                                         selected={this.state.eventDate}
                                                         onChange={(date)=>{
@@ -311,41 +330,77 @@ class SellProductForm extends React.Component {
                                                         className={classes.date}
                                                     />
                                                 </Grid>
-                                            </Grid>
-                                        </ToolBar>
-                                        <ToolBar >
-                                            <Grid container spacing="24">
-                                                <Grid item xs="3" >
+                                                <Grid item xs="1">
                                                     <Typography
                                                         className={classes.leftName}>
-                                                        s
+                                                        Starting*
                                                     </Typography>
-                                                </Grid>
-                                                <Grid item xs="9">
                                                     <TextField
-                                                        margin="dense"
-                                                        type="text"
-                                                        placeholder="Name"
-                                                        className={classes.typo}
-                                                        InputProps={{
-                                                            disableUnderline: true,
-                                                            classes: {
-                                                                root: classes.bootstrapRoot,
-                                                                input: classes.bootstrapInput,
-                                                            },
-
+                                                        id="time"
+                                                        label="Event Start"
+                                                        type="time"
+                                                        defaultValue="12:00"
+                                                        style={{
+                                                            maxWidth: "300%",
                                                         }}
+
                                                         InputLabelProps={{
                                                             shrink: true,
-                                                            className: classes.bootstrapFormLabel,
+                                                        }}
+                                                        inputProps={{
+                                                            step: 300, // 5 min
+                                                        }}
+                                                    />
+                                                </Grid>
+                                                <Grid item xs="2">
+                                                </Grid>
+                                                <Grid item xs="1">
+                                                    <Typography
+                                                        className={classes.leftName}>
+                                                        Duration*
+                                                    </Typography>
+                                                    <TextField
+                                                        id="time"
+                                                        label="Duration"
+                                                        type="time"
+                                                        defaultValue="02:00"
+                                                        style={{
+                                                            maxWidth: "300%",
                                                         }}
 
-
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                        }}
+                                                        inputProps={{
+                                                            step: 300, // 5 min
+                                                        }}
                                                     />
                                                 </Grid>
                                             </Grid>
                                         </ToolBar>
+                                        <Button
+                                            color="primary"
+                                            className={classes.button}
+                                            variant="outlined"
+                                            aria-label="Add"
+                                            onClick={this.handleAddItem}
+                                        >
+                                            Add Event
+                                            <Add/>
+                                        </Button>
+                                        <Dialog
+                                            open={this.state.openItemMenu}
+                                            TransitionComponent={Transition}
+                                            aria-labelledby="item-dialog"
+                                            aria-describedby="item-dialog-description"
+                                        >
+                                            <DialogContent>
+
+                                        </DialogContent>
+
+                                        </Dialog>
                                     </Grid>
+
                                 </Grid>
 
                             </Paper>
