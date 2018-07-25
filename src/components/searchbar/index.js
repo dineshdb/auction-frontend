@@ -19,6 +19,8 @@ import ExpandLess from '@material-ui/icons/ExpandLess'
 import IconButton from '@material-ui/core/IconButton'
 import Icon from '@material-ui/core/Icon'
 import Search from '@material-ui/icons/Search'
+import {USER_TOKEN} from "../../definitions/index";
+import {categoriesAction} from '../actions/categories'
 
 const styles = theme => ({
     root: {
@@ -102,36 +104,33 @@ class SearchBar extends React.Component {
     }
     componentDidMount()
         {
-            let categories = [
-                "watches",
-                "jewellery",
-                "artifacts",
-                "arts",
-                "watches",
-                "jewellery",
-                "artifacts",
-                "arts",
-                "watches",
-                "jewellery",
-                "artifacts",
-                "arts",
-                "watches",
-                "jewellery",
-                "artifacts",
-                "arts",
-                "watches",
-                "jewellery",
-                "artifacts",
-                "arts",
-                "watches",
-                "jewellery",
-                "artifacts",
-                "arts"
-            ]
-            this.setState({
-                categories: categories
+            let categories = []
+            axios({
+                method: 'GET',
+                url: `http://localhost:8080/categories`,
+                headers: {
+                    'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
+                }
+            }).then((response)=> {
+                response.data.map((category) => {
+                    categories.push(category)
+                })
+                let compare = (a,b) => {
+                    if (a.categoryName < b.categoryName)
+                        return -1;
+                    if (a.categoryName > b.categoryName)
+                        return 1;
+                    return 0;
+                }
+
+                categories.sort(compare);
+                this.props.dispatch(categoriesAction(categories))
+                this.setState({
+                    categories: this.props.categories[0]
+                })
             })
-        }
+            }
+
 
     handleSearch(event){
         this.setState({
@@ -259,7 +258,7 @@ class SearchBar extends React.Component {
                                             <div>
                                                 <Link to = "#"
                                                     className = {classes.link}>
-                                                    {category}
+                                                    {category.categoryName}
                                                 </Link>
                                                 <br/>
                                             </div>
@@ -273,7 +272,7 @@ class SearchBar extends React.Component {
                                             return(
                                                 <div>
                                                     <Link to = "#" className = {classes.link}>
-                                                        {category}
+                                                        {category.categoryName}
                                                     </Link>
                                                     <br/>
                                                 </div>
@@ -288,7 +287,7 @@ class SearchBar extends React.Component {
                                             return(
                                                 <div>
                                                     <Link to = "#" className = {classes.link}>
-                                                        {category}
+                                                        {category.categoryName}
                                                     </Link>
                                                     <br/>
                                                 </div>
@@ -306,7 +305,7 @@ class SearchBar extends React.Component {
                                                         to = "#"
                                                         className={classes.link}
                                                         >
-                                                        {category}
+                                                        {category.categoryName}
                                                     </Link>
                                                     <br/>
                                                 </div>
@@ -331,11 +330,12 @@ class SearchBar extends React.Component {
 }
 SearchBar.propTypes = {
     classes: PropTypes.object.isRequired,
+    categories: PropTypes.object
 };
 
 function mapStateToProps(state){
     return {
-
+        categories: state.categories.categories
 
     }
 }

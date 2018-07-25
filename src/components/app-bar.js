@@ -98,6 +98,11 @@ class HomeBar extends React.Component {
         const {classes} = this.props;
         const {anchorEl} = this.state
         const open = Boolean(anchorEl);
+        let isOnline = false
+        let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
+        if(userToken){
+           isOnline = true
+            }
         return (
                 <div >
                     <AppBar position="static" className={classes.root}>
@@ -112,7 +117,7 @@ class HomeBar extends React.Component {
                                 </Link>
                                 </Typography>
                             
-                            {this.state.isOnline && (
+                            {isOnline && (
                                 <div>
                                     <Link to="/add">
                                         <Icon>add</Icon>
@@ -163,7 +168,7 @@ class HomeBar extends React.Component {
                                     </Menu>
                                 </div>
                             )}
-                            {   !this.state.isOnline && (
+                            {   !isOnline && (
                                 <div>
                                     <Link to="/signup">
                                         <Button

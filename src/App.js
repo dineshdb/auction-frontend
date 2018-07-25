@@ -11,7 +11,10 @@ import {MuiThemeProvider} from '@material-ui/core/styles'
 import AddProduct from './components/add-product'
 import theme from './theme'
 import CssBaseline from '@material-ui/core/CssBaseline'
-
+//TODO REMOVE
+//
+import Product from './components/productTemplate'
+//
 import ProductDetails from './components/product-details'
 import Notifications from './components/notifications'
 import Cart from './components/cart'
@@ -24,6 +27,7 @@ class App extends React.Component {
     }
 
     render(props) {
+
         return (
             <MuiThemeProvider theme={theme}>
                 <CssBaseline/>
@@ -31,7 +35,6 @@ class App extends React.Component {
                 <div >
                 <AppBar />
                 <Route path = "/" exact strict component  = { Home }/>
-                <Route path = "/add" exact strict component  = { AddProduct }/>
                 <Route path = "/notifications" exact strict component  = { Notifications }/>
                 <Route path = "/cart" exact strict component  = { Cart }/>
                 <Route path = "product/:id" component = {ProductDetails}/>
@@ -57,6 +60,17 @@ class App extends React.Component {
                         }
                     }}
                 />
+                    <Route path = "/add" exact strict render = {() => {
+                        let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
+                        if(!userToken){
+                            return <Login/>
+                        }
+                        else{
+                            return <AddProduct/>
+                        }
+                         }
+                    }
+                    />
 
                 </div>
             </Router>
