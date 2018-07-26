@@ -8,9 +8,9 @@ import {withStyles} from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import axios from 'axios'
-import {USER_TOKEN} from '../../definitions/index'
 import {Redirect } from 'react-router-dom'
-import {userStatus} from './action'
+import store from'../../store'
+
 const styles = theme => ({
     root: {
       ...theme.mixins.gutters(),
@@ -78,14 +78,11 @@ class LoginForm extends React.Component{
                 userId: "",
                 userOnline: false,
                 fireRedirect: false,
-                loginFailed: false
-
-            
+                loginFailed: false           
         }
     }
     
         handleUserName(event){
-           
             this.setState({
                 userEmail: event.target.value
             })
@@ -94,9 +91,7 @@ class LoginForm extends React.Component{
         handleUserPassword(event){
             this.setState({
                 userPassword: event.target.value
-            })
-           
-           
+            })           
         }
 
         validateUserName(){
@@ -139,39 +134,28 @@ class LoginForm extends React.Component{
              
         }
 
-        handleSubmit(event){
-           
+        handleSubmit(event){           
             event.preventDefault()
             const postingData = {
                 userEmail: this.state.userEmail,
                 userPassword: this.state.userPassword
             }
 
-            axios.post(`http://localhost:8080/login`
-            ,(postingData),
-            {crossDomain: true})
+            axios.post(`http://localhost:8080/login`, (postingData),{crossDomain: true})
             .then((response) => {
-
-                let token = (response.headers.authorization)
-                //TODO
-                /*
-                uncomment
-                 */
-                console.log("response ",response)
-                localStorage.setItem(USER_TOKEN,JSON.stringify({
-                    header: token,
-                    isOnline: true,
-                    id: response.data.response
-                }))
-                this.props.dispatch(userStatus({isOnline: true}))
-                this.setState({
-                    fireRedirect: true
-                })
-
-             }
-
-        )
-            .catch(err => {
+                let token = response.headers.authorization
+                    console.log("response ",response)
+                    let user = {
+                        token,
+                        is_online: true,
+                        id: response.data.response
+                    }
+                    store.dispatch({type: 'SIGN_IN', user })
+                    this.setState({
+                        fireRedirect: true
+                    })
+                }
+            ).catch(err => {
                 console.log("Error")
                 this.setState({
                     userOnline: false
@@ -180,8 +164,7 @@ class LoginForm extends React.Component{
             })
 
         }
-        handleRedirect()
-        {
+        handleRedirect(){
             this.setState({
                 fireRedirect: true
             })
@@ -260,9 +243,7 @@ class LoginForm extends React.Component{
                             </div>
                         </div>
                             </Grid>
-
-
-                            </Grid>
+                        </Grid>
 
                     </div>
                     </form> 

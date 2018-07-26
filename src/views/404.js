@@ -18,9 +18,7 @@ export default class Error extends React.Component{
         const {errorMessage} = this.props
         return (
             <div>
-                <Typography
-                    
-                    >
+                <Typography>
                     <h1>
                     Error !!! {errorMessage}
                     
@@ -31,7 +29,6 @@ export default class Error extends React.Component{
                     </Button>
                     { this.state.home && (
                     <Redirect to = "/" />)}
-                        
              </div>
         )
     }
