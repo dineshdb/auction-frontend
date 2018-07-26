@@ -20,7 +20,8 @@ import {CustomButton} from "./buttons";
 import {SimpleTextField} from "./textFields";
 import BootStrappedTextField from './textFields'
 import SelectItem from "./dialogs";
-
+import {USER_TOKEN} from "../definitions/index";
+import {Redirect} from 'react-router-dom'
 const styles = theme => ({
     root: {
       marginLeft: "40px",
@@ -125,43 +126,40 @@ class SellProductForm extends React.Component {
             title: "",
             description: "",
             eventDate: moment(),
-            eventTime: "",
-            eventDuration: "",
+            eventTime: "12:00",
+            eventDuration: "02:00",
             categories: {},
             openItemMenu: false,
             itemName: "",
             itemDescription: "",
             startingBid: "",
+            itemCategory: "",
+            itemObject: {},
+            image: "",
+            fireSuccessful: false,
+            categoryId: null
+
+
 
         }
         this.fileInput = React.createRef()
     }
-    componentDidMount(){
-        /*
-        Fetch the categories available
-         */
+    componentDidMount() {
+        let categories = []
+        axios({
+            method: 'GET',
+            url: `http://localhost:8080/categories`,
+            headers: {
+                'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
+            }
+        }).then((response)=> {
 
-        /*
-            Uncomment the following code
-         */
-
-        // const {url} = "" //url is the api's url to get the categories
-        // axios.get(url,{crossDomain: true})
-        //     .then((res) => {
-        //     this.setState({
-        //         categories: res.data.categories
-        //     })
-        //     })
-        //     .catch((err)=>{
-        //     console.log("Hey got error",err)
-        //     })
-
-        /*
-            Remove the below code after the api has been made
-         */
-        let categories = ["Artifact","Art","Fashion","Vehicle","Instrument"]
-        this.setState({
-            categories: categories
+            response.data.map((category) => {
+                categories.push(category)
+            })
+            this.setState({
+                categories: categories
+            })
         })
     }
     handleAddItem = (event) => {
@@ -198,9 +196,8 @@ class SellProductForm extends React.Component {
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
                                 <Grid container spacing={24} className={classes.margin}>
-                                    <Grid item xs={4} style={{ borderRight: '0.1em solid ',borderRightColor: "#bfbfbf", padding: '0.5em'}}>
-                                    </Grid>
-                                    <Grid item xs={8}>
+                                    
+                                    <Grid item xs={9}>
                                         <ToolBar >
                                             <Grid container spacing="24">
                                                 <Grid item xs="3" >
@@ -312,11 +309,15 @@ class SellProductForm extends React.Component {
                                         <CustomButton
                                             color="primary"
                                             variant="outlined"
-                                            name="Add Event"
+                                            name="Add Item"
                                             handler={this.handleAddItem}
                                             property={classes.button}
                                         />
+
                                        <SelectItem open={this.state.openItemMenu}
+                                                   category={this.state.itemCategory}
+                                                   categories={this.state.categories}
+
                                                    handleClose={()=>{
                                                        this.setState({
                                                            openItemMenu: false
@@ -324,6 +325,46 @@ class SellProductForm extends React.Component {
                                                    }}
                                                    imageUrl={this.state.imageUrl}
                                                    handleSubmit={()=>{
+                                                       this.setState({
+                                                           openItemMenu: false
+                                                       })
+
+                                                       const {
+                                                           itemName,
+                                                           itemCategory,
+                                                           itemDescription,
+                                                           startingBid,
+                                                           selectedImage
+                                                       }=this.state
+                                                       let itemPostObject = {
+                                                           itemName: itemName,
+                                                           itemDescription: itemDescription,
+                                                           itemCategory: itemCategory,
+                                                           startingBid: startingBid
+                                                       }
+                                                       //TODO LOTS OF CRABS
+                                                      let imagePostObject = new FormData()
+                                                       imagePostObject.append('file',selectedImage)
+                                                       // postingData.append('itemName',itemName)
+                                                       // postingData.append('itemDescription',itemDescription)
+                                                       // postingData.append('startingBid',startingBid)
+                                                       // let imagePostingData = new FormData()
+                                                        console.log("IMAGE",selectedImage,"DATA",imagePostObject)
+                                                           axios({
+                                                               method: 'POST',
+                                                               url: `http://localhost:8080/uploadFile/`,
+                                                               headers: {
+                                                                   'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header,
+                                                                    'Content-Type': 'multipart/form-data'
+                                                               },
+                                                               data: imagePostObject
+                                                           }).then((response)=>{
+                                                                this.setState({
+                                                                    image:response.data.fileDownloadUri
+                                                                })
+                                                               console.log(response,'url of image')
+
+                                                           })
 
                                                    }}
                                                    handleImage={this.handleSelectionOfImage.bind(this)}
@@ -339,12 +380,73 @@ class SellProductForm extends React.Component {
                                                    }}
                                                    handleStartingBid={(event)=>{
                                                        this.setState({
-                                                           itemStartingBid: event.target.value
+                                                           startingBid: event.target.value
+                                                       })
+                                                   }}
+                                                   handleCategory={(event)=>{
+                                                       this.setState({
+                                                           itemCategory: event.target.value,
                                                        })
                                                    }}
                                                    title="Pick Item"/>
-                                    </Grid>
+                                        <CustomButton
+                                            name="Submit"
+                                            variant="contained"
+                                            color="primary"
+                                            property={classes.button}
+                                            handler={()=>{
+                                                let categoryId = null
+                                                this.state.categories.map((category)=>{
+                                                    if(category.categoryName === this.state.itemCategory){
+                                                        categoryId = category.categoryId
+                                                    }
+                                                })
+                                                console.log(JSON.parse(localStorage.getItem(USER_TOKEN)))
+                                                let auctionObject = {
+                                                    auctionName: this.state.title,
+                                                    auctionTime: this.state.eventTime,
+                                                    auctionDate: this.state.eventDate.format("YYYY-MM-DD"),
+                                                    auctionDetails: this.state.description,
+                                                    auctionDuration: this.state.eventDuration,
+                                                    itemHolderList: [
+                                                        {
+                                                            itemName: this.state.itemName,
+                                                            itemDescription: this.state.itemDescription,
+                                                            startingBid: Number(this.state.startingBid),
+                                                            seller:Number(JSON.parse(localStorage.getItem(USER_TOKEN)).id),
+                                                            image: this.state.image,
+                                                            auction: null,
+                                                            bids: [],
+                                                            itemCategories: [categoryId]
 
+
+
+                                                        }
+                                                    ],
+                                                    seller: Number(JSON.parse(localStorage.getItem(USER_TOKEN)).id),
+                                                    bids: [],
+                                                    bidders: []
+                                                  //  items: this.state.itemObject
+                                                }
+                                                console.log("AUCTION OBJECT",auctionObject)
+                                                axios({
+                                                    method: 'POST',
+                                                    url: `http://localhost:8080/auctions/createAuction`,
+                                                    headers: {
+                                                        'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header,
+                                                    },
+                                                    data: auctionObject
+                                                }).then(response=>{
+                                                    console.log("SUCCESSFUL",response)
+                                                    this.setState({
+                                                        fireSuccessful: true
+                                                    })}
+                                                )
+                                            }}
+                                        />
+                                    </Grid>
+                                     <Grid item xs={3}>
+                                    </Grid>
                                 </Grid>
 
                             </Paper>
@@ -352,6 +454,11 @@ class SellProductForm extends React.Component {
                         <Grid item xs={4}>
                         </Grid>
                     </Grid>
+                {
+                    this.state.fireSuccessful && (
+                        <Redirect to = "/" />
+                    )
+                }
             </div>
         )
     }

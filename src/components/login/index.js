@@ -9,8 +9,7 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import axios from 'axios'
 import {Redirect } from 'react-router-dom'
-
-import store, {} from'../../store'
+import store from'../../store'
 
 const styles = theme => ({
     root: {
@@ -149,6 +148,7 @@ class LoginForm extends React.Component{
                     let user = {
                         token,
                         is_online: true,
+                        id: response.data.response
                     }
                     store.dispatch({type: 'SIGN_IN', user })
                     this.setState({
@@ -243,9 +243,7 @@ class LoginForm extends React.Component{
                             </div>
                         </div>
                             </Grid>
-
-
-                            </Grid>
+                        </Grid>
 
                     </div>
                     </form> 

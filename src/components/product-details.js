@@ -10,9 +10,8 @@ class ProductDetails extends React.Component {
     constructor(props){
         super(props)
     }
-    componentDidMount(){
-    }
-    render(props){
+
+    render(){
         const {classes} = this.props
         return (
             <div className={classes.root}>
