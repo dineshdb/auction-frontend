@@ -5,6 +5,8 @@ import axios from 'axios'
 import {USER_TOKEN} from "../definitions/index";
 import Toolbar from '@material-ui/core/Toolbar'
 import UserProducts from '../components/userProducts'
+import Fs from 'fs'
+import Path from 'path'
 class Home extends React.Component {
     constructor(props){
         super(props)
@@ -21,9 +23,36 @@ class Home extends React.Component {
                     'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
                 }
             }).then((response)=>{
+               let products = response.data
+                console.log("first products",products)
+                let productsWithImages = []
+                products.map((product)=>{
+                   if(product.image){
+                       axios({
+                           method: 'GET',
+                           url: `http://localhost:8080/downloadFile/18_image.jpg`,
+                           headers: {
+                               'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
+                           },
+                           responseType: 'blob'
+                       }).then((response)=>{
+                            const url = window.URL.createObjectURL(new Blob([response.data]))
+                           console.log("URL",url)
+
+
+                       })
+                   }
+                   else{
+                       productsWithImages.push(product)
+                   }
+                   }
+                    )
                 this.setState({
-                    products: response.data
+                    products: productsWithImages
                 })
+
+                console.log("PRODUCTS",productsWithImages)
+
             })
         }
 

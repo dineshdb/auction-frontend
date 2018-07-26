@@ -344,28 +344,15 @@ class SellProductForm extends React.Component {
                                                        }
                                                        //TODO LOTS OF CRABS
                                                       let imagePostObject = new FormData()
-                                                       imagePostObject.append('file',selectedImage,'image.jpg')
+                                                       imagePostObject.append('file',selectedImage)
                                                        // postingData.append('itemName',itemName)
                                                        // postingData.append('itemDescription',itemDescription)
                                                        // postingData.append('startingBid',startingBid)
                                                        // let imagePostingData = new FormData()
                                                         console.log("IMAGE",selectedImage,"DATA",imagePostObject)
-                                                       let itemResponse = {}
-                                                       axios({
-                                                           method: 'POST',
-                                                           url: `http://localhost:8080/items`,
-                                                           headers: {
-                                                               'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
-                                                           },
-                                                           data: itemPostObject
-                                                       }).then((response)=>{
-                                                           itemResponse = response.data
-                                                           this.setState({
-                                                               itemObject: itemResponse
-                                                           })
                                                            axios({
                                                                method: 'POST',
-                                                               url: `http://localhost:8080/uploadFile/${response.data.itemId}`,
+                                                               url: `http://localhost:8080/uploadFile/`,
                                                                headers: {
                                                                    'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header,
                                                                     'Content-Type': 'multipart/form-data'
@@ -375,9 +362,9 @@ class SellProductForm extends React.Component {
                                                                 this.setState({
                                                                     image:response.data.fileDownloadUri
                                                                 })
+                                                               console.log(response,'url of image')
 
                                                            })
-                                                       })
 
                                                    }}
                                                    handleImage={this.handleSelectionOfImage.bind(this)}
@@ -426,9 +413,11 @@ class SellProductForm extends React.Component {
                                                             itemName: this.state.itemName,
                                                             itemDescription: this.state.itemDescription,
                                                             startingBid: Number(this.state.startingBid),
+                                                            seller:Number(JSON.parse(localStorage.getItem(USER_TOKEN)).id),
                                                             image: this.state.image,
                                                             auction: null,
-                                                            bids: [categoryId],
+                                                            bids: [],
+                                                            itemCategories: [categoryId]
 
 
 
@@ -448,13 +437,11 @@ class SellProductForm extends React.Component {
                                                     },
                                                     data: auctionObject
                                                 }).then(response=>{
-                                                    console.log("auction successful",response)
+                                                    console.log("SUCCESSFUL",response)
                                                     this.setState({
                                                         fireSuccessful: true
-                                                    }).catch(err=>{
-                                                        console.log("ERROR",err)
-                                                    })
-                                                })
+                                                    })}
+                                                )
                                             }}
                                         />
                                     </Grid>
