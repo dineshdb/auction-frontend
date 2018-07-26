@@ -8,8 +8,9 @@ import {withStyles} from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import axios from 'axios'
-import {USER_TOKEN} from '../../definitions/index'
 import {Redirect } from 'react-router-dom'
+
+import store, {} from'../../store'
 
 const styles = theme => ({
     root: {
@@ -83,7 +84,6 @@ class LoginForm extends React.Component{
     }
     
         handleUserName(event){
-           
             this.setState({
                 userEmail: event.target.value
             })
@@ -92,9 +92,7 @@ class LoginForm extends React.Component{
         handleUserPassword(event){
             this.setState({
                 userPassword: event.target.value
-            })
-           
-           
+            })           
         }
 
         validateUserName(){
@@ -137,8 +135,7 @@ class LoginForm extends React.Component{
              
         }
 
-        handleSubmit(event){
-           
+        handleSubmit(event){           
             event.preventDefault()
             const postingData = {
                 userEmail: this.state.userEmail,
@@ -148,16 +145,17 @@ class LoginForm extends React.Component{
             axios.post(`http://localhost:8080/login`, (postingData),{crossDomain: true})
             .then((response) => {
                 let token = response.headers.authorization
-                console.log("response ",response)
-                let user = {
-                    token,
-                    is_online: true,
+                    console.log("response ",response)
+                    let user = {
+                        token,
+                        is_online: true,
+                    }
+                    store.dispatch({type: 'SIGN_IN', user })
+                    this.setState({
+                        fireRedirect: true
+                    })
                 }
-                //store.dispatch({type: 'SIGN_IN', user })
-             }
-
-        )
-            .catch(err => {
+            ).catch(err => {
                 console.log("Error")
                 this.setState({
                     userOnline: false
@@ -166,8 +164,7 @@ class LoginForm extends React.Component{
             })
 
         }
-        handleRedirect()
-        {
+        handleRedirect(){
             this.setState({
                 fireRedirect: true
             })

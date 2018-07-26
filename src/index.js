@@ -11,5 +11,3 @@ ReactDOM.render(
         <App />
     </Provider>, document.getElementById('root'));
 registerServiceWorker();
-
-console.log("state" + store.getState())

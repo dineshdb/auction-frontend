@@ -18,17 +18,21 @@ export const signout = user =>({
 })
 
 // reducers
-let initialState = {
-    user : {}
+let initialState = JSON.parse(localStorage.getItem(USER_KEY))
+if(initialState == null) {
+    initialState = {
+        user : {}
+    }
 }
 const reducer = ( state = initialState, action) => {
     switch (action.type){
         case SIGN_IN:
             localStorage.setItem(USER_KEY, JSON.stringify(action.user))
-            return Object.assign({}, state, {user: action.user})
+            let date = Date.now()
+            return Object.assign({}, state, {user: action.user, isLoggedIn : true, date})
         case SIGN_OUT:
             localStorage.removeItem(USER_KEY)
-            return Object.assign({}, state, {user: {}})
+            return Object.assign({}, state, {user: {}, isLoggedIn: false, date: null})
         case USER_STATUS:
         default:
             return state
