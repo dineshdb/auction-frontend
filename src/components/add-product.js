@@ -344,6 +344,7 @@ class SellProductForm extends React.Component {
                                                        // postingData.append('startingBid',startingBid)
                                                        // let imagePostingData = new FormData()
                                                         console.log("IMAGE",selectedImage,"DATA",secondPostingData)
+                                                       let itemResponse = {}
                                                        axios({
                                                            method: 'POST',
                                                            url: `http://localhost:8080/items`,
@@ -352,6 +353,7 @@ class SellProductForm extends React.Component {
                                                            },
                                                            data: firstPostingData
                                                        }).then((response)=>{
+                                                           itemResponse = response.data
                                                            axios({
                                                                method: 'POST',
                                                                url: `http://localhost:8080/uploadFile/${response.data.itemId}`,
@@ -361,7 +363,20 @@ class SellProductForm extends React.Component {
                                                                },
                                                                data: secondPostingData
                                                            }).then((response)=>{
-                                                               console.log("SECOND DATA",response)
+                                                                itemResponse={...itemResponse,image:response.data.fileDownloadUri}
+                                                                console.log("ITEMRESPONSE",itemResponse)
+                                                                axios({
+                                                                    method: 'PUT',
+                                                                    url: `http://localhost:8080/items`,
+                                                                    headers: {
+                                                                        'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header,
+                                                                        'Access-Control-Allow-Origin': '*',
+                                                                        'Access-Control-Allow-Methods' : 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+                                                                    },
+                                                                    data: itemResponse
+                                                                }).then(response=>{
+                                                                    console.log("RESPONSE first",response)
+                                                                })
                                                            })
                                                        })
 
