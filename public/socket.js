@@ -6,8 +6,6 @@ let connected = e => {
 	client.subscribe("/auction/1", e =>{
 		console.log("Hello" + e)
 	})
-	client.send("/bid/1", "Eefdsf")
-	
 }
 let error = e => {
 	console.log("error " + e)
