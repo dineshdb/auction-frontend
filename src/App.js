@@ -17,6 +17,7 @@ import Notifications from './components/notifications'
 import Cart from './components/cart'
 import UserProfile from './components/user-profile'
 
+
 import AppBar from './components/app-bar'
 class App extends React.Component {
     constructor(props){

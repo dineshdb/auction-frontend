@@ -115,7 +115,9 @@ class HomeBar extends React.Component {
                             {this.state.isOnline && (
                                 <div>
                                     <Link to="/add">
-                                        <Icon>add</Icon>
+                                        <Button>
+                                            <Icon>add</Icon>
+                                        </Button>
                                     </Link>
                                     <Link to="/notifications">
                                         <Badge className={classes.margin} badgeContent={4} color="primary">
