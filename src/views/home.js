@@ -12,17 +12,20 @@ class Home extends React.Component {
         }
     }
     componentDidMount(){
-        axios({
-            method: 'GET',
-            url: `http://localhost:8080/items`,
-            headers: {
-                'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
-            }
-        }).then((response)=>{
-            this.setState({
-                products: response.data
+        if(localStorage.getItem(USER_TOKEN)){
+            axios({
+                method: 'GET',
+                url: `http://localhost:8080/items`,
+                headers: {
+                    'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
+                }
+            }).then((response)=>{
+                this.setState({
+                    products: response.data
+                })
             })
-        })
+        }
+
     }
     render(){
         return (

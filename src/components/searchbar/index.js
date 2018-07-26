@@ -105,30 +105,33 @@ class SearchBar extends React.Component {
     componentDidMount()
         {
             let categories = []
-            axios({
-                method: 'GET',
-                url: `http://localhost:8080/categories`,
-                headers: {
-                    'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
-                }
-            }).then((response)=> {
-                response.data.map((category) => {
-                    categories.push(category)
-                })
-                let compare = (a,b) => {
-                    if (a.categoryName < b.categoryName)
-                        return -1;
-                    if (a.categoryName > b.categoryName)
-                        return 1;
-                    return 0;
-                }
+            if(localStorage.getItem(USER_TOKEN)){
+                axios({
+                    method: 'GET',
+                    url: `http://localhost:8080/categories`,
+                    headers: {
+                        'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
+                    }
+                }).then((response)=> {
+                    response.data.map((category) => {
+                        categories.push(category)
+                    })
+                    let compare = (a,b) => {
+                        if (a.categoryName < b.categoryName)
+                            return -1;
+                        if (a.categoryName > b.categoryName)
+                            return 1;
+                        return 0;
+                    }
 
-                categories.sort(compare);
-                this.props.dispatch(categoriesAction(categories))
-                this.setState({
-                    categories: this.props.categories[0]
+                    categories.sort(compare);
+                    this.props.dispatch(categoriesAction(categories))
+                    this.setState({
+                        categories: this.props.categories[0]
+                    })
                 })
-            })
+            }
+           
             }
 
 

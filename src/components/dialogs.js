@@ -66,21 +66,24 @@ class SelectItem  extends React.Component{
     }
     componentDidMount() {
         let categories = []
-        axios({
-            method: 'GET',
-            url: `http://localhost:8080/categories`,
-            headers: {
-                'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
-            }
-        }).then((response)=> {
+        if(localStorage.getItem(USER_TOKEN)){
+            axios({
+                method: 'GET',
+                url: `http://localhost:8080/categories`,
+                headers: {
+                    'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
+                }
+            }).then((response)=> {
 
-            response.data.map((category) => {
-                categories.push(category)
+                response.data.map((category) => {
+                    categories.push(category)
+                })
+                this.setState({
+                    categories: categories
+                })
             })
-            this.setState({
-                categories: categories
-            })
-        })
+        }
+
     }
     render(){
         this.fileInput = React.createRef()
