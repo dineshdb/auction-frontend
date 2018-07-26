@@ -61,6 +61,7 @@ class Product extends React.Component {
                     <CardMedia
                         className={classes.media}
                         title="Contemplative Reptile"
+                        image={image}
                     />
                     <CardContent>
                         <Typography >

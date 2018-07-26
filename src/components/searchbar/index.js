@@ -19,7 +19,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess'
 import IconButton from '@material-ui/core/IconButton'
 import Icon from '@material-ui/core/Icon'
 import Search from '@material-ui/icons/Search'
-import {USER_TOKEN} from "../../definitions/index";
+import {USER_TOKEN,USER_PRODUCTS} from "../../definitions/index";
 import {categoriesAction} from '../actions/categories'
 
 const styles = theme => ({
@@ -98,7 +98,8 @@ class SearchBar extends React.Component {
             search: false,
             categoryOpen: false,
             categories: [],
-            selectedCategory: "Categories"
+            selectedCategory: "Categories",
+            login: false
 
         }
     }
@@ -131,7 +132,7 @@ class SearchBar extends React.Component {
                     })
                 })
             }
-           
+
             }
 
 
@@ -188,7 +189,7 @@ class SearchBar extends React.Component {
                         <Grid container spacing={24} >
                             <Grid
                                 item
-                                xs={6}
+                                xs={8}
                             >
                                 <Toolbar>
                                 <Button
@@ -209,11 +210,29 @@ class SearchBar extends React.Component {
                                 >
                                     New Today
                                 </Button>
+                                    <Button
+                                        className={classes.button}
+                                        onClick={ ()=> {
+                                           let user = JSON.parse(localStorage.getItem(USER_TOKEN))
+                                            if(!user){
+                                               this.setState({
+                                                   login: true
+                                               })
+                                            }
+                                            else{
+                                                localStorage.setItem(USER_PRODUCTS,JSON.stringify({
+                                                    on: true
+                                                }))
+                                            }
+                                        }}
+                                    >
+                                        My Products
+                                    </Button>
                                 </Toolbar>
                             </Grid>
 
 
-                            <Grid item xs={5}>
+                            <Grid item xs={4}>
                                 <Toolbar>
                                 <TextField
                                     style={{color: "white"}}
@@ -326,7 +345,9 @@ class SearchBar extends React.Component {
                     {
                         this.state.search && (<Redirect to = "/signup" />)
                     }
-
+                    {
+                        this.state.login && <Redirect to = '/login' />
+                    }
                 </div>
             )
     }

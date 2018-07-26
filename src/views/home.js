@@ -4,6 +4,7 @@ import Product from '../components/productTemplate'
 import axios from 'axios'
 import {USER_TOKEN} from "../definitions/index";
 import Toolbar from '@material-ui/core/Toolbar'
+import UserProducts from '../components/userProducts'
 class Home extends React.Component {
     constructor(props){
         super(props)
@@ -39,6 +40,7 @@ class Home extends React.Component {
                             <Product
                                 title={product.itemName}
                                 bid={product.startingBid}
+                                date={product.date}
                             />
                         )
                     })

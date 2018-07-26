@@ -1,3 +1,3 @@
 export const USER_TOKEN = 'USER_TOKEN'
 export const CATEGORIES = 'CATEGORIES'
-
+export const USER_PRODUCTS = 'USER_PRODUCTS'

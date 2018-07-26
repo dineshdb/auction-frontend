@@ -122,10 +122,15 @@ class SelectItem  extends React.Component{
                         <Grid container spacing="24">
                             <Grid item xs = {6}>
                                 <Card className={classes.card}>
-                                    <CardMedia
-                                        className={classes.media}
-                                        image={imageUrl}
-                                    />
+                                    {
+                                        imageUrl && (
+                                            <CardMedia
+                                                className={classes.media}
+                                                image={imageUrl}
+                                            />
+                                        )
+                                    }
+
                                 </Card>
                                 <input style={{display: 'none'}}
                                        ref = {fileInput => this.fileInput = fileInput}

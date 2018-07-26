@@ -13,6 +13,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Badge from '@material-ui/core/Badge';
+import {userStatus} from "./login/action";
 
 const styles = theme => ({
     root: {
@@ -98,11 +99,12 @@ class HomeBar extends React.Component {
         const {classes} = this.props;
         const {anchorEl} = this.state
         const open = Boolean(anchorEl);
+        let localOnline = JSON.parse(localStorage.getItem(USER_TOKEN))
         let isOnline = false
-        let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
-        if(userToken){
-           isOnline = true
-            }
+        if(localOnline){
+            isOnline = true
+        }
+
         return (
                 <div >
                     <AppBar position="static" className={classes.root}>
@@ -117,7 +119,7 @@ class HomeBar extends React.Component {
                                 </Link>
                                 </Typography>
                             
-                            {isOnline && (
+                            {(isOnline) && (
                                 <div>
                                     <Link to="/add">
                                         <Icon>add</Icon>
@@ -159,16 +161,19 @@ class HomeBar extends React.Component {
                                     <MenuItem onClick={this.gotoHelp}> Help </MenuItem>
                                     <MenuItem onClick={ ()=> {
                                                 localStorage.removeItem(USER_TOKEN)
+                                                this.props.dispatch(userStatus(
+                                                ))
                                                 this.handleClose()
                                                 this.setState({
                                                     isOnline: false
                                                 })
+
                                             }
                                             }>Logout</MenuItem>
                                     </Menu>
                                 </div>
                             )}
-                            {   !isOnline && (
+                            {   (!isOnline) && (
                                 <div>
                                     <Link to="/signup">
                                         <Button
@@ -198,6 +203,7 @@ HomeBar.propTypes = {
 
 function mapStateToProps(state){
     return {
+        userStatus: state.userStatus
     }
 }
 export default connect(mapStateToProps)(withStyles(styles)(HomeBar))

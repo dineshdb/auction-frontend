@@ -21,7 +21,7 @@ import {SimpleTextField} from "./textFields";
 import BootStrappedTextField from './textFields'
 import SelectItem from "./dialogs";
 import {USER_TOKEN} from "../definitions/index";
-
+import {Redirect} from 'react-router-dom'
 const styles = theme => ({
     root: {
       marginLeft: "40px",
@@ -126,14 +126,20 @@ class SellProductForm extends React.Component {
             title: "",
             description: "",
             eventDate: moment(),
-            eventTime: "",
-            eventDuration: "",
+            eventTime: "12:00",
+            eventDuration: "02:00",
             categories: {},
             openItemMenu: false,
             itemName: "",
             itemDescription: "",
             startingBid: "",
-            itemCategory: ""
+            itemCategory: "",
+            itemObject: {},
+            image: "",
+            fireSuccessful: false,
+            categoryId: null
+
+
 
         }
         this.fileInput = React.createRef()
@@ -330,20 +336,20 @@ class SellProductForm extends React.Component {
                                                            startingBid,
                                                            selectedImage
                                                        }=this.state
-                                                       let firstPostingData = {
+                                                       let itemPostObject = {
                                                            itemName: itemName,
                                                            itemDescription: itemDescription,
                                                            itemCategory: itemCategory,
                                                            startingBid: startingBid
                                                        }
                                                        //TODO LOTS OF CRABS
-                                                      let secondPostingData = new FormData()
-                                                       secondPostingData.append('file',selectedImage,'image.jpg')
+                                                      let imagePostObject = new FormData()
+                                                       imagePostObject.append('file',selectedImage,'image.jpg')
                                                        // postingData.append('itemName',itemName)
                                                        // postingData.append('itemDescription',itemDescription)
                                                        // postingData.append('startingBid',startingBid)
                                                        // let imagePostingData = new FormData()
-                                                        console.log("IMAGE",selectedImage,"DATA",secondPostingData)
+                                                        console.log("IMAGE",selectedImage,"DATA",imagePostObject)
                                                        let itemResponse = {}
                                                        axios({
                                                            method: 'POST',
@@ -351,9 +357,12 @@ class SellProductForm extends React.Component {
                                                            headers: {
                                                                'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
                                                            },
-                                                           data: firstPostingData
+                                                           data: itemPostObject
                                                        }).then((response)=>{
                                                            itemResponse = response.data
+                                                           this.setState({
+                                                               itemObject: itemResponse
+                                                           })
                                                            axios({
                                                                method: 'POST',
                                                                url: `http://localhost:8080/uploadFile/${response.data.itemId}`,
@@ -361,22 +370,12 @@ class SellProductForm extends React.Component {
                                                                    'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header,
                                                                     'Content-Type': 'multipart/form-data'
                                                                },
-                                                               data: secondPostingData
+                                                               data: imagePostObject
                                                            }).then((response)=>{
-                                                                itemResponse={...itemResponse,image:response.data.fileDownloadUri}
-                                                                console.log("ITEMRESPONSE",itemResponse)
-                                                                axios({
-                                                                    method: 'PUT',
-                                                                    url: `http://localhost:8080/items`,
-                                                                    headers: {
-                                                                        'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header,
-                                                                        'Access-Control-Allow-Origin': '*',
-                                                                        'Access-Control-Allow-Methods' : 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-                                                                    },
-                                                                    data: itemResponse
-                                                                }).then(response=>{
-                                                                    console.log("RESPONSE first",response)
+                                                                this.setState({
+                                                                    image:response.data.fileDownloadUri
                                                                 })
+
                                                            })
                                                        })
 
@@ -399,10 +398,65 @@ class SellProductForm extends React.Component {
                                                    }}
                                                    handleCategory={(event)=>{
                                                        this.setState({
-                                                           itemCategory: event.target.value
+                                                           itemCategory: event.target.value,
                                                        })
                                                    }}
                                                    title="Pick Item"/>
+                                        <CustomButton
+                                            name="Submit"
+                                            variant="contained"
+                                            color="primary"
+                                            property={classes.button}
+                                            handler={()=>{
+                                                let categoryId = null
+                                                this.state.categories.map((category)=>{
+                                                    if(category.categoryName === this.state.itemCategory){
+                                                        categoryId = category.categoryId
+                                                    }
+                                                })
+                                                console.log(JSON.parse(localStorage.getItem(USER_TOKEN)))
+                                                let auctionObject = {
+                                                    auctionName: this.state.title,
+                                                    auctionTime: this.state.eventTime,
+                                                    auctionDate: this.state.eventDate.format("YYYY-MM-DD"),
+                                                    auctionDetails: this.state.description,
+                                                    auctionDuration: this.state.eventDuration,
+                                                    itemHolderList: [
+                                                        {
+                                                            itemName: this.state.itemName,
+                                                            itemDescription: this.state.itemDescription,
+                                                            startingBid: Number(this.state.startingBid),
+                                                            image: this.state.image,
+                                                            auction: null,
+                                                            bids: [categoryId],
+
+
+
+                                                        }
+                                                    ],
+                                                    seller: Number(JSON.parse(localStorage.getItem(USER_TOKEN)).id),
+                                                    bids: [],
+                                                    bidders: []
+                                                  //  items: this.state.itemObject
+                                                }
+                                                console.log("AUCTION OBJECT",auctionObject)
+                                                axios({
+                                                    method: 'POST',
+                                                    url: `http://localhost:8080/auctions/createAuction`,
+                                                    headers: {
+                                                        'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header,
+                                                    },
+                                                    data: auctionObject
+                                                }).then(response=>{
+                                                    console.log("auction successful",response)
+                                                    this.setState({
+                                                        fireSuccessful: true
+                                                    }).catch(err=>{
+                                                        console.log("ERROR",err)
+                                                    })
+                                                })
+                                            }}
+                                        />
                                     </Grid>
                                      <Grid item xs={3}>
                                     </Grid>
@@ -413,6 +467,11 @@ class SellProductForm extends React.Component {
                         <Grid item xs={4}>
                         </Grid>
                     </Grid>
+                {
+                    this.state.fireSuccessful && (
+                        <Redirect to = "/" />
+                    )
+                }
             </div>
         )
     }
