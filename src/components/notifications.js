@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography'
+import {connect} from 'react-redux'
 let styles = {
 
 }
@@ -13,8 +14,9 @@ class Notifications extends React.Component {
     componentDidMount(){
     }
     render(props){
-        const {classes, match} = this.props
+        const {classes, match,products} = this.props
         console.log(match)
+        console.log("CHECKING REDUX STORE",products)
         return (
             <div className={classes.root}>
                 <Typography
@@ -32,6 +34,11 @@ class Notifications extends React.Component {
 
 Notifications.propTypes = {
     classes: PropTypes.object.isRequired,
+    products: PropTypes.object.isRequired
 };
-
-export default withStyles(styles)(Notifications);
+function mapStateToProps(state){
+    return {
+        products: state.products
+    }
+}
+export default connect(mapStateToProps)(withStyles(styles)(Notifications));

@@ -131,7 +131,7 @@ class SellProductForm extends React.Component {
             eventDate: moment(),
             eventTime: "12:00",
             eventDuration: "02:00",
-            categories: {},
+            categories: [],
             openItemMenu: false,
             itemName: "",
             itemDescription: "",
@@ -350,7 +350,7 @@ class SellProductForm extends React.Component {
                                                                method: 'POST',
                                                                url: `http://localhost:8080/uploadFile/`,
                                                                headers: {
-                                                                   'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header,
+                                                                   'Authorization': store.getState().header,
                                                                     'Content-Type': 'multipart/form-data'
                                                                },
                                                                data: imagePostObject
@@ -397,7 +397,6 @@ class SellProductForm extends React.Component {
                                                         categoryId = category.categoryId
                                                     }
                                                 })
-                                                console.log(JSON.parse(localStorage.getItem(USER_TOKEN)))
                                                 let auctionObject = {
                                                     auctionName: this.state.title,
                                                     auctionTime: this.state.eventTime,
@@ -409,7 +408,7 @@ class SellProductForm extends React.Component {
                                                             itemName: this.state.itemName,
                                                             itemDescription: this.state.itemDescription,
                                                             startingBid: Number(this.state.startingBid),
-                                                            seller:Number(JSON.parse(localStorage.getItem(USER_TOKEN)).id),
+                                                            seller:Number(store.getState().header.id),
                                                             image: this.state.image,
                                                             auction: null,
                                                             bids: [],
@@ -419,7 +418,7 @@ class SellProductForm extends React.Component {
 
                                                         }
                                                     ],
-                                                    seller: Number(JSON.parse(localStorage.getItem(USER_TOKEN)).id),
+                                                    seller: Number(store.getState().id),
                                                     bids: [],
                                                     bidders: []
                                                   //  items: this.state.itemObject
@@ -429,7 +428,7 @@ class SellProductForm extends React.Component {
                                                     method: 'POST',
                                                     url: `http://localhost:8080/auctions/createAuction`,
                                                     headers: {
-                                                        'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header,
+                                                        'Authorization':store.getState().header,
                                                     },
                                                     data: auctionObject
                                                 }).then(response=>{
