@@ -11,10 +11,6 @@ import {MuiThemeProvider} from '@material-ui/core/styles'
 import AddProduct from './components/add-product'
 import theme from './theme'
 import CssBaseline from '@material-ui/core/CssBaseline'
-//TODO REMOVE
-//
-import Product from './components/productTemplate'
-//
 import ProductDetails from './components/product-details'
 import Notifications from './components/notifications'
 import Cart from './components/cart'
@@ -37,7 +33,7 @@ class App extends React.Component {
                 <Route path = "/" exact strict component  = { Home }/>
                 <Route path = "/notifications" exact strict component  = { Notifications }/>
                 <Route path = "/cart" exact strict component  = { Cart }/>
-                <Route path = "product/:id" component = {ProductDetails}/>
+                <Route path = "/product/:id" component = {ProductDetails}/>
                 <Route path = "/error" exact strict render = {() => <PageNotFound errorMessage = "Invalid page" />}/>
                 <Route path = "/profile/:id" component = {UserProfile} />
 

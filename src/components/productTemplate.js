@@ -10,16 +10,23 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
 import AddIcon from '@material-ui/icons/Add';
+import {CustomButton} from "./buttons";
+import {Redirect} from 'react-router-dom'
 
 const styles = theme => ({
     card: {
-        maxWidth: 300,
-        height: "10%",
-        margin: theme.spacing.unit*4
+
+        marginTop: "8%",
+        height: "60%",
+        maxWidth: 460,
+        width: 283,
+        margin: theme.spacing.unit,
+
     },
     media: {
+        margin: theme.spacing.unit*3,
         height: 0,
-        paddingTop: '56.25%', // 16:9
+        paddingTop: '56.25%'
     },
     actions: {
         display: 'flex',
@@ -37,46 +44,82 @@ const styles = theme => ({
     avatar: {
         backgroundColor: red[500],
     },
+    link: {
+        color: "black",
+        opacity: "0.8",
+        '&:hover': {
+            textDecoration: "underline"
+        }
+
+    },
+    margin: {
+        margin: theme.spacing.unit,
+        width: "100%"
+    }
 });
 
 class Product extends React.Component {
-    state = { expanded: false };
+    state = {
+        expanded: false,
+        fireDetails: false,
+        path: ""
+    };
 
 
     render() {
-        const { classes,title,date,time,bid,image } = this.props;
+        const { classes,title,date,time,bid,image,id } = this.props;
 
         return (
             <div>
-                <Card className={classes.card}>
-                    <CardHeader
-                        title={title}
-                    />
-                    <CardActions className={classes.actions} disableActionSpacing>
-                        <IconButton aria-label="Add to favorites" color="primary" variant="contained">
-                            <AddIcon />
-                        </IconButton>
-                        Participate
-                    </CardActions>
+                <Card
+                    elevation={0}
+                    square
+                    className={classes.card}>
                     <CardMedia
                         className={classes.media}
-                        title="Contemplative Reptile"
                         image={image}
                     />
                     <CardContent>
-                        <Typography >
-                            Bid: {bid}
+                        <Typography
+                            style={{
+                                fontSize: "16px",
+                                fontWeight: 400
+                            }}
+                        ><a href = "#" className={classes.link}>{title}</a>
                         </Typography>
-                        <Typography>
-                            Date: {date}
-                        </Typography>
-                        <Typography>
-                            Time: {time}
+                        <Typography
+                            style={{
+                                fontSize: "16px",
+                                fontWeight: 400,
+                                color: "#6b6b6b"
+                            }}
+                        >Rs. {bid}
                         </Typography>
 
                     </CardContent>
+                    <CardActions>
+                        <CustomButton
+                            property={classes.margin}
+                            name="BID NOW"
+                            handler={()=>{
+                                this.setState({
+                                    fireDetails: true,
+                                    path: `product/${id}`
+                                })
+                            }}
+                            variant="contained"
+                            color="primary"
+                            style={{borderRadius: 0}}
+                            size="large"
+                        />
+                    </CardActions>
 
                 </Card>
+                {
+                    this.state.fireDetails && (
+                        <Redirect to = {this.state.path}/>
+                    )
+                }
             </div>
         );
     }
@@ -88,7 +131,8 @@ Product.propTypes = {
     image: PropTypes.string,
     bid: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
-    time: PropTypes.string.isRequired
+    time: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(Product)
