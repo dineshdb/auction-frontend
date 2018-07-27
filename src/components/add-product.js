@@ -183,23 +183,18 @@ class SellProductForm extends React.Component {
         return (
             <div className={classes.root}>
                 <Typography
-
                     style={{
                         fontSize: "30px",
                         color: "black",
                         fontWeight: "lighter"
                     }}
                     align="center"
-                >
-                    Auction Details
-
-                </Typography>
+                > Auction Details</Typography>
 
                     <Grid container spacing="24">
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
                                 <Grid container spacing={24} className={classes.margin}>
-                                    
                                     <Grid item xs={9}>
                                         <ToolBar >
                                             <Grid container spacing="24">
@@ -225,8 +220,6 @@ class SellProductForm extends React.Component {
                                                 </Grid>
                                             </Grid>
                                         </ToolBar>
-
-
                                         <ToolBar  >
                                             <Grid container spacing="24">
                                                 <Grid item xs="3">

@@ -12,23 +12,20 @@ import Collapse from '@material-ui/core/Collapse';
 import Divider from '@material-ui/core/Divider'
 import {Redirect} from 'react-router-dom'
 import Paper from '@material-ui/core/Paper'
-import DialogContent from '@material-ui/core/DialogContent'
 import AppBar from '@material-ui/core/AppBar'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import IconButton from '@material-ui/core/IconButton'
-import Icon from '@material-ui/core/Icon'
 import Search from '@material-ui/icons/Search'
 import {USER_TOKEN,USER_PRODUCTS} from "../../definitions/index";
 import {categoriesAction} from '../actions/categories'
+import store from '../../store'
 
 const styles = theme => ({
     root: {
         flexGrow: 0,
         marginTop: "0px",
         fontWeight: "lighter",
-
-
     },
     paper:{
       padding: "30px",
@@ -85,12 +82,7 @@ const styles = theme => ({
 
     }
 });
-
-
-
-
 class SearchBar extends React.Component {
-
     constructor(props) {
         super(props)
         this.state = {
@@ -100,42 +92,28 @@ class SearchBar extends React.Component {
             categories: [],
             selectedCategory: "Categories",
             login: false
-
         }
     }
-    componentDidMount()
-        {
-            let categories = []
-            if(localStorage.getItem(USER_TOKEN)){
-                axios({
-                    method: 'GET',
-                    url: `http://localhost:8080/categories`,
-                    headers: {
-                        'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
-                    }
-                }).then((response)=> {
-                    response.data.map((category) => {
-                        categories.push(category)
-                    })
-                    let compare = (a,b) => {
-                        if (a.categoryName < b.categoryName)
-                            return -1;
-                        if (a.categoryName > b.categoryName)
-                            return 1;
-                        return 0;
-                    }
-
-                    categories.sort(compare);
-                    this.props.dispatch(categoriesAction(categories))
-                    this.setState({
-                        categories: this.props.categories[0]
-                    })
-                })
+    componentDidMount(){
+        let categories = []
+        axios({
+            method: 'GET',
+            url: `http://localhost:8080/categories`,
+            headers: {
+                'Authorization': store.getState().header
             }
-
-            }
-
-
+        }).then(response =>{
+            response.data.map((category) => {
+                categories.push(category)
+            })
+            categories.sort((a,b) => a.categoryName < b.categoryName ? -1 : 1)
+            this.props.dispatch(categoriesAction(categories))
+            this.setState({
+                categories: categories
+            })
+        })
+    }
+        
     handleSearch(event){
         this.setState({
             searchName: event.target.value
@@ -174,8 +152,7 @@ class SearchBar extends React.Component {
         this.handleCategoryClick()
     }
     render() {
-
-            const {classes} = this.props
+        const {classes} = this.props
 
             return (
                 <div >
