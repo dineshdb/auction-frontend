@@ -46,7 +46,7 @@ class HomeBar extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            isOnline: store.getState().is_online,
+            isOnline: store.getState().isLoggedIn,
             userId: "",
             fireHome: false,
             userName: ""
@@ -54,8 +54,9 @@ class HomeBar extends React.Component {
     }
     componentDidMount(){
         store.subscribe(()=>{
+            console.log(store.getState())
             this.setState({
-                isOnline: store.getState().is_online
+                isOnline: store.getState().isLoggedIn
             })
         })
     }
@@ -91,6 +92,12 @@ class HomeBar extends React.Component {
         const {classes} = this.props;
         const {anchorEl} = this.state
         const open = Boolean(anchorEl);
+        let localOnline = JSON.parse(localStorage.getItem(USER_TOKEN))
+        let isOnline = false
+        if(localOnline){
+            isOnline = true
+        }
+
         return (
                 <div >
                     <AppBar position="static" className={classes.root}>
@@ -105,7 +112,7 @@ class HomeBar extends React.Component {
                                 </Link>
                                 </Typography>
                             
-                            {this.state.isOnline && (
+                            {(this.state.isOnline) && (
                                 <div>
                                     <Link to="/add">
                                         <Button>
@@ -148,17 +155,14 @@ class HomeBar extends React.Component {
                                     <MenuItem onClick={this.openProfile}>Profile</MenuItem>
                                     <MenuItem onClick={this.gotoHelp}> Help </MenuItem>
                                     <MenuItem onClick={ ()=> {
-                                                localStorage.removeItem(USER_TOKEN)
+                                                this.props.dispatch({type: 'SIGN_OUT'})
                                                 this.handleClose()
-                                                this.setState({
-                                                    isOnline: false
-                                                })
                                             }
                                             }>Logout</MenuItem>
                                     </Menu>
                                 </div>
                             )}
-                            {   !this.state.isOnline && (
+                            {   (!this.state.isOnline) && (
                                 <div>
                                     <Link to="/signup">
                                         <Button
@@ -188,6 +192,7 @@ HomeBar.propTypes = {
 
 function mapStateToProps(state){
     return {
+        userStatus: state.userStatus
     }
 }
 export default connect(mapStateToProps)(withStyles(styles)(HomeBar))

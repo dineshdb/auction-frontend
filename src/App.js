@@ -11,7 +11,6 @@ import {MuiThemeProvider} from '@material-ui/core/styles'
 import AddProduct from './components/add-product'
 import theme from './theme'
 import CssBaseline from '@material-ui/core/CssBaseline'
-
 import ProductDetails from './components/product-details'
 import Notifications from './components/notifications'
 import Cart from './components/cart'
@@ -25,11 +24,19 @@ class App extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            isOnline : store.getState().is_online
+            isOnline : store.getState().isLoggedIn
         }
+    }
+    componentDidMount(){
+        store.subscribe(()=>{
+            this.setState({
+                isOnline: store.getState().isLoggedIn
+            })
+        })
     }
 
     render(props) {
+
         return (
             <MuiThemeProvider theme={theme}>
                 <CssBaseline/>
@@ -37,19 +44,21 @@ class App extends React.Component {
                 <div >
                 <AppBar />
                 <Route path = "/" exact strict component  = { Home }/>
-                <Route path = "/add" exact strict component  = { AddProduct }/>
                 <Route path = "/notifications" exact strict component  = { Notifications }/>
                 <Route path = "/cart" exact strict component  = { Cart }/>
-                <Route path = "product/:id" component = {ProductDetails}/>
+                <Route path = "/product/:id" component = {ProductDetails}/>
                 <Route path = "/error" exact strict render = {() => <PageNotFound errorMessage = "Invalid page" />}/>
                 <Route path = "/profile/:id" component = {UserProfile} />
                 <Route path = "/login" exact strict render = {() => {
                     return this.state.isOnline? (<Redirect to="/" />) : (<Login/>)
                 }}/>
                 <Route path = "/signup" exact strict render = {() => {
-                    return this.state.isOnline? (<Redirect to="/" />) : (<SignUp/>)
+                   return this.state.isOnline? (<Redirect to="/" />) : (<SignUp/>)
                 }}/>
-                </div>
+                <Route path = "/add" exact strict render = {() => {
+                   return this.state.isOnline? (<Login to="/" />) : (<AddProduct/>)
+                }}/>
+               </div>
             </Router>
             </MuiThemeProvider>
         )

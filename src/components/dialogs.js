@@ -11,6 +11,19 @@ import {withStyles} from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Card from '@material-ui/core/Card'
 import CardMedia from '@material-ui/core/CardMedia'
+import Add from '@material-ui/icons/Add'
+import Button from '@material-ui/core/Button'
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import {connect} from 'react-redux'
+import axios from 'axios'
+import {USER_TOKEN} from "../definitions/index";
+import Typography from '@material-ui/core/Typography'
+import Collapse from '@material-ui/core/Collapse'
+import TextField from '@material-ui/core/TextField'
 
 const styles = (theme) => {
     return{
@@ -21,13 +34,17 @@ const styles = (theme) => {
         card: {
 
             marginTop: "8%",
-            height: "200%",
-            width: "100%"
+            height: "250px",
+            width: "100%",
+
         },
         media: {
-            paddingTop: '56.25%',
-            height: "200%",
-            width: "100%"// 16:9
+            height: 0,
+            paddingTop: '100%',
+        },
+        formControl: {
+            minWidth: 120,
+            marginTop: theme.spacing.unit
         },
     }
 
@@ -38,6 +55,36 @@ function Transition(props) {
 }
 class SelectItem  extends React.Component{
 
+    constructor(props){
+        super(props)
+        this.state={
+            category: "Category",
+            categories: [],
+            newCategoryOpen: false,
+            newCategory: ""
+        }
+    }
+    componentDidMount() {
+        let categories = []
+        if(localStorage.getItem(USER_TOKEN)){
+            axios({
+                method: 'GET',
+                url: `http://localhost:8080/categories`,
+                headers: {
+                    'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
+                }
+            }).then((response)=> {
+
+                response.data.map((category) => {
+                    categories.push(category)
+                })
+                this.setState({
+                    categories: categories
+                })
+            })
+        }
+
+    }
     render(){
         this.fileInput = React.createRef()
         let {open,
@@ -48,19 +95,25 @@ class SelectItem  extends React.Component{
             handleStartingBid,
             handleImage,
             handleSubmit,
+            handleCategory,
             classes,
-            imageUrl
+            imageUrl,
+            category
         } = this.props
 
         return (
+
+
+
+
             <div >
                 <Dialog
                     open={open}
                     TransitionComponent={Transition}
                     keepMounted
                     onClose={handleClose}
-                   // maxWidth
-                    maxWidth="md"
+                    fullWidth
+                    style={{height: "80%"}}
                 >
                     <DialogTitle id="select-item">
                         {title}
@@ -69,23 +122,20 @@ class SelectItem  extends React.Component{
                         <Grid container spacing="24">
                             <Grid item xs = {6}>
                                 <Card className={classes.card}>
-                                    <CardMedia
-                                        className={classes.media}
-                                        image={imageUrl}
-                                    />
+                                    {
+                                        imageUrl && (
+                                            <CardMedia
+                                                className={classes.media}
+                                                image={imageUrl}
+                                            />
+                                        )
+                                    }
+
                                 </Card>
                                 <input style={{display: 'none'}}
                                        ref = {fileInput => this.fileInput = fileInput}
                                        type="file"
                                        onChange={handleImage}
-                                />
-                                <CustomButton
-                                    handler = {()=>this.fileInput.click()}
-                                    variant="outlined"
-                                    color={"primary"}
-                                    className={classes.button}
-                                    size="large"
-                                    name="Upload Image"
                                 />
                             </Grid>
                             <Grid item xs = {6}>
@@ -118,8 +168,80 @@ class SelectItem  extends React.Component{
                                         handler={handleStartingBid}
                                         placeholder="Starting Bid"
                                         property={classes.textField}
+                                        style={{width: "50%"}}
 
                                     />
+                                </div>
+                                {
+                                    (
+                                        <div>
+                                            <FormControl className={classes.formControl}>
+                                            <InputLabel htmlFor="demo-controlled-open-select">Category  </InputLabel>
+                                            <Select
+                                                value={this.props.category}
+                                                onChange={handleCategory}
+                                                name="category"
+                                                inputProps={{
+                                                    id: 'demo-controlled-open-select',
+                                                    name: 'category'
+                                                }}
+                                            >
+                                                {
+                                                    this.state.categories.map((category)=>{
+
+                                                        return <MenuItem
+                                                            value={category.categoryName}
+                                                        >{category.categoryName}
+                                                        </MenuItem>
+                                                    })
+
+                                                }
+                                            </Select>
+                                            </FormControl>
+                                            <a
+                                                style={{
+                                                        color: '#ff74ad',
+                                                       float: "right",
+                                                        '&:hover':{
+                                                           color: "#11a6e5"
+                                                        }
+                                                }}
+                                                href='#'
+                                                color="secondary"
+                                                onClick={()=>{
+                                                    this.setState({
+                                                        newCategoryOpen: true
+                                                    })
+                                                }}
+                                            >
+                                                Add New <Add/>
+                                            </a>
+                                            <Collapse in = {this.state.newCategoryOpen}>
+                                                <TextField
+                                                    type="text"
+                                                    onChange={(event)=>{
+                                                       this.setState({
+                                                       newCategory: event.target.value
+                                                    })
+                                                    }}
+
+                                                />
+                                            </Collapse>
+                                        </div>
+                                    )
+                                }
+
+                                <div style={{margin: "5%"}}>
+                                    <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        aria-label="Add"
+                                        className={classes.button}
+                                        onClick = {()=>this.fileInput.click()}
+                                        style={{marginLeft: "1%"}}
+                                    >Upload Image
+                                        <Add />
+                                    </Button>
                                 </div>
 
                             </Grid>
@@ -133,9 +255,10 @@ class SelectItem  extends React.Component{
                             variant="outlined"
                             color="secondary"
                         />
+
                         <CustomButton
                             name="Submit"
-                            handler={handleClose}
+                            handler={handleSubmit}
                             variant="contained"
                             color="primary"
                         />
@@ -155,6 +278,14 @@ SelectItem.propTypes = {
     handleDescription:PropTypes.func.isRequired,
     handleStartingBid:PropTypes.func.isRequired,
     handleImage:PropTypes.func.isRequired,
-    classes: PropTypes.object.isRequired
+    handleCategory: PropTypes.func.isRequired,
+    classes: PropTypes.object.isRequired,
+    categories: PropTypes.object.isRequired,
+    category: PropTypes.string.isRequired
 }
-export default withStyles(styles)(SelectItem)
+function mapStateToProps(state){
+    return {
+        categories: state.categories
+    }
+}
+export default (withStyles(styles)(SelectItem))

@@ -9,8 +9,7 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import axios from 'axios'
 import {Redirect } from 'react-router-dom'
-
-import store, {} from'../../store'
+import store from'../../store'
 
 const styles = theme => ({
     root: {
@@ -144,13 +143,12 @@ class LoginForm extends React.Component{
 
             axios.post(`http://localhost:8080/login`, (postingData),{crossDomain: true})
             .then((response) => {
-                let token = response.headers.authorization
-                    console.log("response ",response)
+                let header = response.headers.authorization
                     let user = {
-                        token,
-                        is_online: true,
+                        header,
+                        isLoggedIn: true,
                     }
-                    store.dispatch({type: 'SIGN_IN', user })
+                    this.props.dispatch({type: 'SIGN_IN', user })
                     this.setState({
                         fireRedirect: true
                     })
