@@ -11,7 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
 import AddIcon from '@material-ui/icons/Add';
 import {CustomButton} from "./buttons";
-import {Redirect} from 'react-router-dom'
+import {Redirect,Link} from 'react-router-dom'
+
 
 const styles = theme => ({
     card: {
@@ -47,9 +48,6 @@ const styles = theme => ({
     link: {
         color: "black",
         opacity: "0.8",
-        '&:hover': {
-            textDecoration: "underline"
-        }
 
     },
     margin: {
@@ -68,9 +66,10 @@ class Product extends React.Component {
 
     render() {
         const { classes,title,date,time,bid,image,id } = this.props;
-
+        let link = `product/${id}`
         return (
             <div>
+                <Link to = {link} className={classes.link}>
                 <Card
                     elevation={0}
                     square
@@ -85,7 +84,7 @@ class Product extends React.Component {
                                 fontSize: "16px",
                                 fontWeight: 400
                             }}
-                        ><a href = "#" className={classes.link}>{title}</a>
+                        >{title}
                         </Typography>
                         <Typography
                             style={{
@@ -120,6 +119,7 @@ class Product extends React.Component {
                         <Redirect to = {this.state.path}/>
                     )
                 }
+                </Link>
             </div>
         );
     }

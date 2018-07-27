@@ -8,9 +8,12 @@ import Card from '@material-ui/core/Card'
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import {USER_TOKEN} from "../definitions/index";
 import Grid from '@material-ui/core/Grid'
 import {CustomButton} from "./buttons";
+import Divider from '@material-ui/core/Divider'
+import {USER_TOKEN} from "../definitions/index";
+import store from '../store'
+import {Redirect } from 'react-router-dom'
 
 let styles = (theme)=>{
     return {
@@ -40,11 +43,17 @@ let styles = (theme)=>{
           color: "#6b6b6b",
             margin: theme.spacing.unit
         },
-        description: {
+        top: {
             fontSize: 25,
             fontWeight: 200,
             color: "#050505",
-            marginTop: theme.spacing.unit*10
+            marginTop: theme.spacing.unit
+        },
+        description: {
+            fontSize: 15,
+            fontWeight: 200,
+            color: "#050505",
+            marginTop: theme.spacing.unit
         },
         actions: {
             display: 'flex',
@@ -83,11 +92,9 @@ class ProductDetails extends React.Component {
             details : {},
             count : 0,
             image: null,
-            auctionDetails:{}
+            auctionDetails:{},
+            isOnline : store.getState().isLoggedIn
         }
-    }
-    componentWillReceiveProps(props){
-        console.log("HEy",props)
     }
     render(){
         const {classes, match} = this.props
@@ -127,21 +134,19 @@ class ProductDetails extends React.Component {
                         this.setState({
                             auctionDetails: res.data
                         })
+                        console.log("details",this.state.details,"auction",res.data)
                     })
 
                 })
             })
         }
         const {details,auctionDetails} = this.state
+        console.log("USER",this.state.isOnline)
         return (
             <div className={classes.root}>
                 <Typography
-                    style={{
-                        fontSize: "30px",
-                        color: "black",
-                        fontWeight: "lighter"
-                    }}
                     align="center"
+                    className={classes.title}
                 >Product Details</Typography>
                 <Paper
                     square
@@ -153,12 +158,13 @@ class ProductDetails extends React.Component {
                         elevation={0}
                         square
                         className={classes.card}>
-                        <Grid container spacing={24}>
+                        <Grid container spacing={24} >
                             <Grid item xs={8}>
                                 <Typography
                                     align="center"
                                     className={classes.title}
                                 >{details.itemName}
+                                    <Divider/>
                                 </Typography>
                                 <CardMedia
                                     className={classes.media}
@@ -168,23 +174,72 @@ class ProductDetails extends React.Component {
                             <Grid item xs={4}>
 
 
+                                <Typography
+                                    className={classes.top}
 
+                                >Description
+                                </Typography>
+                                <Divider/>
                                     <Typography
                                         className={classes.description}
                                     >{details.itemDescription}
                                     </Typography>
+                                    <Divider/>
+                                <Grid container spacing={24}>
+                                    <Grid item xs={4}>
+                                        <Typography
+                                            className={classes.top}
+
+                                        >Date
+                                        </Typography>
+                                        <Typography
+                                            className={classes.description}
+                                        >{auctionDetails.auctionDate}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Typography
+                                            className={classes.top}
+
+                                        >Time
+                                        </Typography>
+                                        <Typography
+                                            className={classes.description}
+                                        >{auctionDetails.auctionTime}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Typography
+                                            className={classes.top}
+
+                                        >Duration
+                                        </Typography>
+                                        <Typography
+                                            className={classes.description}
+                                        >{auctionDetails.auctionDuration}
+                                        </Typography>
+                                    </Grid>
+
+                                </Grid>
+                                <Divider/>
+                                <Typography
+                                    className={classes.top}
+
+                                >Minimum Bid
+                                </Typography>
                                 <Typography
                                     className={classes.description}
-                                >{details.itemDescription}
+                                >Rs. {details.startingBid}
                                 </Typography>
 
                                    <CardActions>
                                        <CustomButton
                                            name="Participate"
                                            color="primary"
-                                           variant="outlined"
+                                           variant="contained"
                                            style={{
-                                               width: "50%"
+                                               width: "100%",
+                                               borderRadius: 0
                                            }}
                                            handler={()=>{
 
@@ -204,6 +259,11 @@ class ProductDetails extends React.Component {
 
                     </Card>
                 </Paper>
+                {
+                    (this.state.isOnline === undefined | !(this.state.isOnline)) && (
+                        <Redirect to = "/login"/>
+                    )
+                }
             </div>
         )
     }
