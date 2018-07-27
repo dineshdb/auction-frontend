@@ -75,19 +75,11 @@ class Home extends React.Component {
                                     products:productsWithImages
                                 })
                             })
-
-
-
-
-
                        }).catch(err=>{
                             console.log("HEY ERROR",err)
                        })
                    }
                     )})
-
-
-
         }
 
     }
@@ -124,9 +116,6 @@ class Home extends React.Component {
                                                 />
                                             )
                                         }
-
-
-
                                     })
                                 }
                             </Toolbar>
