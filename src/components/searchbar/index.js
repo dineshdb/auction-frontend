@@ -127,9 +127,9 @@ class SearchBar extends React.Component {
 
                     categories.sort(compare);
                     this.props.dispatch(categoriesAction(categories))
-                    this.setState({
-                        categories: this.props.categories[0]
-                    })
+                    // this.setState({
+                    //     categories: this.props.categories[0]
+                    // })
                 })
             }
 
