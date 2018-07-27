@@ -15,6 +15,8 @@ import Menu from '@material-ui/core/Menu';
 import Badge from '@material-ui/core/Badge';
 import {userStatus} from "./login/action";
 
+import store from '../store'
+
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -42,34 +44,25 @@ const styles = theme => ({
 
 const Site = "BidStellar.com"
 class HomeBar extends React.Component {
-
     constructor(props){
         super(props)
         this.state = {
-            isOnline: false,
+            isOnline: store.getState().is_online,
             userId: "",
             fireHome: false,
             userName: ""
         }
     }
     componentDidMount(){
-        let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
-        if(userToken){
+        store.subscribe(()=>{
             this.setState({
-                isOnline: userToken.isOnline,
+                isOnline: store.getState().is_online
             })
-        }
+        })
     }
     handleLogOut(){
-        let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
-        if(userToken){
-           localStorage.removeItem(USER_TOKEN)
-           this.setState({
-               isOnline: false,
-           })
-        }
-        this.fireHome()
-        
+        store.dispatch({type: 'SIGN_OUT'})
+        this.fireHome()        
     }
     fireHome(){
         this.setState({
@@ -122,7 +115,9 @@ class HomeBar extends React.Component {
                             {(isOnline) && (
                                 <div>
                                     <Link to="/add">
-                                        <Icon>add</Icon>
+                                        <Button>
+                                            <Icon>add</Icon>
+                                        </Button>
                                     </Link>
                                     <Link to="/notifications">
                                         <Badge className={classes.margin} badgeContent={4} color="primary">

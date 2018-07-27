@@ -69,71 +69,59 @@ class SignUpForm extends React.Component{
                 phoneLabel: "Phone",
                 addressLabel: "Address",
                 submitValid: false,
-                triggerSubmit: false
-
-            
+                triggerSubmit: false            
         }
     }
     
-        validateSubmit(){
-     
-            const {userNameValid,emailValid,passwordValid,phoneValid,addressValid} = this.state
-            return !(userNameValid && emailValid && passwordValid && phoneValid && addressValid)
-            
-             
-        }
-        handleUserName(event){
-           
-            this.setState({
-                userName: event.target.value
-            })
-            this.validateUserName()
-           
-        }
+    validateSubmit(){
+        const {userNameValid,emailValid,passwordValid,phoneValid,addressValid} = this.state
+        return !(userNameValid && emailValid && passwordValid && phoneValid && addressValid)    
+    }
+    handleUserName(event){      
+        this.setState({
+            userName: event.target.value
+        })
+        this.validateUserName()   
+    }
 
-        handleEmail(event){
+    handleEmail(event){
+        this.setState({
+            email: event.target.value
+        })
+        this.validateEmail()   
+    }
+    handlePassword(event){
+        this.setState({
+            password: event.target.value
+        })
+        this.validatePassword()   
+    }
+    handlePhone(event){
+        this.setState({
+            phone: event.target.value
+        })
+        this.validatePhone()    
+    }
+    handleAddress(event){
+        this.setState({
+            address: event.target.value
+        })
+        this.validateAddress()    
+    }
+    validateUserName(){
+        const {userName} = this.state
+        if(userName.length > 0){
             this.setState({
-                email: event.target.value
+                userNameValid: true,
+                userNameLabel: "Username"
             })
-            this.validateEmail()
-           
-        }
-        handlePassword(event){
+        } else{
             this.setState({
-                password: event.target.value
+                userNameValid: false,
+                userNameLabel: "Invalid"
             })
-            this.validatePassword()
-           
         }
-        handlePhone(event){
-            this.setState({
-                phone: event.target.value
-            })
-            this.validatePhone()
-            
-        }
-        handleAddress(event){
-            this.setState({
-                address: event.target.value
-            })
-            this.validateAddress()
-            
-        }
-        validateUserName(){
-            const {userName} = this.state
-            if(userName.length > 0){
-                this.setState({
-                    userNameValid: true,
-                    userNameLabel: "Username"
-                })
-            }
-            else{
-                this.setState({
-                    userNameValid: false,
-                    userNameLabel: "Invalid"
-                })
-            }
-        }
+    }
 
         validateEmail(){
             const {email} = this.state
@@ -201,7 +189,6 @@ class SignUpForm extends React.Component{
             }
         }
        
-       
         handleSubmit(event){
             event.preventDefault()
             const {userName,name,password,email,phone,address} = this.state
@@ -215,14 +202,10 @@ class SignUpForm extends React.Component{
             axios.post('http://localhost:8080/users/sign-up'
             ,(signUpObject),{crossDomain: true})
             .then(response => {
-                console.log('response',response)
+                this.setState({
+                    triggerSubmit: true
+                })    
             })
-            this.setState({
-                triggerSubmit: true
-            })
-            
-
-
         }
 
         render(){
@@ -310,7 +293,6 @@ class SignUpForm extends React.Component{
                                margin="dense"
                                id="password"
                                type="password"
-
                                placeholder="Password"
                                label= {this.state.passwordLabel}
                                onChange={this.handlePassword.bind(this)}
@@ -379,34 +361,26 @@ class SignUpForm extends React.Component{
                                 }}
                             />
                              </div>
-
-                        <Grid container spacing={24} style={{marginTop: 10}}
-                            >
+                        <Grid container spacing={24} style={{marginTop: 10}}>
                             <Grid item xs={4}>
                             </Grid>
                             <Grid item xs = {8}>
                                 <Toolbar>
                                     <Link to = "/">
                                         <Button
-
                                             color="secondary"
                                             style={{margin: "5px"}}
-                                        >
-                                            Cancel
-                                            </Button>
+                                        > Cancel </Button>
                                     </Link>
                                     <Button
                                     variant = "contained"
                                     type="submit"
                                     color="primary"
                                     style={{margin: "5px"}}
-                                    >
-                                    Submit
-                                    </Button>
+                                    >  Submit </Button>
                                 </Toolbar>
                             </Grid>
                         </Grid>
-
                         </form>
                         </Paper>
                     </Grid>
@@ -417,10 +391,8 @@ class SignUpForm extends React.Component{
                         this.state.triggerSubmit && <Redirect to = "/login" />
                     }
                 </div>
-
             )
-        }
-    
+        }   
 }
 
 SignUpForm.propTypes = {

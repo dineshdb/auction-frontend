@@ -16,10 +16,16 @@ import Notifications from './components/notifications'
 import Cart from './components/cart'
 import UserProfile from './components/user-profile'
 
+import store from './store'
+
+
 import AppBar from './components/app-bar'
 class App extends React.Component {
     constructor(props){
         super(props)
+        this.state = {
+            isOnline : store.getState().is_online
+        }
     }
 
     render(props) {
@@ -36,39 +42,16 @@ class App extends React.Component {
                 <Route path = "/product/:id" component = {ProductDetails}/>
                 <Route path = "/error" exact strict render = {() => <PageNotFound errorMessage = "Invalid page" />}/>
                 <Route path = "/profile/:id" component = {UserProfile} />
-
                 <Route path = "/login" exact strict render = {() => {
-                    let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
-                    console.log("user",userToken)
-                    if(!userToken){
-                        return <Login/>
-                    } else {
-                            return <Redirect to = "/" />
-                    }
-                }}
-                />
+                    return this.state.isOnline? (<Redirect to="/" />) : (<Login/>)
+                }}/>
                 <Route path = "/signup" exact strict render = {() => {
-                        let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
-                        if(!userToken){
-                            return <SignUp/>
-                        } else{
-                            return <Redirect to = "/" />
-                        }
-                    }}
-                />
-                    <Route path = "/add" exact strict render = {() => {
-                        let userToken = JSON.parse(localStorage.getItem(USER_TOKEN))
-                        if(!userToken){
-                            return <Login/>
-                        }
-                        else{
-                            return <AddProduct/>
-                        }
-                         }
-                    }
-                    />
-
-                </div>
+                   return this.state.isOnline? (<Redirect to="/" />) : (<SignUp/>)
+                }}/>
+                <Route path = "/add" exact strict render = {() => {
+                   return this.state.isOnline? (<Login to="/" />) : (<AddProduct/>)
+                }}/>
+               </div>
             </Router>
             </MuiThemeProvider>
         )
