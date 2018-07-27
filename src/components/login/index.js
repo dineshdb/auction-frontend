@@ -9,7 +9,6 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import axios from 'axios'
 import {Redirect } from 'react-router-dom'
-import {userStatus} from './action'
 import store from'../../store'
 
 const styles = theme => ({
@@ -147,7 +146,7 @@ class LoginForm extends React.Component{
                 let header = response.headers.authorization
                     let user = {
                         header,
-                        is_online: true,
+                        isLoggedIn: true,
                     }
                     this.props.dispatch({type: 'SIGN_IN', user })
                     this.setState({

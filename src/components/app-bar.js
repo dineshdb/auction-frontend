@@ -13,7 +13,6 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Badge from '@material-ui/core/Badge';
-import {userStatus} from "./login/action";
 
 import store from '../store'
 
@@ -47,7 +46,7 @@ class HomeBar extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            isOnline: store.getState().is_online,
+            isOnline: store.getState().isLoggedIn,
             userId: "",
             fireHome: false,
             userName: ""
@@ -55,8 +54,9 @@ class HomeBar extends React.Component {
     }
     componentDidMount(){
         store.subscribe(()=>{
+            console.log(store.getState())
             this.setState({
-                isOnline: store.getState().is_online
+                isOnline: store.getState().isLoggedIn
             })
         })
     }
@@ -112,7 +112,7 @@ class HomeBar extends React.Component {
                                 </Link>
                                 </Typography>
                             
-                            {(isOnline) && (
+                            {(this.state.isOnline) && (
                                 <div>
                                     <Link to="/add">
                                         <Button>
@@ -155,20 +155,14 @@ class HomeBar extends React.Component {
                                     <MenuItem onClick={this.openProfile}>Profile</MenuItem>
                                     <MenuItem onClick={this.gotoHelp}> Help </MenuItem>
                                     <MenuItem onClick={ ()=> {
-                                                localStorage.removeItem(USER_TOKEN)
-                                                this.props.dispatch(userStatus(
-                                                ))
+                                                this.props.dispatch({type: 'SIGN_OUT'})
                                                 this.handleClose()
-                                                this.setState({
-                                                    isOnline: false
-                                                })
-
                                             }
                                             }>Logout</MenuItem>
                                     </Menu>
                                 </div>
                             )}
-                            {   (!isOnline) && (
+                            {   (!this.state.isOnline) && (
                                 <div>
                                     <Link to="/signup">
                                         <Button
