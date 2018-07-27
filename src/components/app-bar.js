@@ -92,12 +92,7 @@ class HomeBar extends React.Component {
         const {classes} = this.props;
         const {anchorEl} = this.state
         const open = Boolean(anchorEl);
-        let localOnline = JSON.parse(localStorage.getItem(USER_TOKEN))
-        let isOnline = false
-        if(localOnline){
-            isOnline = true
-        }
-
+        
         return (
                 <div >
                     <AppBar position="static" className={classes.root}>

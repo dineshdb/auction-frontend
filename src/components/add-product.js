@@ -22,6 +22,9 @@ import BootStrappedTextField from './textFields'
 import SelectItem from "./dialogs";
 import {USER_TOKEN} from "../definitions/index";
 import {Redirect} from 'react-router-dom'
+
+import store from '../store'
+
 const styles = theme => ({
     root: {
       marginLeft: "40px",
@@ -150,7 +153,7 @@ class SellProductForm extends React.Component {
             method: 'GET',
             url: `http://localhost:8080/categories`,
             headers: {
-                'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
+                'Authorization': store.getState().header
             }
         }).then((response)=> {
 

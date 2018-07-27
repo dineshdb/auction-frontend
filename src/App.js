@@ -6,7 +6,6 @@ import Login from './components/login/index'
 import SignUp from './components/signup/index'
 import {Redirect} from 'react-router-dom'
 import PageNotFound from './views/404'
-import {USER_TOKEN} from './definitions/index'
 import {MuiThemeProvider} from '@material-ui/core/styles'
 import AddProduct from './components/add-product'
 import theme from './theme'
@@ -56,7 +55,7 @@ class App extends React.Component {
                    return this.state.isOnline? (<Redirect to="/" />) : (<SignUp/>)
                 }}/>
                 <Route path = "/add" exact strict render = {() => {
-                   return this.state.isOnline? (<Login to="/" />) : (<AddProduct/>)
+                   return !this.state.isOnline? (<Login to="/login" />) : (<AddProduct/>)
                 }}/>
                </div>
             </Router>
