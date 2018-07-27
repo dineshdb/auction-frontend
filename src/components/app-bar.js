@@ -13,6 +13,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Badge from '@material-ui/core/Badge';
+import {SIGN_OUT} from "../store";
 
 import store from '../store'
 
@@ -150,7 +151,7 @@ class HomeBar extends React.Component {
                                     <MenuItem onClick={this.openProfile}>Profile</MenuItem>
                                     <MenuItem onClick={this.gotoHelp}> Help </MenuItem>
                                     <MenuItem onClick={ ()=> {
-                                                this.props.dispatch({type: 'SIGN_OUT'})
+                                                this.props.dispatch({type: SIGN_OUT})
                                                 this.handleClose()
                                             }
                                             }>Logout</MenuItem>

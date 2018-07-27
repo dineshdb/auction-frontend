@@ -4,10 +4,10 @@ import { connect } from 'react-redux'
 const USER_KEY = 'user'
 
 // Action Types
-const SIGN_IN = 'SIGN_IN'
-const SIGN_OUT = 'SIGN_OUT'
-const USER_STATUS = 'USER_STATUS'
-
+export const SIGN_IN = 'SIGN_IN'
+export const SIGN_OUT = 'SIGN_OUT'
+export const USER_STATUS = 'USER_STATUS'
+export const PRODUCTS_ADD = 'PRODUCTS_ADD'
 // Action creators
 export const signIn = user =>({
     type : SIGN_IN,
@@ -16,12 +16,17 @@ export const signIn = user =>({
 export const signout = user =>({
     type: SIGN_OUT
 })
+export const productsAdd = products => ({
+    type: PRODUCTS_ADD,
+    payload: products
+})
 
 // reducers
 let initialState = JSON.parse(localStorage.getItem(USER_KEY))
 if(initialState == null) {
     initialState = {
-        user : {}
+        user : {},
+        products: []
     }
 }
 const reducer = ( state = initialState, action) => {
@@ -33,6 +38,9 @@ const reducer = ( state = initialState, action) => {
         case SIGN_OUT:
             localStorage.removeItem(USER_KEY)
             return Object.assign({}, state, {user: {}, isLoggedIn: false, date: null})
+        case PRODUCTS_ADD:
+            console.log("Products in store",action.payload)
+            return {...state,products: action.payload}
         case USER_STATUS:
         default:
             return state
@@ -54,13 +62,19 @@ export function isUserOnline(state){
     return state.user.token !== null
 }
 
+export function getProducts(state){
+    return state.products
+}
+
 const mapStateToProps = state => ({
     user: getUser(state),
     token: getUserToken(state),
-    isOnline: isUserOnline(state)
+    isOnline: isUserOnline(state),
+    products: getProducts(state)
 })
   
 const mapDispatchToProps = dispatch => ({
     signin: data => dispatch(signIn(data)),
     signout: data => dispatch(signout(data)),
+    addProducts: data => dispatch(productsAdd(data))
  })
