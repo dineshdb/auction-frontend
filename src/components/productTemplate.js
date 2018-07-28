@@ -12,6 +12,7 @@ import red from '@material-ui/core/colors/red';
 import AddIcon from '@material-ui/icons/Add';
 import {CustomButton} from "./buttons";
 import {Redirect,Link} from 'react-router-dom'
+import {USER_TOKEN} from "../definitions/index";
 
 
 const styles = theme => ({
@@ -60,12 +61,41 @@ class Product extends React.Component {
     state = {
         expanded: false,
         fireDetails: false,
-        path: ""
+        path: "",
+        userId: null,
+        buttonName: ""
     };
+    componentDidMount(){
+        let user = JSON.parse(localStorage.getItem(USER_TOKEN))
+        console.log("USER",user)
+        if(user){
+            this.setState({
+                userId: user.id
+            })
+        }
+    }
 
 
     render() {
-        const { classes,title,date,time,bid,image,id } = this.props;
+        const { classes,title,date,time,bid,image,id,sellerId } = this.props;
+        let buttonName = "",disable=false
+        let user = JSON.parse(localStorage.getItem(USER_TOKEN))
+        if(user){
+            if(this.state.userId == sellerId){
+                buttonName="Own Product"
+                disable=true
+            }
+            else{
+                buttonName="CHECK"
+                disable=false
+            }
+        }
+
+        else{
+          buttonName="BID NOW"
+            disable=false
+        }
+        console.log(buttonName)
         let link = `product/${id}`
         return (
             <div>
@@ -99,7 +129,7 @@ class Product extends React.Component {
                     <CardActions>
                         <CustomButton
                             property={classes.margin}
-                            name="BID NOW"
+                            name={buttonName}
                             handler={()=>{
                                 this.setState({
                                     fireDetails: true,
@@ -110,6 +140,7 @@ class Product extends React.Component {
                             color="primary"
                             style={{borderRadius: 0}}
                             size="large"
+                            disabled={disable}
                         />
                     </CardActions>
 
@@ -132,7 +163,8 @@ Product.propTypes = {
     bid: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
     time: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
+    sellerId: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(Product)

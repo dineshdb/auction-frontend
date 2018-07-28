@@ -1,5 +1,4 @@
 import {createStore} from 'redux'
-import { connect } from 'react-redux'
 
 const USER_KEY = 'user'
 
@@ -8,6 +7,8 @@ export const SIGN_IN = 'SIGN_IN'
 export const SIGN_OUT = 'SIGN_OUT'
 export const USER_STATUS = 'USER_STATUS'
 export const PRODUCTS_ADD = 'PRODUCTS_ADD'
+export const ADD_AUCTION_STARTED = 'ADD_AUCTION_STARTED'
+export const ADD_TO_CART = 'ADD_TO_CART'
 // Action creators
 export const signIn = user =>({
     type : SIGN_IN,
@@ -16,9 +17,17 @@ export const signIn = user =>({
 export const signout = user =>({
     type: SIGN_OUT
 })
-export const productsAdd = products => ({
+export const productsAdd = (products) => ({
     type: PRODUCTS_ADD,
     payload: products
+})
+export const addToCart = (product) => ({
+    type:ADD_TO_CART,
+    payload: product
+})
+export const addAuctionStarted = (id) => ({
+    type: ADD_AUCTION_STARTED,
+    payload: id
 })
 
 // reducers
@@ -26,7 +35,9 @@ let initialState = JSON.parse(localStorage.getItem(USER_KEY))
 if(initialState == null) {
     initialState = {
         user : {},
-        products: []
+        products: [],
+        auctionsStarted: [],
+        cart: []
     }
 }
 const reducer = ( state = initialState, action) => {
@@ -41,6 +52,15 @@ const reducer = ( state = initialState, action) => {
         case PRODUCTS_ADD:
             console.log("Products in store",action.payload)
             return {...state,products: action.payload}
+        case ADD_AUCTION_STARTED:
+            console.log("NEW AUCTION",action.payload)
+            let withNewAuction = state.auctionsStarted
+            withNewAuction.push(action.payload)
+            return {...state,products: withNewAuction}
+        case ADD_TO_CART:
+            console.log("ADDING PRODUCT TO CART",action.payload)
+            let newCartWithProduct = state.cart
+            return {...state,cart: newCartWithProduct}
         case USER_STATUS:
         default:
             return state

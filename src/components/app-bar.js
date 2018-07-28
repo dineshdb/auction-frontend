@@ -14,8 +14,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Badge from '@material-ui/core/Badge';
 import {SIGN_OUT} from "../store";
-
+import {Redirect} from 'react-router-dom'
 import store from '../store'
+import {productsAdd} from "../store";
 
 const styles = theme => ({
     root: {
@@ -50,12 +51,11 @@ class HomeBar extends React.Component {
             isOnline: store.getState().isLoggedIn,
             userId: "",
             fireHome: false,
-            userName: ""
+            userName: "",
         }
     }
     componentDidMount(){
         store.subscribe(()=>{
-            console.log(store.getState())
             this.setState({
                 isOnline: store.getState().isLoggedIn
             })
@@ -159,6 +159,12 @@ class HomeBar extends React.Component {
                                     <MenuItem onClick={ ()=> {
                                                 this.props.dispatch({type: SIGN_OUT})
                                                 this.handleClose()
+                                                localStorage.removeItem(USER_TOKEN)
+                                                this.setState({
+                                                    fireHome: true
+                                                })
+
+
                                             }
                                             }>Logout</MenuItem>
                                     </Menu>
@@ -184,6 +190,11 @@ class HomeBar extends React.Component {
 
                         </Toolbar>
                     </AppBar>
+                    {
+                        this.state.fireHome && (
+                            <Redirect to = "/" />
+                        )
+                    }
                 </div>
         )
     }

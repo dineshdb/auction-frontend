@@ -148,22 +148,27 @@ class SellProductForm extends React.Component {
         this.fileInput = React.createRef()
     }
     componentDidMount() {
-        let categories = []
-        axios({
-            method: 'GET',
-            url: `http://localhost:8080/categories`,
-            headers: {
-                'Authorization': store.getState().header
-            }
-        }).then((response)=> {
+        let user = localStorage.getItem(USER_TOKEN)
+        if(user != null){
+            let categories = []
+            axios({
+                method: 'GET',
+                url: `http://localhost:8080/categories`,
+                headers: {
+                    'Authorization': JSON.parse(user).header
+                }
+            }).then((response)=> {
+                response.data.map((category) => {
+                    categories.push(category)
+                })
+                this.setState({
+                    categories: categories
+                })
+            }).catch(err=>{
 
-            response.data.map((category) => {
-                categories.push(category)
             })
-            this.setState({
-                categories: categories
-            })
-        })
+        }
+
     }
     handleAddItem = (event) => {
         this.setState({
