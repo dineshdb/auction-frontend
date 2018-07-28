@@ -6,7 +6,6 @@ import Paper from '@material-ui/core/Paper'
 import axios from 'axios'
 import Card from '@material-ui/core/Card'
 import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid'
 import {CustomButton} from "./buttons";
@@ -14,6 +13,11 @@ import Divider from '@material-ui/core/Divider'
 import {USER_TOKEN} from "../definitions/index";
 import store from '../store'
 import {Redirect } from 'react-router-dom'
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Right from '@material-ui/icons/Check'
+import {addToCart} from "../store";
 
 
 let styles = (theme)=>{
@@ -94,12 +98,17 @@ class ProductDetails extends React.Component {
             count : 0,
             image: null,
             auctionDetails:{},
-            isOnline : store.getState().isLoggedIn
+            isOnline : store.getState().isLoggedIn,
+            openDialog: false,
+            participated: false,
+            alreadyParticipated: false,
+            buttonName: ""
         }
     }
     render(){
         const {classes, match} = this.props
         const id = this.props.match.params.id
+        const userId = JSON.parse(localStorage.getItem(USER_TOKEN)).id
         if (this.state.count === 0){
             axios({
                 method: 'GET',
@@ -131,18 +140,25 @@ class ProductDetails extends React.Component {
                             'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
                         },
                     }).then(res=>{
-                        console.log("hey data",res)
-                        this.setState({
-                            auctionDetails: res.data
+                        let participated = false
+                        let buttonName = "Participate"
+                        res.data.bidders.map((bidder)=>{
+                            if(bidder == userId){
+                                participated=true,
+                                    buttonName="Participated"
+                            }
                         })
-                        console.log("details",this.state.details,"auction",res.data)
+                        this.setState({
+                            auctionDetails: res.data,
+                            alreadyParticipated: participated,
+                            buttonName: buttonName
+                        })
                     })
 
                 })
             })
         }
         const {details,auctionDetails} = this.state
-        console.log("USER",this.state.isOnline)
         return (
             <div className={classes.root}>
                 <Typography
@@ -235,7 +251,8 @@ class ProductDetails extends React.Component {
 
                                    <CardActions>
                                        <CustomButton
-                                           name="Participate"
+                                           disabled={this.state.alreadyParticipated}
+                                           name={this.state.buttonName}
                                            color="primary"
                                            variant="contained"
                                            style={{
@@ -243,8 +260,62 @@ class ProductDetails extends React.Component {
                                                borderRadius: 0
                                            }}
                                            handler={()=>{
+                                                this.setState({
+                                                    openDialog: true
+                                                })
 
                                            }}/>
+                                       <Dialog
+                                           open={this.state.openDialog}
+                                           onClose={()=>{
+                                               this.setState({
+                                                   openDialog: false
+                                               })
+                                           }}
+                                           aria-labelledby="alert-dialog-title"
+                                           aria-describedby="alert-dialog-description"
+                                       >
+                                           <DialogTitle
+                                               id="alert-dialog-title"
+                                           >Do you want to participate?</DialogTitle>
+                                           <DialogActions>
+                                             <CustomButton
+                                                 name="Yes"
+                                                 handler={()=>{
+                                                     this.setState({
+                                                         openDialog: false
+                                                     })
+                                                     let user = JSON.parse(localStorage.getItem(USER_TOKEN))
+                                                     let auction = this.state.auctionDetails
+                                                     let url = `http://localhost:8080/auctions/${auction.auctionId}/participate/${user.id}`
+                                                         axios({
+                                                             method: 'GET',
+                                                             url: url,
+                                                             headers: {
+                                                                 'Authorization': user.header
+                                                             }
+                                                         }).then((response)=>{
+                                                            console.log("RESPONSE FROM CREATE_AUCTION",response)
+                                                             this.setState({
+                                                                 participated: true
+                                                             })
+                                                         })
+                                                 }}
+                                                 color="primary"
+                                                 variant="contained"
+                                             />
+                                               <CustomButton
+                                                   name="No"
+                                                   handler={()=>{
+                                                       this.setState({
+                                                           openDialog: false
+                                                       })
+                                                   }}
+                                                   color="secondary"
+                                                   variant="outlined"
+                                               />
+                                           </DialogActions>
+                                       </Dialog>
                                    </CardActions>
 
 
@@ -265,6 +336,12 @@ class ProductDetails extends React.Component {
                         <Redirect to = "/login"/>
                     )
                 }
+                {
+                    (this.state.participated && (
+                        <Redirect to = "/" />
+                        )
+                    )
+                }
             </div>
         )
     }
@@ -273,5 +350,10 @@ class ProductDetails extends React.Component {
 ProductDetails.propTypes = {
     classes: PropTypes.object.isRequired,
 };
+function mapStateToProps(state){
+    return {
 
-export default withStyles(styles)(ProductDetails);
+    }
+}
+
+export default (withStyles(styles)(ProductDetails));

@@ -10,6 +10,7 @@ import {connect} from 'react-redux'
 import axios from 'axios'
 import {Redirect } from 'react-router-dom'
 import store from'../../store'
+import {USER_TOKEN} from "../../definitions/index";
 
 const styles = theme => ({
     root: {
@@ -148,6 +149,11 @@ class LoginForm extends React.Component{
                         header,
                         isLoggedIn: true,
                     }
+                    localStorage.setItem(USER_TOKEN,JSON.stringify({
+                        isOnline: true,
+                        header: header,
+                        id: response.data.response
+                    }))
                     this.props.dispatch({type: 'SIGN_IN', user })
                     this.setState({
                         fireRedirect: true

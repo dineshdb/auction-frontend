@@ -96,22 +96,30 @@ class SearchBar extends React.Component {
     }
     componentDidMount(){
         let categories = []
-        axios({
-            method: 'GET',
-            url: `http://localhost:8080/categories`,
-            headers: {
-                'Authorization': store.getState().header
-            }
-        }).then(response =>{
-            response.data.map((category) => {
-                categories.push(category)
+        let user = JSON.parse(localStorage.getItem(USER_TOKEN))
+        if(user){
+            axios({
+                method: 'GET',
+                url: `http://localhost:8080/categories`,
+                headers: {
+                    'Authorization': user.header
+                }
+            }).then(response =>{
+                console.log("CATEGORIES",response)
+                response.data.map((category) => {
+                    categories.push(category)
+                })
+                categories.sort((a,b) => a.categoryName < b.categoryName ? -1 : 1)
+                this.props.dispatch(categoriesAction(categories))
+                this.setState({
+                    categories: categories
+                })
+            }).catch(err=>{
+                console.log("ERROR",err)
+                Window.Refresh
             })
-            categories.sort((a,b) => a.categoryName < b.categoryName ? -1 : 1)
-            this.props.dispatch(categoriesAction(categories))
-            this.setState({
-                categories: categories
-            })
-        })
+        }
+
     }
         
     handleSearch(event){

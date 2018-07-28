@@ -28,23 +28,28 @@ class Home extends React.Component {
             products:[],
             pages: 0,
             frames: [],
-            count: 0
+            count: 0,
+            user: null
         }
     }
 
     componentDidMount() {
         let productsWithImages = []
         let count = 0
-        if (localStorage.getItem(USER_TOKEN)) {
-            if (!this.props.products) {
-                console.log("no data")
-                axios({
-                    method: 'GET',
-                    url: `http://localhost:8080/items`,
-                    headers: {
-                        'Authorization': JSON.parse(localStorage.getItem(USER_TOKEN)).header
-                    }
-                }).then((response) => {
+        let user = localStorage.getItem(USER_TOKEN)
+
+        console.log("STORE",this.props.products)
+        if(user !== null) {
+            this.setState({
+                user: JSON.parse(user).id
+            })
+            axios({
+                method: 'GET',
+                url: `http://localhost:8080/items`,
+                headers: {
+                    'Authorization': JSON.parse(localStorage.getItem(USER_TOKEN)).header
+                }
+            }).then((response) => {
                     let productIds = response.data
                     let length = productIds.length / 4
                     this.setState({
@@ -57,6 +62,9 @@ class Home extends React.Component {
                     this.setState({
                         frames: tempFrames
                     })
+                    let newLength = length*4
+                    console.log("Initial",newLength)
+
                     productIds.map((id) => {
 
                             axios({
@@ -67,55 +75,42 @@ class Home extends React.Component {
                                 },
                             }).then((response) => {
                                 let product = response.data
-                                axios({
-                                    method: 'GET',
-                                    url: product.image,
-                                    headers: {
-                                        'Authorization': JSON.parse(localStorage.getItem(USER_TOKEN)).header
-                                    },
-                                    responseType: 'blob'
-                                }).then((response) => {
-                                    console.log("in progress")
-                                    const url = window.URL.createObjectURL(new Blob([response.data]))
-                                    product = {...product, image: url}
-                                    productsWithImages.push(product)
-                                    if(productsWithImages.length === length*4){
-                                        this.setState({
-                                            products: productsWithImages
-                                        })
-                                        this.props.dispatch(productsAdd(productsWithImages))
 
-                                    }
+                                    axios({
+                                        method: 'GET',
+                                        url: product.image,
+                                        headers: {
+                                            'Authorization': JSON.parse(localStorage.getItem(USER_TOKEN)).header
+                                        },
+                                        responseType: 'blob'
+                                    }).then((response) => {
+                                        const url = window.URL.createObjectURL(new Blob([response.data]))
+                                        product = {...product, image: url}
 
+                                        productsWithImages.push(product)
+                                        if (productsWithImages.length === length*4) {
+                                            this.setState({
+                                                products: productsWithImages
+                                            })
+                                            this.props.dispatch(productsAdd(productsWithImages))
 
-
-                                })
+                                        }
 
 
-                            }).catch(err => {
-                                console.log("HEY ERROR", err)
+                                    }).catch(err => {
+                                        console.log("HEY ERROR", err)
+                                    })
+
+
+
                             })
                         }
                     )
-                })
 
-
-            }
-            else{
-                let num = this.props.products.length
-                let tempFrames = []
-                for (let i = 0; i < num; i++) {
-                    tempFrames.push(i)
                 }
-                this.setState({
-                    frames: tempFrames
-                })
-                this.setState({
-                    products: this.props.products,
-
-                })
-            }
+            )
         }
+
     }
 
     render(){
@@ -137,7 +132,9 @@ class Home extends React.Component {
                             <Toolbar>
                                 {
                                     this.state.products.map((product,key)=>{
-                                        if((key >= frame*4) && (key < (frame+1)*4)){
+                                        if(((key >= frame*4) && (key < (frame+1)*4))){
+                                            console.log("USER",this.state.user,product.seller.userId)
+
                                             return (
                                                 <Product
                                                     title={product.itemName}
@@ -145,6 +142,7 @@ class Home extends React.Component {
                                                     date={product.date}
                                                     image={product.image}
                                                     id={product.itemId}
+                                                    sellerId = {product.seller.userId}
 
                                                 />
                                             )
