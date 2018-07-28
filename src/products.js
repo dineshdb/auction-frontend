@@ -4,6 +4,7 @@ import {baseUrl} from './config'
 
 export const baseFavoritesUrl = `${baseUrl}/items`
 export const baseProductUrl = `${baseUrl}/items`
+export const categoriesUrl = `${baseUrl}/categories`
 
 export function fetchProducts(){
     return fetch(baseProductUrl)
@@ -17,4 +18,9 @@ export function fetchFavorites(){
 export function fetchEach(items){
     let promises = items.map(item => fetch(`${baseProductUrl}/${item}`).then(res=>res.json()))
     return Promise.all(promises)
+}
+
+export function getCategories(){
+    return fetch(categoriesUrl)
+        .then(res => res.json())
 }

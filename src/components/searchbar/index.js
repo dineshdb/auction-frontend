@@ -18,8 +18,8 @@ import ExpandLess from '@material-ui/icons/ExpandLess'
 import IconButton from '@material-ui/core/IconButton'
 import Search from '@material-ui/icons/Search'
 import {USER_TOKEN,USER_PRODUCTS} from "../../definitions/index";
-import {categoriesAction} from '../actions/categories'
 import store from '../../store'
+import {getCategories} from '../../products'
 
 const styles = theme => ({
     root: {
@@ -95,29 +95,10 @@ class SearchBar extends React.Component {
         }
     }
     componentDidMount(){
-        let categories = []
-        if(store.getState().user.header){
-            axios({
-                method: 'GET',
-                url: `http://localhost:8080/categories`,
-                headers: {
-                    'Authorization': store.getState().user.header
-                }
-            }).then(response =>{
-                console.log("CATEGORIES",response)
-                response.data.map((category) => {
-                    categories.push(category)
-                })
-                categories.sort((a,b) => a.categoryName < b.categoryName ? -1 : 1)
-                this.setState({
-                    categories: categories
-                })
-            }).catch(err=>{
-                console.log("ERROR",err)
-                Window.Refresh
-            })
-        }
-
+        getCategories()
+            .then(cats => cats.sort((a,b) => a.categoryName < b.categoryName ? -1 : 1))
+            .then(categories => this.setState({ categories}))
+            .catch("Could not fetch categories")
     }
         
     handleSearch(event){
