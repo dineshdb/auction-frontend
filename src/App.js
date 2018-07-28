@@ -15,7 +15,7 @@ import Notifications from './components/notifications'
 import Cart from './components/cart'
 import UserProfile from './components/user-profile'
 
-import store from './store'
+import store, {subscribeAuctionAction} from './store'
 
 
 import AppBar from './components/app-bar'
@@ -32,6 +32,8 @@ class App extends React.Component {
                 isOnline: store.getState().isLoggedIn
             })
         })
+
+        store.dispatch(subscribeAuctionAction(1))
     }
 
     render(props) {

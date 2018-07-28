@@ -1,5 +1,5 @@
 import {createStore} from 'redux'
-import wsClient from './socket'
+import wsClient, {subscribeAuction, unsubscribeAuction} from './socket'
 
 const USER_KEY = 'user'
 
@@ -12,6 +12,7 @@ export const ADD_AUCTION_STARTED = 'ADD_AUCTION_STARTED'
 export const ADD_TO_CART = 'ADD_TO_CART'
 
 export const SUBSCRIBE_AUCTION = 'SUBSCRIBE_AUCTION'
+export const UNSUBSCRIBE_AUCTION = 'UNSUBSCRIBE_AUCTION'
 
 // Action creators
 export const signIn = user =>({
@@ -34,10 +35,15 @@ export const addAuctionStarted = (id) => ({
     payload: id
 })
 
-export const subscribeAuction = auctionId => ({
+export const subscribeAuctionAction = payload => ({
     type: SUBSCRIBE_AUCTION,
-    payload: auctionId
+    payload
 })
+export const unsubscribeAuctionAction = payload => ({
+    type: UNSUBSCRIBE_AUCTION,
+    payload
+})
+
 // reducers
 let initialState = JSON.parse(localStorage.getItem(USER_KEY))
 if(initialState == null) {
@@ -46,7 +52,7 @@ if(initialState == null) {
         products: [],
         auctionsStarted: [],
         cart: [],
-        subscriptions: {},
+        subscriptions: [],
     }
 }
 
@@ -71,11 +77,24 @@ const reducer = ( state = initialState, action) => {
             console.log("ADDING PRODUCT TO CART",action.payload)
             let newCartWithProduct = state.cart
             return {...state,cart: newCartWithProduct}
+
         case SUBSCRIBE_AUCTION:
-            let subscription = wsClient.subscribe(`/auction/${action.payload}`, auctionCallback(action.payload))
-            let subscriptions = {}
-            subscriptions[action.payload] = subscription
-            return Object.assign({}, state, {subscriptions})
+            let auctionId = action.payload
+            subscribeAuction(auctionId)
+            let subscriptions = Object.assign({}, state.subscriptions)
+            return Object.assign({}, state, {subscriptions: [...subscriptions, auctionId]})
+
+        case UNSUBSCRIBE_AUCTION:{
+            unsubscribeAuction(action.payload)
+            let subscriptions = state.subscriptions
+            let index = subscriptions.findIndex( el => el === action.payload)
+            if(index > -1){
+                subscriptions = subscriptions.splice(index, 1)
+                return Object.assign({}, state, {subscriptions})
+            }
+            return state
+        }
+
         case USER_STATUS:
         default:
             return state
@@ -99,12 +118,6 @@ export function isUserOnline(state){
 
 export function getProducts(state){
     return state.products
-}
-
-const auctionCallback = (auctionId) => {
-    return (e) => {
-        
-    }
 }
 
 const mapStateToProps = state => ({
