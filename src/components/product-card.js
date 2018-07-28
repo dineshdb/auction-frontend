@@ -41,15 +41,15 @@ class Product extends React.Component {
         return store.getState().user.favorites.includes(id)
     }
     render() {
-        const { title,maxBid,image, actionName, brief, id, isFavorite} = this.props.item;
+        const { itemName,maxBid,image, actionName, itemDescription, itemId, isFavorite} = this.props.item;
         const { classes, baseUrl } = this.props
         return (
             <Card elevation={2} className={classes.card}>
-                <CardMedia className={classes.media} image={image} title={title}/>
+                <CardMedia className={classes.media} image={image} itemName={itemName}/>
                 <CardContent>
                     <div className={classes.flex}>
                         <Typography gutterBottom variant="headline" component="h3">
-                        {title}</Typography>
+                        {itemName}</Typography>
                         <Typography
                             className={classes.right}
                             style={{
@@ -64,13 +64,13 @@ class Product extends React.Component {
                             fontWeight: 400,
                             color: "#6b6b6b"
                         }}
-                    >{brief}</Typography>
+                    >{itemDescription}</Typography>
                 </CardContent>
                 <CardActions>
                     <IconButton size="small">
                         <Icon>{isFavorite ? "favorite": "favorite_outline"}</Icon>
                     </IconButton>
-                    <Link to={baseUrl + id} className={classes.right}> Details</Link>
+                    <Link to={baseUrl + itemId} className={classes.right}> Details</Link>
                 </CardActions>
             </Card>
         );
@@ -84,7 +84,7 @@ Product.propTypes = {
     bid: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
     time: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired
+    itemId: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(Product)

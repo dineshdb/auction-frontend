@@ -2,9 +2,9 @@ import store from './store'
 
 function fetchApi(path, options){
     let headers = {
-        'Authorization': state.getState().user.header,
+        'Authorization': store.getState().user.header,
     }
-    options = Object.assign({}, options, {headers,})
+    options = Object.assign({}, options, {headers, mode: 'cors'})
     return fetch(path, options)
 }
 
