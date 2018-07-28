@@ -2,21 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
-import red from '@material-ui/core/colors/red';
-import Button from '@material-ui/core/Button';
 import {Link} from 'react-router-dom'
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import store from '../store'
+
 const styles = theme => ({
     card: {
         margin: theme.spacing.unit,
@@ -43,11 +37,11 @@ const styles = theme => ({
 });
 
 class Product extends React.Component {
-    state = {
-    };
-
+    isFavorite(id){
+        return store.getState().user.favorites.includes(id)
+    }
     render() {
-        const { title,maxBid,image, actionName, brief, id} = this.props.item;
+        const { title,maxBid,image, actionName, brief, id, isFavorite} = this.props.item;
         const { classes, baseUrl } = this.props
         return (
             <Card elevation={2} className={classes.card}>
@@ -62,27 +56,23 @@ class Product extends React.Component {
                                 fontWeight: 400,
                                 color: "#6b6b6b"
                             }}
-                        > {maxBid}
-                        </Typography>
+                        > {maxBid} </Typography>
                     </div>
                     <Typography
-                            className={classes.brief}
-                            style={{
-                                fontWeight: 400,
-                                color: "#6b6b6b"
-                            }}
-                        >{brief}
-                        </Typography>
-                    </CardContent>
-                    <CardActions>
-                        <IconButton size="small">
-                            <FavoriteIcon/>
-                        </IconButton>
-                        <Link to={baseUrl + id} className={classes.right}>
-                            Details
-                        </Link>
-                    </CardActions>
-                </Card>
+                        className={classes.brief}
+                        style={{
+                            fontWeight: 400,
+                            color: "#6b6b6b"
+                        }}
+                    >{brief}</Typography>
+                </CardContent>
+                <CardActions>
+                    <IconButton size="small">
+                        <Icon>{isFavorite ? "favorite": "favorite_outline"}</Icon>
+                    </IconButton>
+                    <Link to={baseUrl + id} className={classes.right}> Details</Link>
+                </CardActions>
+            </Card>
         );
     }
 }

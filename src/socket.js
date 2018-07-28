@@ -1,5 +1,5 @@
 import {WebSocketUrl} from './config'
-import store from './store'
+import store, {auctionStartedAction, newBid, auctionEndedAction} from './store'
 
 let Stomp = window.Stomp
 let subscriptions = {}
@@ -13,7 +13,6 @@ function subscribeFutures(futureList){
         if(futures.length === 0){
             break;
         }
-        console.log(futures.length)
         let item = futures.pop()
         subscribeAuction(item)
     }
@@ -65,13 +64,13 @@ export function unsubscribeAuction(id){
 }
 
 const auctionStarted = auctionId => {
-    
+    store.dispatch(auctionStartedAction(auctionId))
 }
 
 const auctionEnded = auctionId => {
-
+    store.dispatch(auctionEndedAction(auctionId))
 }
 
 const auctionBid = (auctionId, userId, bidAmount) =>{
-    console.log("bid", auctionId, bidAmount, userId)
+    store.dispatch(newBid({auctionId, userId, bidAmount}))
 }
