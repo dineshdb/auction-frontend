@@ -81,6 +81,7 @@ const reducer = ( state = initialState, action) => {
     switch (action.type){
         case SIGN_IN:
             localStorage.setItem(USER_KEY, JSON.stringify(action.user))
+            console.log("NEW USER",action.user)
             let date = Date.now()
             return Object.assign({}, state, {user: action.user, isLoggedIn : true, date})
         case SIGN_OUT:

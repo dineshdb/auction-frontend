@@ -13,6 +13,7 @@ import AddIcon from '@material-ui/icons/Add';
 import {CustomButton} from "./buttons";
 import {Redirect,Link} from 'react-router-dom'
 import {USER_TOKEN} from "../definitions/index";
+import store from '../store'
 
 
 const styles = theme => ({
@@ -66,11 +67,10 @@ class Product extends React.Component {
         buttonName: ""
     };
     componentDidMount(){
-        let user = JSON.parse(localStorage.getItem(USER_TOKEN))
-        console.log("USER",user)
-        if(user){
+
+        if(store.getState().header){
             this.setState({
-                userId: user.id
+                userId: store.getState().id
             })
         }
     }
@@ -79,7 +79,7 @@ class Product extends React.Component {
     render() {
         const { classes,title,date,time,bid,image,id,sellerId } = this.props;
         let buttonName = "",disable=false
-        let user = JSON.parse(localStorage.getItem(USER_TOKEN))
+        let user = store.getState().header
         if(user){
             if(this.state.userId == sellerId){
                 buttonName="Own Product"

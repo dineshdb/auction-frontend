@@ -36,18 +36,17 @@ class Home extends React.Component {
     componentDidMount() {
         let productsWithImages = []
         let count = 0
-        let user = localStorage.getItem(USER_TOKEN)
 
         console.log("STORE",this.props.products)
-        if(user !== null) {
+        if(store.getState().header) {
             this.setState({
-                user: JSON.parse(user).id
+                user: store.getState().id
             })
             axios({
                 method: 'GET',
                 url: `http://localhost:8080/items`,
                 headers: {
-                    'Authorization': JSON.parse(localStorage.getItem(USER_TOKEN)).header
+                    'Authorization': store.getState().header
                 }
             }).then((response) => {
                     let productIds = response.data
@@ -63,7 +62,7 @@ class Home extends React.Component {
                         frames: tempFrames
                     })
                     let newLength = length*4
-                    console.log("Initial",newLength)
+
 
                     productIds.map((id) => {
 
@@ -74,12 +73,13 @@ class Home extends React.Component {
                                     'Authorization': store.getState().header
                                 },
                             }).then((response) => {
+                                console.log("items",response)
                                 let product = response.data
                                     axios({
                                         method: 'GET',
                                         url: product.image,
                                         headers: {
-                                            'Authorization': JSON.parse(localStorage.getItem(USER_TOKEN)).header
+                                            'Authorization': store.getState().header
                                         },
                                         responseType: 'blob'
                                     }).then((response) => {
@@ -126,8 +126,6 @@ class Home extends React.Component {
                                 {
                                     this.state.products.map((product,key)=>{
                                         if(((key >= frame*4) && (key < (frame+1)*4))){
-                                            console.log("USER",this.state.user,product.seller.userId)
-
                                             return (
                                                 <Product
                                                     title={product.itemName}
@@ -135,7 +133,7 @@ class Home extends React.Component {
                                                     date={product.date}
                                                     image={product.image}
                                                     id={product.itemId}
-                                                    sellerId = {product.seller.userId}
+                                                  //  sellerId = {product.seller.userId}
 
                                                 />
                                             )

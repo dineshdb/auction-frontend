@@ -96,13 +96,12 @@ class SearchBar extends React.Component {
     }
     componentDidMount(){
         let categories = []
-        let user = JSON.parse(localStorage.getItem(USER_TOKEN))
-        if(user){
+        if(store.getState().header){
             axios({
                 method: 'GET',
                 url: `http://localhost:8080/categories`,
                 headers: {
-                    'Authorization': user.header
+                    'Authorization': store.getState().header
                 }
             }).then(response =>{
                 console.log("CATEGORIES",response)
@@ -110,7 +109,6 @@ class SearchBar extends React.Component {
                     categories.push(category)
                 })
                 categories.sort((a,b) => a.categoryName < b.categoryName ? -1 : 1)
-                this.props.dispatch(categoriesAction(categories))
                 this.setState({
                     categories: categories
                 })
