@@ -1,4 +1,5 @@
 import {createStore} from 'redux'
+import wsClient from './socket'
 
 const USER_KEY = 'user'
 
@@ -9,6 +10,9 @@ export const USER_STATUS = 'USER_STATUS'
 export const PRODUCTS_ADD = 'PRODUCTS_ADD'
 export const ADD_AUCTION_STARTED = 'ADD_AUCTION_STARTED'
 export const ADD_TO_CART = 'ADD_TO_CART'
+
+export const SUBSCRIBE_AUCTION = 'SUBSCRIBE_AUCTION'
+
 // Action creators
 export const signIn = user =>({
     type : SIGN_IN,
@@ -30,6 +34,10 @@ export const addAuctionStarted = (id) => ({
     payload: id
 })
 
+export const subscribeAuction = auctionId => ({
+    type: SUBSCRIBE_AUCTION,
+    payload: auctionId
+})
 // reducers
 let initialState = JSON.parse(localStorage.getItem(USER_KEY))
 if(initialState == null) {
@@ -37,9 +45,11 @@ if(initialState == null) {
         user : {},
         products: [],
         auctionsStarted: [],
-        cart: []
+        cart: [],
+        subscriptions: {},
     }
 }
+
 const reducer = ( state = initialState, action) => {
     switch (action.type){
         case SIGN_IN:
@@ -61,6 +71,11 @@ const reducer = ( state = initialState, action) => {
             console.log("ADDING PRODUCT TO CART",action.payload)
             let newCartWithProduct = state.cart
             return {...state,cart: newCartWithProduct}
+        case SUBSCRIBE_AUCTION:
+            let subscription = wsClient.subscribe(`/auction/${action.payload}`, auctionCallback(action.payload))
+            let subscriptions = {}
+            subscriptions[action.payload] = subscription
+            return Object.assign({}, state, {subscriptions})
         case USER_STATUS:
         default:
             return state
@@ -84,6 +99,12 @@ export function isUserOnline(state){
 
 export function getProducts(state){
     return state.products
+}
+
+const auctionCallback = (auctionId) => {
+    return (e) => {
+        
+    }
 }
 
 const mapStateToProps = state => ({
