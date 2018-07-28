@@ -186,7 +186,6 @@ class SellProductForm extends React.Component {
 
     render(){
         const {classes} = this.props
-        console.log("HEY user",store.getState().user)
         return (
             <div className={classes.root}>
                 <Typography
