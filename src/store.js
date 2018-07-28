@@ -1,5 +1,5 @@
 import {createStore} from 'redux'
-import wsClient, {subscribeAuction, unsubscribeAuction} from './socket'
+import {subscribeAuction, unsubscribeAuction} from './socket'
 
 const USER_KEY = 'user'
 
@@ -61,21 +61,19 @@ export const auctionEnded = payload => ({
     payload
 })
 // reducers
-let initialState = {
-    user : {},
-    products: [],
-    auctions: [],
-    auctionsStarted: [],
-    cart: [],
-    subscriptions: [],
+function initializeState(){
+    let initialState = {
+        user : {},
+        products: [],
+        auctions: [],
+        auctionsStarted: [],
+        cart: [],
+        subscriptions: [],
+    }    
+    let user = JSON.parse(localStorage.getItem(USER_KEY)) || {}
+    return Object.assign({}, initialState, {user})
 }
-
-{
-    let user = JSON.parse(localStorage.getItem(USER_KEY))
-    initialState = Object.assign({}, initialState, {user})
-}
-
-const reducer = ( state = initialState, action) => {
+const reducer = ( state = initializeState(), action) => {
     switch (action.type){
         case SIGN_IN:
             localStorage.setItem(USER_KEY, JSON.stringify(action.user))
