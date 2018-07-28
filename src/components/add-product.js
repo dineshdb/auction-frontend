@@ -11,19 +11,13 @@ import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import ToolBar from '@material-ui/core/Toolbar'
 import 'react-datepicker/dist/react-datepicker-cssmodules.css'
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Add from '@material-ui/icons/Add'
 import {CustomButton} from "./buttons";
 import {SimpleTextField} from "./textFields";
 import BootStrappedTextField from './textFields'
 import SelectItem from "./dialogs";
-import {USER_TOKEN} from "../definitions/index";
 import {Redirect} from 'react-router-dom'
-
 import store from '../store'
+import {getCategories} from '../products'
 
 const styles = theme => ({
     root: {
@@ -148,28 +142,10 @@ class SellProductForm extends React.Component {
         this.fileInput = React.createRef()
     }
     componentDidMount() {
-        let user = store.getState().user.header
-        if(user != null){
-            let categories = []
-            axios({
-                method: 'GET',
-                url: `http://localhost:8080/categories`,
-                headers: {
-                    'Authorization': store.getState().user.header
-                }
-            }).then((response)=> {
-
-                response.data.map((category) => {
-                    categories.push(category)
-                })
-                this.setState({
-                    categories: categories
-                })
-            }).catch(err=>{
-
-            })
-        }
-
+        getCategories()
+        .then(cats => cats.sort((a,b) => a.categoryName < b.categoryName ? -1 : 1))
+        .then(categories => this.setState({ categories}))
+        .catch("Could not fetch categories")
     }
     handleAddItem = (event) => {
         this.setState({
