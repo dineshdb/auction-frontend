@@ -12,7 +12,7 @@ import theme from './theme'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import ProductDetails from './components/product-details'
 import Notifications from './components/notifications'
-import Cart from './views/cart'
+import Favorites from './views/favs'
 import UserProfile from './components/user-profile'
 
 import store, {subscribeAuctionAction} from './store'
@@ -46,7 +46,7 @@ class App extends React.Component {
                 <AppBar />
                 <Route path = "/" exact strict component  = { Home }/>
                 <Route path = "/notifications" exact strict component  = { Notifications }/>
-                <Route path = "/cart" exact strict component  = { Cart }/>
+                <Route path = "/favs" exact strict component  = { Favorites }/>
                 <Route path = "/product/:id" component = {ProductDetails}/>
                 <Route path = "/error" exact strict render = {() => <PageNotFound errorMessage = "Invalid page" />}/>
                 <Route path = "/profile/:id" component = {UserProfile} />

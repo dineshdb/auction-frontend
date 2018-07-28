@@ -57,7 +57,7 @@ class Product extends React.Component {
         store.dispatch(toggleFavorite(itemId))
     }
     render() {
-        const { itemName,maxBid,image, actionName, itemDescription, itemId} = this.props.item;
+        const { itemName,maxBid, bid,image, actionName, itemDescription, itemId} = this.props.item;
         const { classes, baseUrl } = this.props
         return (
             <Card elevation={2} className={classes.card}>

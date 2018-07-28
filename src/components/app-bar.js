@@ -47,17 +47,21 @@ const Site = "BidStellar.com"
 class HomeBar extends React.Component {
     constructor(props){
         super(props)
+        let state = store.getState()
         this.state = {
-            isOnline: store.getState().user.isLoggedIn,
+            isOnline: state.user.isLoggedIn,
             userId: "",
             fireHome: false,
             userName: "",
+            favoritesCount: state.favorites.length
         }
     }
     componentDidMount(){
         store.subscribe(()=>{
+            let state = store.getState()
             this.setState({
-                isOnline: store.getState().user.isLoggedIn
+                isOnline: store.getState().user.isLoggedIn,
+                favoritesCount: state.favorites.length
             })
         })
     }
@@ -116,19 +120,14 @@ class HomeBar extends React.Component {
                                         </Button>
                                     </Link>
                                     <Link to="/favs">
-                                        <Badge className={classes.margin} badgeContent={4}>
-                                            <Icon>favorite_border</Icon>
+                                        <Badge className={classes.margin} badgeContent={this.state.favoritesCount} color="secondary">
+                                            <Icon>favorite</Icon>
                                         </Badge>
                                     </Link>
 
                                     <Link to="/notifications">
                                         <Badge className={classes.margin} badgeContent={4}>
                                             <Icon>notifications</Icon>
-                                        </Badge>
-                                    </Link>
-                                    <Link to="/cart">
-                                        <Badge className={classes.margin} badgeContent={4}>
-                                            <Icon>shopping_cart</Icon>
                                         </Badge>
                                     </Link>
 

@@ -8,7 +8,7 @@ import store from '../store'
 let styles = theme => ({
 
 })
-class Cart extends React.Component {
+class Favorites extends React.Component {
     constructor(props){
         super(props)
         this.state = {
@@ -31,8 +31,8 @@ class Cart extends React.Component {
     }
 }
 
-Cart.propTypes = {
+Favorites.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Cart);
+export default withStyles(styles)(Favorites);
