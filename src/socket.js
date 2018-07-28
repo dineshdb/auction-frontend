@@ -1,4 +1,5 @@
 import {WebSocketUrl} from './config'
+import store from './store'
 
 let Stomp = window.Stomp
 let subscriptions = {}
@@ -32,7 +33,15 @@ export default wsClient
 
 function auctionCallback(id){
     return e => {
-        console.log(e)
+        let msg = e.body
+        if(msg.startsWith("bid")){
+            let params = msg.split(' ')
+            auctionBid(id, Number.parseInt(params[1]), Number.parseInt(params[2]))
+        } else if( msg.startsWith("end")){
+            auctionEnded(id)
+        } else if(msg.startsWith("start")){
+            auctionStarted(id)
+        }
     }
 }
 
@@ -63,6 +72,6 @@ const auctionEnded = auctionId => {
 
 }
 
-const auctionNewBid = (auctionId, bidAmount, userId) =>{
-
+const auctionBid = (auctionId, userId, bidAmount) =>{
+    console.log("bid", auctionId, bidAmount, userId)
 }

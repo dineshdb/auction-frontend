@@ -14,6 +14,10 @@ export const ADD_TO_CART = 'ADD_TO_CART'
 export const SUBSCRIBE_AUCTION = 'SUBSCRIBE_AUCTION'
 export const UNSUBSCRIBE_AUCTION = 'UNSUBSCRIBE_AUCTION'
 
+export const NEW_BID_PUSH = 'NEW_BID_PUSH'
+export const AUCTION_STARTED = 'AUCTION_STARTED'
+export const AUCTION_ENDED = 'AUCTION_ENDED'
+
 // Action creators
 export const signIn = user =>({
     type : SIGN_IN,
@@ -44,15 +48,32 @@ export const unsubscribeAuctionAction = payload => ({
     payload
 })
 
+export const newBid = payload => ({
+    type: NEW_BID_PUSH,
+    payload
+})
+export const auctionStarted = payload => ({
+    type: AUCTION_STARTED,
+    payload
+})
+export const auctionEnded = payload => ({
+    type: AUCTION_ENDED,
+    payload
+})
 // reducers
-let initialState = JSON.parse(localStorage.getItem(USER_KEY))
-if(initialState == null) {
-    initialState = {
-        user : {},
-        products: [],
-        auctionsStarted: [],
-        cart: [],
-        subscriptions: [],
+let initialState = {
+    user : {},
+    products: [],
+    auctions: [],
+    auctionsStarted: [],
+    cart: [],
+    subscriptions: [],
+}
+
+{
+    let storedState = JSON.parse(localStorage.getItem(USER_KEY))
+    if(storedState){
+        initialState = Object.assign({}, initialState, storedState)
     }
 }
 
@@ -67,7 +88,7 @@ const reducer = ( state = initialState, action) => {
             return Object.assign({}, state, {user: {}, isLoggedIn: false, date: null})
         case PRODUCTS_ADD:
             console.log("Products in store",action.payload)
-            return {...state,products: action.payload}
+            return {...state, products: action.payload}
         case ADD_AUCTION_STARTED:
             console.log("NEW AUCTION",action.payload)
             let withNewAuction = state.auctionsStarted
@@ -93,6 +114,44 @@ const reducer = ( state = initialState, action) => {
                 return Object.assign({}, state, {subscriptions})
             }
             return state
+        }
+
+        case AUCTION_STARTED:{
+            let {id}= action.payload
+            let auctions = state.auctions
+            let index = auctions.findIndex(el => el.id === id)
+            let auction = auctions[index]
+            auctions = auctions.splice(index, 1)
+            auction.state = 'LIVE'
+            return Object.assign({}, state, {auctions: [...auctions, auction]})
+        }
+
+        case AUCTION_ENDED: {
+            let {id}= action.payload
+            let auctions = state.auctions
+            let index = auctions.findIndex(el => el.id === id)
+            let auction = auctions[index]
+            auctions = auctions.splice(index, 1)
+            auction.state = 'ENDED'
+            return Object.assign({}, state, {auctions: [...auctions, auction]})
+        }
+
+        case NEW_BID_PUSH: {
+            let {id, userId, bidAmount} = action.payload
+            let auctions = state.auctions
+            let index = auctions.findIndex(el => el.id === id)
+            let auction = auctions[index]
+            auctions = auctions.splice(index, 1)
+            auction.bids.push({
+                userId,
+                bidAmount
+            })
+            if(auction.highestBid < bidAmount){
+                auction.highestBid = bidAmount
+                auction.highestBidder = userId
+            }
+            return Object.assign({}, state, {auctions: [...auctions, auction]})
+
         }
 
         case USER_STATUS:
