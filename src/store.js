@@ -162,9 +162,11 @@ const reducer = ( state = initializeState(), action) => {
             let itemId = action.payload
             let favorites = state.favorites
             let index = favorites.indexOf(itemId)
+            console.log(index, itemId)
             if(index > -1){
-                favorites =  favorites.splice(index, 1)
-                return Object.assign({}, state,{favorites})
+
+                favorites.splice(index, 1)
+                return Object.assign({}, state, {favorites})
             } else {
                 return Object.assign({}, state,{favorites: [...favorites, itemId]})
             }

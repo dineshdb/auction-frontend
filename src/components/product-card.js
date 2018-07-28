@@ -42,20 +42,23 @@ class Product extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            isFavorite : this.isFavorite(props.item.itemId)
+            isFavorite : this.isFavorite(props.item.itemId),
         }
     }
     isFavorite(id){
         return store.getState().favorites.includes(id)
     }
+    componentDidMount(){
+        store.subscribe(() =>{
+            this.setState({
+                isFavorite: this.isFavorite(this.props.item.itemId)
+            })
+        })
+    }
     handleFavorite = (e) => {
         let {itemId} = this.props.item
-        console.log(this.props)
-        this.setState({
-            isFavorite: !this.state.isFavorite
-        })
-        console.log(this.state.isFavorite, store.getState().favorites)
         store.dispatch(toggleFavorite(itemId))
+        console.log(this.state.isFavorite, store.getState().favorites)
     }
     render() {
         const { itemName,maxBid, bid,image, actionName, itemDescription, itemId} = this.props.item;
