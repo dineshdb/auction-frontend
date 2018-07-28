@@ -23,52 +23,6 @@ class Cart extends React.Component {
     }
     render(props){
         const {classes} = this.props
-        let data = {
-            items : [
-                {
-                    id: 1,
-                    title : "Scissors",
-                    quantity: 3,
-                    price: 540,
-                    image: '/img/home.jpg'
-                },
-                {
-                    id: 1,
-                    title : "Scissors",
-                    quantity: 3,
-                    price: 540,
-                    image: '/img/home.jpg'
-                },
-                {
-                    id: 1,
-                    title : "Scissors",
-                    quantity: 3,
-                    price: 540,
-                    image: '/img/home.jpg'
-                },
-                {
-                    id: 1,
-                    title : "Scissors",
-                    quantity: 3,
-                    price: 540,
-                    image: '/img/home.jpg'
-                },
-                {
-                    id: 1,
-                    title : "Scissors",
-                    quantity: 3,
-                    price: 540,
-                    image: '/img/home.jpg'
-                },
-                {
-                    id: 1,
-                    title : "Scissors",
-                    quantity: 3,
-                    price: 540,
-                    image: '/img/home.jpg'
-                },
-                ]
-        }
         return (
             <div className={classes.root}>
                 <TileView items={this.state.favorites} basePath={"/product/"}/>
