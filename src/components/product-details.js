@@ -102,7 +102,7 @@ class ProductDetails extends React.Component {
             openDialog: false,
             participated: false,
             alreadyParticipated: false,
-            buttonName: ""
+            buttonName: "Participate"
         }
     }
     render(){

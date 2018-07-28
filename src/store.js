@@ -98,6 +98,7 @@ const reducer = ( state = initializeState(), action) => {
 
         case SUBSCRIBE_AUCTION:
             let auctionId = action.payload
+            console.log("auction subsribed",auctionId)
             subscribeAuction(auctionId)
             let subscriptions = Object.assign({}, state.subscriptions)
             return Object.assign({}, state, {subscriptions: [...subscriptions, auctionId]})
@@ -119,6 +120,7 @@ const reducer = ( state = initializeState(), action) => {
             let index = auctions.findIndex(el => el.id === id)
             let auction = auctions[index]
             auctions = auctions.splice(index, 1)
+            console.log("AUCTIONS STARTED",auctions)
             auction.state = 'LIVE'
             return Object.assign({}, state, {auctions: [...auctions, auction]})
         }
