@@ -12,11 +12,10 @@ import theme from './theme'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import ProductDetails from './components/product-details'
 import Notifications from './components/notifications'
-import Cart from './components/cart'
+import Cart from './views/cart'
 import UserProfile from './components/user-profile'
 
 import store, {subscribeAuctionAction} from './store'
-
 
 import AppBar from './components/app-bar'
 class App extends React.Component {
