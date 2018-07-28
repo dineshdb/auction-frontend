@@ -24,6 +24,7 @@ import {USER_TOKEN} from "../definitions/index";
 import Typography from '@material-ui/core/Typography'
 import Collapse from '@material-ui/core/Collapse'
 import TextField from '@material-ui/core/TextField'
+import store from '../store'
 
 const styles = (theme) => {
     return{
@@ -66,12 +67,12 @@ class SelectItem  extends React.Component{
     }
     componentDidMount() {
         let categories = []
-        if(localStorage.getItem(USER_TOKEN)){
+        if(store.getState().header){
             axios({
                 method: 'GET',
                 url: `http://localhost:8080/categories`,
                 headers: {
-                    'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
+                    'Authorization':store.getState().header
                 }
             }).then((response)=> {
 

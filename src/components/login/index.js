@@ -82,6 +82,9 @@ class LoginForm extends React.Component{
                 loginFailed: false           
         }
     }
+    componentWillUnmount(){
+      
+    }
     
         handleUserName(event){
             this.setState({
@@ -148,12 +151,8 @@ class LoginForm extends React.Component{
                     let user = {
                         header,
                         isLoggedIn: true,
-                    }
-                    localStorage.setItem(USER_TOKEN,JSON.stringify({
-                        isOnline: true,
-                        header: header,
                         id: response.data.response
-                    }))
+                    }
                     this.props.dispatch({type: 'SIGN_IN', user })
                     this.setState({
                         fireRedirect: true

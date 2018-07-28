@@ -108,13 +108,13 @@ class ProductDetails extends React.Component {
     render(){
         const {classes, match} = this.props
         const id = this.props.match.params.id
-        const userId = JSON.parse(localStorage.getItem(USER_TOKEN)).id
+        const userId = store.getState().id
         if (this.state.count === 0){
             axios({
                 method: 'GET',
                 url: `http://localhost:8080/items/${id}`,
                 headers: {
-                    'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
+                    'Authorization':store.getState().header
                 },
             }).then((res)=>{
                 this.setState({
@@ -125,7 +125,7 @@ class ProductDetails extends React.Component {
                     method: 'GET',
                     url: this.state.details.image,
                     headers: {
-                        'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
+                        'Authorization':store.getState().header
                     },
                     responseType: 'blob'
                 }).then((response)=>{
@@ -137,7 +137,7 @@ class ProductDetails extends React.Component {
                         method: 'GET',
                         url: `http://localhost:8080/auctions/${this.state.details.auction}`,
                         headers: {
-                            'Authorization':JSON.parse(localStorage.getItem(USER_TOKEN)).header
+                            'Authorization':store.getState().header
                         },
                     }).then(res=>{
                         let participated = false
@@ -285,14 +285,13 @@ class ProductDetails extends React.Component {
                                                      this.setState({
                                                          openDialog: false
                                                      })
-                                                     let user = JSON.parse(localStorage.getItem(USER_TOKEN))
                                                      let auction = this.state.auctionDetails
-                                                     let url = `http://localhost:8080/auctions/${auction.auctionId}/participate/${user.id}`
+                                                     let url = `http://localhost:8080/auctions/${auction.auctionId}/participate/${store.getState().id}`
                                                          axios({
                                                              method: 'GET',
                                                              url: url,
                                                              headers: {
-                                                                 'Authorization': user.header
+                                                                 'Authorization': store.getState().header
                                                              }
                                                          }).then((response)=>{
                                                             console.log("RESPONSE FROM CREATE_AUCTION",response)

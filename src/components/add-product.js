@@ -148,16 +148,17 @@ class SellProductForm extends React.Component {
         this.fileInput = React.createRef()
     }
     componentDidMount() {
-        let user = localStorage.getItem(USER_TOKEN)
+        let user = store.getState().header
         if(user != null){
             let categories = []
             axios({
                 method: 'GET',
                 url: `http://localhost:8080/categories`,
                 headers: {
-                    'Authorization': JSON.parse(user).header
+                    'Authorization': store.getState().header
                 }
             }).then((response)=> {
+
                 response.data.map((category) => {
                     categories.push(category)
                 })
@@ -346,11 +347,6 @@ class SellProductForm extends React.Component {
                                                        //TODO LOTS OF CRABS
                                                       let imagePostObject = new FormData()
                                                        imagePostObject.append('file',selectedImage)
-                                                       // postingData.append('itemName',itemName)
-                                                       // postingData.append('itemDescription',itemDescription)
-                                                       // postingData.append('startingBid',startingBid)
-                                                       // let imagePostingData = new FormData()
-                                                        console.log("IMAGE",selectedImage,"DATA",imagePostObject)
                                                            axios({
                                                                method: 'POST',
                                                                url: `http://localhost:8080/uploadFile/`,
@@ -413,7 +409,7 @@ class SellProductForm extends React.Component {
                                                             itemName: this.state.itemName,
                                                             itemDescription: this.state.itemDescription,
                                                             startingBid: Number(this.state.startingBid),
-                                                            seller:Number(store.getState().header.id),
+                                                            seller:Number(store.getState().id),
                                                             image: this.state.image,
                                                             auction: null,
                                                             bids: [],
