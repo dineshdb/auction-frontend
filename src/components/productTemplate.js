@@ -68,9 +68,9 @@ class Product extends React.Component {
     };
     componentDidMount(){
 
-        if(store.getState().header){
+        if(store.getState().user.header){
             this.setState({
-                userId: store.getState().id
+                userId: store.getState().user.id
             })
         }
     }
@@ -79,7 +79,7 @@ class Product extends React.Component {
     render() {
         const { classes,title,date,time,bid,image,id,sellerId } = this.props;
         let buttonName = "",disable=false
-        let user = store.getState().header
+        let user = store.getState().user.header
         if(user){
             if(this.state.userId == sellerId){
                 buttonName="Own Product"

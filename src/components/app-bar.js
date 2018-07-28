@@ -48,7 +48,7 @@ class HomeBar extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            isOnline: store.getState().isLoggedIn,
+            isOnline: store.getState().user.isLoggedIn,
             userId: "",
             fireHome: false,
             userName: "",
@@ -57,7 +57,7 @@ class HomeBar extends React.Component {
     componentDidMount(){
         store.subscribe(()=>{
             this.setState({
-                isOnline: store.getState().isLoggedIn
+                isOnline: store.getState().user.isLoggedIn
             })
         })
     }

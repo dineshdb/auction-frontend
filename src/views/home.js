@@ -38,15 +38,15 @@ class Home extends React.Component {
         let count = 0
 
         console.log("STORE",this.props.products)
-        if(store.getState().header) {
+        if(store.getState().user.header) {
             this.setState({
-                user: store.getState().id
+                user: store.getState().user.id
             })
             axios({
                 method: 'GET',
                 url: `http://localhost:8080/items`,
                 headers: {
-                    'Authorization': store.getState().header
+                    'Authorization': store.getState().user.header
                 }
             }).then((response) => {
                     let productIds = response.data
@@ -70,7 +70,7 @@ class Home extends React.Component {
                                 method: 'GET',
                                 url: `http://localhost:8080/items/${id}`,
                                 headers: {
-                                    'Authorization': store.getState().header
+                                    'Authorization': store.getState().user.header
                                 },
                             }).then((response) => {
                                 console.log("items",response)
@@ -79,7 +79,7 @@ class Home extends React.Component {
                                         method: 'GET',
                                         url: product.image,
                                         headers: {
-                                            'Authorization': store.getState().header
+                                            'Authorization': store.getState().user.header
                                         },
                                         responseType: 'blob'
                                     }).then((response) => {

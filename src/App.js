@@ -23,17 +23,18 @@ class App extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            isOnline : store.getState().isLoggedIn
+            isOnline : store.getState().user.isLoggedIn
         }
     }
     componentDidMount(){
         store.subscribe(()=>{
             this.setState({
-                isOnline: store.getState().isLoggedIn
+                isOnline: store.getState().user.isLoggedIn
             })
         })
 
         store.dispatch(subscribeAuctionAction(1))
+        console.log(store.getState())
     }
 
     render(props) {

@@ -71,10 +71,8 @@ let initialState = {
 }
 
 {
-    let storedState = JSON.parse(localStorage.getItem(USER_KEY))
-    if(storedState){
-        initialState = Object.assign({}, initialState, storedState)
-    }
+    let user = JSON.parse(localStorage.getItem(USER_KEY))
+    initialState = Object.assign({}, initialState, {user})
 }
 
 const reducer = ( state = initialState, action) => {
@@ -169,11 +167,11 @@ export function getUser(state){
 }
 
 export function getUserToken(state) {
-    return state.user.token
+    return state.user.header
 }
 
 export function isUserOnline(state){
-    return state.user.token !== null
+    return state.user.isLoggedIn
 }
 
 export function getProducts(state){

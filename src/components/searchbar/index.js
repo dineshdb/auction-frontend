@@ -96,12 +96,12 @@ class SearchBar extends React.Component {
     }
     componentDidMount(){
         let categories = []
-        if(store.getState().header){
+        if(store.getState().user.header){
             axios({
                 method: 'GET',
                 url: `http://localhost:8080/categories`,
                 headers: {
-                    'Authorization': store.getState().header
+                    'Authorization': store.getState().user.header
                 }
             }).then(response =>{
                 console.log("CATEGORIES",response)

@@ -148,14 +148,14 @@ class SellProductForm extends React.Component {
         this.fileInput = React.createRef()
     }
     componentDidMount() {
-        let user = store.getState().header
+        let user = store.getState().user.header
         if(user != null){
             let categories = []
             axios({
                 method: 'GET',
                 url: `http://localhost:8080/categories`,
                 headers: {
-                    'Authorization': store.getState().header
+                    'Authorization': store.getState().user.header
                 }
             }).then((response)=> {
 
@@ -351,7 +351,7 @@ class SellProductForm extends React.Component {
                                                                method: 'POST',
                                                                url: `http://localhost:8080/uploadFile/`,
                                                                headers: {
-                                                                   'Authorization': store.getState().header,
+                                                                   'Authorization': store.getState().user.header,
                                                                     'Content-Type': 'multipart/form-data'
                                                                },
                                                                data: imagePostObject
@@ -409,7 +409,7 @@ class SellProductForm extends React.Component {
                                                             itemName: this.state.itemName,
                                                             itemDescription: this.state.itemDescription,
                                                             startingBid: Number(this.state.startingBid),
-                                                            seller:Number(store.getState().id),
+                                                            seller:Number(store.getState().user.id),
                                                             image: this.state.image,
                                                             auction: null,
                                                             bids: [],
@@ -419,7 +419,7 @@ class SellProductForm extends React.Component {
 
                                                         }
                                                     ],
-                                                    seller: Number(store.getState().id),
+                                                    seller: Number(store.getState().user.id),
                                                     bids: [],
                                                     bidders: []
                                                   //  items: this.state.itemObject
@@ -429,7 +429,7 @@ class SellProductForm extends React.Component {
                                                     method: 'POST',
                                                     url: `http://localhost:8080/auctions/createAuction`,
                                                     headers: {
-                                                        'Authorization':store.getState().header,
+                                                        'Authorization':store.getState().user.header,
                                                     },
                                                     data: auctionObject
                                                 }).then(response=>{
