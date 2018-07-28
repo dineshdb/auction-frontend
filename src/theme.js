@@ -2,7 +2,6 @@ import { createMuiTheme } from '@material-ui/core/styles';
 
 export default createMuiTheme({
     palette: {
-
         primary: {
             light: '#536bea',
             main: '#2196F3',
@@ -15,7 +14,6 @@ export default createMuiTheme({
             dark: '#ea007e',
             contrastText: '#000',
         },
-
     },
     overrides: {
         MuiButton: {
@@ -38,7 +36,7 @@ export default createMuiTheme({
             '"Segoe UI Emoji"',
             '"Segoe UI Symbol"',
         ].join(','),
-        fontSize: "21px",
+        fontSize: "16px",
         fontWeight: "lighter",
     },
 });

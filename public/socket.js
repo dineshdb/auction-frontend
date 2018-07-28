@@ -3,17 +3,9 @@ var client = Stomp.client(url);
 
 
 let connected = e => {
-	client.subscribe("/auction/watch", e =>{
-		console.log("Auction going live of id" + JSON.parse(e.body))
-		let body = JSON.parse(e.body)
-		console.log("DATA",body)
-
-
+		client.subscribe("/auction/1", e =>{
+		console.log("Auction going live of id:" + e.body)
 	})
-    client.subscribe("/auction/highestBid", e =>{
-        console.log("Highest bid info" + JSON.stringify(e.body))
-
-    })
 }
 let error = e => {
 	console.log("error " + e)

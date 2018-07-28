@@ -115,13 +115,19 @@ class HomeBar extends React.Component {
                                             <Icon>add</Icon>
                                         </Button>
                                     </Link>
+                                    <Link to="/favs">
+                                        <Badge className={classes.margin} badgeContent={4}>
+                                            <Icon>favorite_border</Icon>
+                                        </Badge>
+                                    </Link>
+
                                     <Link to="/notifications">
-                                        <Badge className={classes.margin} badgeContent={4} color="primary">
+                                        <Badge className={classes.margin} badgeContent={4}>
                                             <Icon>notifications</Icon>
                                         </Badge>
                                     </Link>
                                     <Link to="/cart">
-                                        <Badge className={classes.margin} badgeContent={4} color="primary">
+                                        <Badge className={classes.margin} badgeContent={4}>
                                             <Icon>shopping_cart</Icon>
                                         </Badge>
                                     </Link>

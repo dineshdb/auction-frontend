@@ -71,11 +71,10 @@ class Home extends React.Component {
                                 method: 'GET',
                                 url: `http://localhost:8080/items/${id}`,
                                 headers: {
-                                    'Authorization': JSON.parse(localStorage.getItem(USER_TOKEN)).header
+                                    'Authorization': store.getState().header
                                 },
                             }).then((response) => {
                                 let product = response.data
-
                                     axios({
                                         method: 'GET',
                                         url: product.image,
@@ -95,18 +94,12 @@ class Home extends React.Component {
                                             this.props.dispatch(productsAdd(productsWithImages))
 
                                         }
-
-
                                     }).catch(err => {
                                         console.log("HEY ERROR", err)
                                     })
-
-
-
                             })
                         }
                     )
-
                 }
             )
         }
@@ -147,9 +140,6 @@ class Home extends React.Component {
                                                 />
                                             )
                                         }
-
-
-
                                     })
                                 }
                             </Toolbar>
