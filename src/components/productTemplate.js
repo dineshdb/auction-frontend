@@ -2,29 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
-import AddIcon from '@material-ui/icons/Add';
 import {CustomButton} from "./buttons";
 import {Redirect,Link} from 'react-router-dom'
-import {USER_TOKEN} from "../definitions/index";
 import store from '../store'
-
 
 const styles = theme => ({
     card: {
-
         marginTop: "8%",
         height: "60%",
         maxWidth: 460,
         width: 283,
         margin: theme.spacing.unit,
-
     },
     media: {
         margin: theme.spacing.unit*3,
@@ -50,7 +43,6 @@ const styles = theme => ({
     link: {
         color: "black",
         opacity: "0.8",
-
     },
     margin: {
         margin: theme.spacing.unit,
@@ -67,14 +59,12 @@ class Product extends React.Component {
         buttonName: ""
     };
     componentDidMount(){
-
         if(store.getState().user.header){
             this.setState({
                 userId: store.getState().user.id
             })
         }
     }
-
 
     render() {
         const { classes,title,date,time,bid,image,id,sellerId } = this.props;
@@ -89,9 +79,7 @@ class Product extends React.Component {
                 buttonName="CHECK"
                 disable=false
             }
-        }
-
-        else{
+        } else{
           buttonName="BID NOW"
             disable=false
         }

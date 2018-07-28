@@ -52,11 +52,11 @@ export const newBid = payload => ({
     type: NEW_BID_PUSH,
     payload
 })
-export const auctionStarted = payload => ({
+export const auctionStartedAction = payload => ({
     type: AUCTION_STARTED,
     payload
 })
-export const auctionEnded = payload => ({
+export const auctionEndedAction = payload => ({
     type: AUCTION_ENDED,
     payload
 })
@@ -69,6 +69,7 @@ function initializeState(){
         auctionsStarted: [],
         cart: [],
         subscriptions: [],
+        favorites: []
     }    
     let user = JSON.parse(localStorage.getItem(USER_KEY)) || {}
     return Object.assign({}, initialState, {user})
