@@ -2,16 +2,15 @@ import React from 'react'
 import SearchBar from '../components/searchbar/index'
 import Product from '../components/productTemplate'
 import axios from 'axios'
-import {USER_TOKEN} from "../definitions/index";
 import Toolbar from '@material-ui/core/Toolbar'
 import Paper from '@material-ui/core/Paper'
-import UserProducts from '../components/userProducts'
 import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import store from '../store'
 import {connect} from 'react-redux'
 import {productsAdd} from "../store";
-
+import TileView from '../components/tile-view'
+import {fetchProducts, fetchEach} from '../products'
 const styles = (theme) =>{
     return {
         margin:{
@@ -29,11 +28,17 @@ class Home extends React.Component {
             pages: 0,
             frames: [],
             count: 0,
-            user: null
+            user: null,
+            favorites: []
         }
     }
 
     componentDidMount() {
+        fetchProducts()
+        .then(fetchEach)
+        .then(favorites => this.setState({favorites}))
+        .catch(console.log)
+
         let productsWithImages = []
         let count = 0
 
@@ -112,6 +117,7 @@ class Home extends React.Component {
 
             <div>
                 <SearchBar/>
+                <TileView items={this.state.favorites} basePath={"/product/"}/>
                 <Paper
                     style={{
                         color: "white"
