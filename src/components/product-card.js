@@ -9,7 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import {Link} from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
-import store from '../store'
+import store, {toggleFavorite} from '../store'
+import {connect} from 'react-redux'
 
 const styles = theme => ({
     card: {
@@ -37,11 +38,26 @@ const styles = theme => ({
 });
 
 class Product extends React.Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            isFavorite : props.item.isFavorite
+        }
+    }
     isFavorite(id){
         return store.getState().user.favorites.includes(id)
     }
+    handleFavorite = (e) => {
+        let {itemId} = this.props.item
+        console.log(this.props)
+        this.setState({
+            isFavorite: !this.state.isFavorite
+        })
+        console.log(this.state.isFavorite, store.getState().favorites)
+        store.dispatch(toggleFavorite(itemId))
+    }
     render() {
-        const { itemName,maxBid,image, actionName, itemDescription, itemId, isFavorite} = this.props.item;
+        const { itemName,maxBid,image, actionName, itemDescription, itemId} = this.props.item;
         const { classes, baseUrl } = this.props
         return (
             <Card elevation={2} className={classes.card}>
@@ -67,8 +83,8 @@ class Product extends React.Component {
                     >{itemDescription}</Typography>
                 </CardContent>
                 <CardActions>
-                    <IconButton size="small">
-                        <Icon>{isFavorite ? "favorite": "favorite_outline"}</Icon>
+                    <IconButton size="small" onClick={this.handleFavorite}>
+                        <Icon>{this.state.isFavorite ? "favorite": "favorite_outline"}</Icon>
                     </IconButton>
                     <Link to={baseUrl + itemId} className={classes.right}> Details</Link>
                 </CardActions>
@@ -86,5 +102,9 @@ Product.propTypes = {
     time: PropTypes.string.isRequired,
     itemId: PropTypes.string.isRequired
 };
-
-export default withStyles(styles)(Product)
+function mapStateToProps(state){
+    return {
+        isFavorite: state.isFavorite
+    }
+}
+export default connect(mapStateToProps)(withStyles(styles)(Product))
