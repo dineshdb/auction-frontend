@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import store, {toggleFavorite} from '../store'
 import {connect} from 'react-redux'
+import Tooltip from '@material-ui/core/Tooltip';
 
 const styles = theme => ({
     card: {
@@ -41,11 +42,11 @@ class Product extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            isFavorite : props.item.isFavorite
+            isFavorite : this.isFavorite(props.item.itemId)
         }
     }
     isFavorite(id){
-        return store.getState().user.favorites.includes(id)
+        return store.getState().favorites.includes(id)
     }
     handleFavorite = (e) => {
         let {itemId} = this.props.item
@@ -83,9 +84,11 @@ class Product extends React.Component {
                     >{itemDescription}</Typography>
                 </CardContent>
                 <CardActions>
+                    <Tooltip title="Save to favorites">
                     <IconButton size="small" onClick={this.handleFavorite}>
                         <Icon>{this.state.isFavorite ? "favorite": "favorite_outline"}</Icon>
                     </IconButton>
+                    </Tooltip>
                     <Link to={baseUrl + itemId} className={classes.right}> Details</Link>
                 </CardActions>
             </Card>
