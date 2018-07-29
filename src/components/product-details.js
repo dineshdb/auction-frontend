@@ -11,7 +11,7 @@ import Grid from '@material-ui/core/Grid'
 import {CustomButton} from "./buttons";
 import Divider from '@material-ui/core/Divider'
 import {USER_TOKEN} from "../definitions/index";
-import store from '../store'
+import store, {subscribeAuctionAction} from '../store'
 import {Redirect } from 'react-router-dom'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -295,6 +295,7 @@ class ProductDetails extends React.Component {
                                                              }
                                                          }).then((response)=>{
                                                             console.log("RESPONSE FROM CREATE_AUCTION",response)
+                                                             store.dispatch(subscribeAuctionAction(auction.auctionId))
                                                              this.setState({
                                                                  participated: true
                                                              })
