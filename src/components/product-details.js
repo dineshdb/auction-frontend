@@ -127,10 +127,6 @@ class ProductDetails extends React.Component {
                     },
                     responseType: 'blob'
                 }).then((response)=>{
-                    const url = window.URL.createObjectURL(new Blob([response.data]))
-                    this.setState({
-                        image: url
-                    })
                     axios({
                         method: 'GET',
                         url: `http://localhost:8080/auctions/${this.state.details.auction}`,
@@ -138,14 +134,8 @@ class ProductDetails extends React.Component {
                             'Authorization':store.getState().user.header
                         },
                     }).then(res=>{
-                        let participated = false
-                        let buttonName = "Participate"
-                        res.data.bidders.map((bidder)=>{
-                            if(bidder == userId){
-                                participated=true,
-                                    buttonName="Participated"
-                            }
-                        })
+                        let participated = res.data.bidders.includes(userId)
+                        let buttonName = participated ? "Participated" : "Participate"
                         this.setState({
                             auctionDetails: res.data,
                             alreadyParticipated: participated,
@@ -183,7 +173,7 @@ class ProductDetails extends React.Component {
                                 </Typography>
                                 <CardMedia
                                     className={classes.media}
-                                    image={this.state.image}
+                                    image={details.image}
                                 />
                             </Grid>
                             <Grid item xs={4}>

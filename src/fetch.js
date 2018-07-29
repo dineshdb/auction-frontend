@@ -8,4 +8,15 @@ function fetchApi(path, options){
     return fetch(path, options)
 }
 
+export function postForm(url, body){
+    let options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        body,
+    }
+    return fetchApi(url, options)
+}
+
 export default fetchApi
