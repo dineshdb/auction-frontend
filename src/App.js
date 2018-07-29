@@ -15,7 +15,11 @@ import Notifications from './components/notifications'
 import Favorites from './views/favs'
 import UserProfile from './components/user-profile'
 
-import store, {subscribeAuctionAction} from './store'
+import store, {
+    subscribeAuctionAction, 
+    updateAuctionListAction, 
+    auctionStartedAction
+} from './store'
 
 import AppBar from './components/app-bar'
 class App extends React.Component {
@@ -33,6 +37,16 @@ class App extends React.Component {
         })
 
         store.dispatch(subscribeAuctionAction(1))
+        let auctions = [
+            {
+                id: 1,
+                state: 'READY'
+            },
+        ]
+        // Check 
+        store.dispatch(updateAuctionListAction(auctions))
+        console.log(store.getState())
+        store.dispatch(auctionStartedAction(1))
         console.log(store.getState())
     }
 

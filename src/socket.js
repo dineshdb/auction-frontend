@@ -1,5 +1,10 @@
 import {WebSocketUrl} from './config'
-import store, {auctionStartedAction, newBid, auctionEndedAction} from './store'
+import store, {
+    auctionStartedAction, 
+    newBid, 
+    auctionEndedAction,
+    updateAuctionListAction
+} from './store'
 
 let Stomp = window.Stomp
 let subscriptions = {}
@@ -60,7 +65,7 @@ export function unsubscribeAuction(id){
     if(subscriptions[id]){
         subscriptions[id].unsubscribe()
         subscriptions[id] = null
-    }    
+    }
 }
 
 const auctionStarted = auctionId => {
