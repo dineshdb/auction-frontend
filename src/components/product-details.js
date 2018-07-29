@@ -10,14 +10,18 @@ import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid'
 import {CustomButton} from "./buttons";
 import Divider from '@material-ui/core/Divider'
+<<<<<<< Updated upstream
 import {USER_TOKEN} from "../definitions/index";
 import store, {subscribeAuctionAction} from '../store'
+=======
+import store from '../store'
+>>>>>>> Stashed changes
 import {Redirect } from 'react-router-dom'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Right from '@material-ui/icons/Check'
 import {addToCart} from "../store";
+import {participateInAuction} from '../products'
 
 
 let styles = (theme)=>{
@@ -286,20 +290,14 @@ class ProductDetails extends React.Component {
                                                          openDialog: false
                                                      })
                                                      let auction = this.state.auctionDetails
-                                                     let url = `http://localhost:8080/auctions/${auction.auctionId}/participate/${store.getState().user.id}`
-                                                         axios({
-                                                             method: 'GET',
-                                                             url: url,
-                                                             headers: {
-                                                                 'Authorization': store.getState().user.header
-                                                             }
-                                                         }).then((response)=>{
-                                                            console.log("RESPONSE FROM CREATE_AUCTION",response)
-                                                             store.dispatch(subscribeAuctionAction(auction.auctionId))
-                                                             this.setState({
-                                                                 participated: true
-                                                             })
-                                                         })
+                                                     participateInAuction(auction.auctionId)
+                                                     .then(res =>{
+                                                        console.log("RESPONSE FROM CREATE_AUCTION",res)
+                                                        store.dispatch(subscribeAuctionAction(auction.auctionId))
+                                                        this.setState({
+                                                            participated: true
+                                                        })
+                                                     })
                                                  }}
                                                  color="primary"
                                                  variant="contained"
@@ -317,18 +315,8 @@ class ProductDetails extends React.Component {
                                            </DialogActions>
                                        </Dialog>
                                    </CardActions>
-
-
-
-
                             </Grid>
                         </Grid>
-
-
-
-
-
-
                     </Card>
                 </Paper>
                 {

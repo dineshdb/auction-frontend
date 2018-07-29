@@ -24,3 +24,8 @@ export function getCategories(){
     return fetch(categoriesUrl)
         .then(res => res.json())
 }
+
+export function participateInAuction(auctionId){
+    let url = `${baseUrl}/auctions/${auctionId}/participate/${store.getState().user.id}`
+    return fetch(url)
+}
