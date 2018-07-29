@@ -10,17 +10,11 @@ import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid'
 import {CustomButton} from "./buttons";
 import Divider from '@material-ui/core/Divider'
-<<<<<<< Updated upstream
-import {USER_TOKEN} from "../definitions/index";
 import store, {subscribeAuctionAction} from '../store'
-=======
-import store from '../store'
->>>>>>> Stashed changes
 import {Redirect } from 'react-router-dom'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {addToCart} from "../store";
 import {participateInAuction} from '../products'
 
 
