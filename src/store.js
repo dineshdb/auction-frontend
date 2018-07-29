@@ -18,6 +18,7 @@ export const NEW_BID_PUSH = 'NEW_BID_PUSH'
 export const AUCTION_STARTED = 'AUCTION_STARTED'
 export const AUCTION_ENDED = 'AUCTION_ENDED'
 export const TOGGLE_FAVORITE = 'TOGGLE_FAVORITE'
+export const UPDATE_AUCTION_LIST = 'UPDATE_AUCTION_LIST'
 
 // Action creators
 export const signIn = user =>({
@@ -64,6 +65,11 @@ export const auctionEndedAction = payload => ({
 
 export const toggleFavorite = payload =>({
     type: TOGGLE_FAVORITE,
+    payload
+})
+
+export const updateAuctionListAction = payload => ({
+    type: UPDATE_AUCTION_LIST,
     payload
 })
 // reducers
@@ -121,20 +127,28 @@ const reducer = ( state = initializeState(), action) => {
         }
 
         case AUCTION_STARTED:{
-            let {id}= action.payload
+            let id= action.payload
             let auctions = state.auctions
             let index = auctions.findIndex(el => el.id === id)
             let auction = auctions[index]
             auctions = auctions.splice(index, 1)
-            console.log("AUCTIONS STARTED",auctions)
-            auction.state = 'LIVE'
-            return Object.assign({}, state, {auctions: [...auctions, auction]})
+            //console.log("AUCTIONS STARTED",auctions)
+            //auction.state = 'LIVE'
+           // return Object.assign({}, state, {auctions: [...auctions, auction]})
+            if(index === -1){
+                return state
+            }
+            auctions[index].state = 'LIVE'
+            return Object.assign({}, state, {auctions})
         }
 
         case AUCTION_ENDED: {
             let {id}= action.payload
             let auctions = state.auctions
             let index = auctions.findIndex(el => el.id === id)
+            if(index === -1){
+                return state
+            }
             let auction = auctions[index]
             auctions = auctions.splice(index, 1)
             auction.state = 'ENDED'
@@ -156,9 +170,11 @@ const reducer = ( state = initializeState(), action) => {
                 auction.highestBidder = userId
             }
             return Object.assign({}, state, {auctions: [...auctions, auction]})
-
         }
 
+        case UPDATE_AUCTION_LIST: {
+            return Object.assign({}, state, {auctions: action.payload})
+        }
         case TOGGLE_FAVORITE:{
             let itemId = action.payload
             let favorites = state.favorites
@@ -179,7 +195,6 @@ const reducer = ( state = initializeState(), action) => {
     }
 }
 let store = createStore(reducer)
-export default store
 
 // Containers
 export function getUser(state){
@@ -210,3 +225,5 @@ const mapDispatchToProps = dispatch => ({
     signout: data => dispatch(signout(data)),
     addProducts: data => dispatch(productsAdd(data))
  })
+
+ export default store
