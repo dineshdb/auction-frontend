@@ -46,7 +46,7 @@ export default wsClient
 function auctionCallback(id){
     return e => {
         let msg = e.body
-        console.log("auctionCallback",JSON.parse(msg))
+        console.log("auctionCallback",msg)
         if(msg.startsWith("bid")){
             let params = msg.split(' ')
             auctionBid(id, Number.parseInt(params[1]), Number.parseInt(params[2]))
