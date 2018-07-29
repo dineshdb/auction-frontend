@@ -9,7 +9,9 @@ import Typography from '@material-ui/core/Typography';
 import {Link} from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
-import store from '../store'
+import store, {toggleFavorite} from '../store'
+import {connect} from 'react-redux'
+import Tooltip from '@material-ui/core/Tooltip';
 
 const styles = theme => ({
     card: {
@@ -37,11 +39,29 @@ const styles = theme => ({
 });
 
 class Product extends React.Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            isFavorite : this.isFavorite(props.item.itemId),
+        }
+    }
     isFavorite(id){
-        return store.getState().user.favorites.includes(id)
+        return store.getState().favorites.includes(id)
+    }
+    componentDidMount(){
+        store.subscribe(() =>{
+            this.setState({
+                isFavorite: this.isFavorite(this.props.item.itemId)
+            })
+        })
+    }
+    handleFavorite = (e) => {
+        let {itemId} = this.props.item
+        store.dispatch(toggleFavorite(itemId))
+        console.log(this.state.isFavorite, store.getState().favorites)
     }
     render() {
-        const { itemName,maxBid,image, actionName, itemDescription, itemId, isFavorite} = this.props.item;
+        const { itemName,maxBid, bid,image, actionName, itemDescription, itemId} = this.props.item;
         const { classes, baseUrl } = this.props
         return (
             <Card elevation={2} className={classes.card}>
@@ -67,9 +87,11 @@ class Product extends React.Component {
                     >{itemDescription}</Typography>
                 </CardContent>
                 <CardActions>
-                    <IconButton size="small">
-                        <Icon>{isFavorite ? "favorite": "favorite_outline"}</Icon>
+                    <Tooltip title="Save to favorites">
+                    <IconButton size="small" onClick={this.handleFavorite}>
+                        <Icon>{this.state.isFavorite ? "favorite": "favorite_outline"}</Icon>
                     </IconButton>
+                    </Tooltip>
                     <Link to={baseUrl + itemId} className={classes.right}> Details</Link>
                 </CardActions>
             </Card>
@@ -86,5 +108,9 @@ Product.propTypes = {
     time: PropTypes.string.isRequired,
     itemId: PropTypes.string.isRequired
 };
-
-export default withStyles(styles)(Product)
+function mapStateToProps(state){
+    return {
+        isFavorite: state.isFavorite
+    }
+}
+export default connect(mapStateToProps)(withStyles(styles)(Product))

@@ -17,6 +17,7 @@ export const UNSUBSCRIBE_AUCTION = 'UNSUBSCRIBE_AUCTION'
 export const NEW_BID_PUSH = 'NEW_BID_PUSH'
 export const AUCTION_STARTED = 'AUCTION_STARTED'
 export const AUCTION_ENDED = 'AUCTION_ENDED'
+export const TOGGLE_FAVORITE = 'TOGGLE_FAVORITE'
 
 // Action creators
 export const signIn = user =>({
@@ -58,6 +59,11 @@ export const auctionStartedAction = payload => ({
 })
 export const auctionEndedAction = payload => ({
     type: AUCTION_ENDED,
+    payload
+})
+
+export const toggleFavorite = payload =>({
+    type: TOGGLE_FAVORITE,
     payload
 })
 // reducers
@@ -151,6 +157,20 @@ const reducer = ( state = initializeState(), action) => {
             }
             return Object.assign({}, state, {auctions: [...auctions, auction]})
 
+        }
+
+        case TOGGLE_FAVORITE:{
+            let itemId = action.payload
+            let favorites = state.favorites
+            let index = favorites.indexOf(itemId)
+            console.log(index, itemId)
+            if(index > -1){
+
+                favorites.splice(index, 1)
+                return Object.assign({}, state, {favorites})
+            } else {
+                return Object.assign({}, state,{favorites: [...favorites, itemId]})
+            }
         }
 
         case USER_STATUS:

@@ -32,32 +32,33 @@ const styles = theme => ({
     link:{
         textDecoration: "none"
     },
-
-    typoButton: {
-        fontSize: "15px",
-        fontWeight: "lighter",
-        color: "#ffffff"
-    },
     margin: {
         margin: theme.spacing.unit * 2,
     },
+    badge: {
+        margin: 1 * theme.spacing.unit
+    }
 });
 
 const Site = "BidStellar.com"
 class HomeBar extends React.Component {
     constructor(props){
         super(props)
+        let state = store.getState()
         this.state = {
-            isOnline: store.getState().user.isLoggedIn,
+            isOnline: state.user.isLoggedIn,
             userId: "",
             fireHome: false,
             userName: "",
+            favoritesCount: state.favorites.length
         }
     }
     componentDidMount(){
         store.subscribe(()=>{
+            let state = store.getState()
             this.setState({
-                isOnline: store.getState().user.isLoggedIn
+                isOnline: store.getState().user.isLoggedIn,
+                favoritesCount: state.favorites.length
             })
         })
     }
@@ -116,19 +117,14 @@ class HomeBar extends React.Component {
                                         </Button>
                                     </Link>
                                     <Link to="/favs">
-                                        <Badge className={classes.margin} badgeContent={4}>
-                                            <Icon>favorite_border</Icon>
+                                        <Badge className={classes.badge} badgeContent={this.state.favoritesCount} color="secondary">
+                                            <Icon>favorite</Icon>
                                         </Badge>
                                     </Link>
 
                                     <Link to="/notifications">
-                                        <Badge className={classes.margin} badgeContent={4}>
+                                        <Badge className={classes.badge} badgeContent={4}>
                                             <Icon>notifications</Icon>
-                                        </Badge>
-                                    </Link>
-                                    <Link to="/cart">
-                                        <Badge className={classes.margin} badgeContent={4}>
-                                            <Icon>shopping_cart</Icon>
                                         </Badge>
                                     </Link>
 
@@ -163,8 +159,6 @@ class HomeBar extends React.Component {
                                                 this.setState({
                                                     fireHome: true
                                                 })
-
-
                                             }
                                             }>Logout</MenuItem>
                                     </Menu>
