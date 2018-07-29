@@ -23,7 +23,15 @@ function subscribeFutures(futureList){
     }
 }
 let connected = e => {
+
+    wsClient.subscribe("/auction/watch",e=>{
+        let body = e.body
+        console.log("auction",JSON.parse(body))
+    })
+
     setTimeout(subscribeFutures, 2, futureList)
+
+
 }
 let error = e => {
 	console.log("error " + e)
@@ -38,6 +46,7 @@ export default wsClient
 function auctionCallback(id){
     return e => {
         let msg = e.body
+        console.log("auctionCallback",msg)
         if(msg.startsWith("bid")){
             let params = msg.split(' ')
             auctionBid(id, Number.parseInt(params[1]), Number.parseInt(params[2]))
@@ -52,12 +61,14 @@ function auctionCallback(id){
 export function subscribeAuction(id){
     if(wsClient.connected){
         let subscription = wsClient.subscribe(`/auction/${id}`, auctionCallback(id))
+        console.log("HEY DATA ON SUBSCRIBE",subscription)
         if(subscriptions[id]){
             subscriptions[id].unsubscribe()
         }    
         subscriptions[id] = subscription
     } else {
         futureList.push(id)
+        console.log("FUTURELIST",futureList)
     }
 }
 

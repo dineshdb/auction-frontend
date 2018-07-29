@@ -89,8 +89,8 @@ function initializeState(){
 const reducer = ( state = initializeState(), action) => {
     switch (action.type){
         case SIGN_IN:
-            localStorage.setItem(USER_KEY, JSON.stringify(action.user))
             console.log("NEW USER",action.user)
+            localStorage.setItem(USER_KEY, JSON.stringify(action.user))
             let date = Date.now()
             return Object.assign({}, state, {user: action.user, isLoggedIn : true, date})
         case SIGN_OUT:
@@ -111,6 +111,7 @@ const reducer = ( state = initializeState(), action) => {
 
         case SUBSCRIBE_AUCTION:
             let auctionId = action.payload
+            console.log("auction subsribed",auctionId)
             subscribeAuction(auctionId)
             let subscriptions = Object.assign({}, state.subscriptions)
             return Object.assign({}, state, {subscriptions: [...subscriptions, auctionId]})
@@ -130,6 +131,11 @@ const reducer = ( state = initializeState(), action) => {
             let id= action.payload
             let auctions = state.auctions
             let index = auctions.findIndex(el => el.id === id)
+            let auction = auctions[index]
+            auctions = auctions.splice(index, 1)
+            //console.log("AUCTIONS STARTED",auctions)
+            //auction.state = 'LIVE'
+           // return Object.assign({}, state, {auctions: [...auctions, auction]})
             if(index === -1){
                 return state
             }

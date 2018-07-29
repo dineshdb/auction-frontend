@@ -374,6 +374,7 @@ class SellProductForm extends React.Component {
                                                         categoryId = category.categoryId
                                                     }
                                                 })
+                                                console.log("user",store.getState().user)
                                                 let auctionObject = {
                                                     auctionName: this.state.title,
                                                     auctionTime: this.state.eventTime,
@@ -401,6 +402,7 @@ class SellProductForm extends React.Component {
                                                   //  items: this.state.itemObject
                                                 }
                                                 console.log("AUCTION OBJECT",auctionObject)
+                                                console.log("user",store.getState().user)
                                                 axios({
                                                     method: 'POST',
                                                     url: `http://localhost:8080/auctions/createAuction`,
