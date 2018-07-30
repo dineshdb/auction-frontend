@@ -17,7 +17,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {participateInAuction,getAuctionDetails} from '../products'
 
-
 let styles = (theme)=>{
     return {
         paper: {

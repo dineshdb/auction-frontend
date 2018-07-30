@@ -31,18 +31,14 @@ class App extends React.Component {
         }
     }
     componentDidMount(){
-
         store.subscribe(()=>{
             this.setState({
                 isOnline: store.getState().user.isLoggedIn
             })
         })
-
-
     }
 
     render(props) {
-
         return (
             <MuiThemeProvider theme={theme}>
                 <CssBaseline/>

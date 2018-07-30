@@ -46,7 +46,7 @@ class HomeBar extends React.Component {
         super(props)
         let state = store.getState()
         this.state = {
-            isOnline: state.user.isLoggedIn,
+            isOnline: state.isLoggedIn,
             userId: "",
             fireHome: false,
             userName: "",
@@ -57,12 +57,10 @@ class HomeBar extends React.Component {
         store.subscribe(()=>{
             let state = store.getState()
             this.setState({
-                isOnline: store.getState().user.isLoggedIn,
+                isOnline: store.getState().isLoggedIn,
                 favoritesCount: state.favorites.length
             })
         })
-        //remove
-
     }
     handleLogOut(){
         store.dispatch({type: 'SIGN_OUT'})
