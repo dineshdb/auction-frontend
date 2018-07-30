@@ -38,18 +38,7 @@ class App extends React.Component {
             })
         })
 
-        store.dispatch(subscribeAuctionAction(1))
-        let auctions = [
-            {
-                id: 1,
-                state: 'READY'
-            },
-        ]
-        // Check 
-        store.dispatch(updateAuctionListAction(auctions))
-        console.log(store.getState())
-        store.dispatch(auctionStartedAction(1))
-        console.log(store.getState())
+
     }
 
     render(props) {

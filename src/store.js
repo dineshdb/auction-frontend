@@ -129,6 +129,7 @@ const reducer = ( state = initializeState(), action) => {
 
         case AUCTION_STARTED:{
             let id= action.payload
+            console.log("id",id)
             let auctions = state.auctions
             let index = auctions.findIndex(el => el.id === id)
             let auction = auctions[index]
@@ -158,6 +159,7 @@ const reducer = ( state = initializeState(), action) => {
 
         case NEW_BID_PUSH: {
             let {id, userId, bidAmount} = action.payload
+            console.log("INSIDE NEW BID",action)
             let auctions = state.auctions
             let index = auctions.findIndex(el => el.id === id)
             let auction = auctions[index]

@@ -12,14 +12,19 @@ import Icon from '@material-ui/core/Icon';
 import store, {toggleFavorite} from '../store'
 import {connect} from 'react-redux'
 import Tooltip from '@material-ui/core/Tooltip';
+import Divider from '@material-ui/core/Divider'
 
 const styles = theme => ({
     card: {
-        margin: theme.spacing.unit,
-        fontSize: '12px'
+        marginTop: theme.spacing.unit*2,
+        marginBottom: theme.spacing.unit*2,
+        marginLeft: theme.spacing.unit*1,
+        fontSize: '16px',
+        maxWidth: 250,
+       
     },
     media: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing.unit*3,
         height: 0,
         paddingTop: '56.25%'
     },
@@ -27,8 +32,13 @@ const styles = theme => ({
         display: 'flex',
     },
     margin: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing.unit*3,
         width: "100%"
+    },
+    divider: {
+        margin: theme.spacing.unit*3,
+        height: 0,
+        paddingTop: "1%"
     },
     flex: {
         display: 'flex',
@@ -43,6 +53,8 @@ class Product extends React.Component {
         super(props)
         this.state = {
             isFavorite : this.isFavorite(props.item.itemId),
+            hovered: false,
+            elevation: 0
         }
     }
     isFavorite(id){
@@ -61,11 +73,40 @@ class Product extends React.Component {
         console.log(this.state.isFavorite, store.getState().favorites)
     }
     render() {
-        const { itemName,maxBid, bid,image, actionName, itemDescription, itemId} = this.props.item;
+        const { itemName,maxBid, bid,image, actionName, itemDescription, itemId,startingBid} = this.props.item;
         const { classes, baseUrl } = this.props
-        return (
-            <Card elevation={2} className={classes.card}>
-                <CardMedia className={classes.media} image={image} itemName={itemName}/>
+        return (<div onMouseEnter={()=>{
+                this.setState({
+                    elevation: 20
+                })
+            }}
+            onMouseLeave={()=>{
+                this.setState({
+                    elevation: 0
+                })
+        }}
+            >
+            
+            <Card square elevation={this.state.elevation} className={classes.card}
+            >
+             <CardActions>
+                    <Tooltip title="Save to favorites">
+                    <IconButton color="secondary" size="small" onClick={this.handleFavorite}>
+                        <Icon>{this.state.isFavorite ? "favorite": "favorite_outline"}</Icon>
+                    </IconButton>
+                    </Tooltip>
+                </CardActions>
+            
+                <Link to={baseUrl + itemId} className={classes.right}> 
+                <CardMedia  className={classes.media} image={image} itemName={itemName}>
+                
+                </CardMedia>
+                
+                    
+                    <Divider className={classes.divider}/>
+                   
+                
+               
                 <CardContent>
                     <div className={classes.flex}>
                         <Typography gutterBottom variant="headline" component="h3">
@@ -85,16 +126,14 @@ class Product extends React.Component {
                             color: "#6b6b6b"
                         }}
                     >{itemDescription}</Typography>
+                     <Typography gutterBottom variant="headline" component="h3">
+                        Rs.{startingBid}</Typography>
                 </CardContent>
-                <CardActions>
-                    <Tooltip title="Save to favorites">
-                    <IconButton size="small" onClick={this.handleFavorite}>
-                        <Icon>{this.state.isFavorite ? "favorite": "favorite_outline"}</Icon>
-                    </IconButton>
-                    </Tooltip>
-                    <Link to={baseUrl + itemId} className={classes.right}> Details</Link>
-                </CardActions>
+                </Link>
+                
             </Card>
+           
+            </div>
         );
     }
 }
