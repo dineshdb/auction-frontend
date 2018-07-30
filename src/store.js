@@ -128,10 +128,12 @@ const reducer = ( state = initializeState(), action) => {
         }
 
         case AUCTION_STARTED:{
+            console.log("STATE",state)
             let id= action.payload
             console.log("id",id)
             let auctions = state.auctions
-            let index = auctions.findIndex(el => el.id === id)
+            console.log("auctions",auctions)
+            let index = auctions.findIndex(el => el.auctionId === id)
             let auction = auctions[index]
             auctions = auctions.splice(index, 1)
             //console.log("AUCTIONS STARTED",auctions)
@@ -147,7 +149,7 @@ const reducer = ( state = initializeState(), action) => {
         case AUCTION_ENDED: {
             let {id}= action.payload
             let auctions = state.auctions
-            let index = auctions.findIndex(el => el.id === id)
+            let index = auctions.findIndex(el => el.auctionId === id)
             if(index === -1){
                 return state
             }
@@ -161,7 +163,7 @@ const reducer = ( state = initializeState(), action) => {
             let {id, userId, bidAmount} = action.payload
             console.log("INSIDE NEW BID",action)
             let auctions = state.auctions
-            let index = auctions.findIndex(el => el.id === id)
+            let index = auctions.findIndex(el => el.auctionId === id)
             let auction = auctions[index]
             auctions = auctions.splice(index, 1)
             auction.bids.push({
@@ -176,7 +178,10 @@ const reducer = ( state = initializeState(), action) => {
         }
 
         case UPDATE_AUCTION_LIST: {
-            return Object.assign({}, state, {auctions: action.payload})
+            console.log("new auction",action.payload)
+            let current = state.auctions
+            current.push(action.payload)
+            return {...state,auctions:current}
         }
         case TOGGLE_FAVORITE:{
             let itemId = action.payload

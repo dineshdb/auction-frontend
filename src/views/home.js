@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import {connect} from 'react-redux'
 import TileView from '../components/tile-view'
-import {fetchProducts, fetchEach} from '../products'
+import {fetchProducts, fetchEach,getAuctionDetails} from '../products'
 const styles = (theme) =>({
 
 })
@@ -29,6 +29,7 @@ class Home extends React.Component {
 
     render(){
         const {classes} = this.props
+
         return (
             <div>
                 <SearchBar/>

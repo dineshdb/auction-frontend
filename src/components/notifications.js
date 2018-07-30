@@ -6,6 +6,7 @@ import {connect} from 'react-redux'
 import store,{newBid} from '../store'
 import axios from 'axios'
 import BiddingTemplate from '../components/biddingTemplate'
+import {getAuctionDetails} from '../products'
 let styles = {
 
 }
@@ -36,6 +37,7 @@ class Notifications extends React.Component {
         //
         // }
         let notification = []
+       
         if(auctions !== null){
             console.log("INSIDE",auctions)
             auctions.map((auction)=>{
@@ -44,20 +46,16 @@ class Notifications extends React.Component {
                     console.log("LIVE")
                     console.log("AUCTION STATE",store.getState().auctions[0])
                     notification.push(auction.id)
-                    axios({
-                        method: 'GET',
-                        url: `http://localhost:8080/auctions/${auction.id}`,
-                        headers: {
-                            'Authorization':store.getState().user.header
-                        },
-                    }).then((res)=>{
+                    getAuctionDetails(auction.id)
+                    .then(res=>{
+                        let data= res
                         let x = this.state.auctionDetails
-                        x.push(res.data)
-
+                        x.push(data)
                         this.setState({
                             auctionDetails: x
                         })
                     })
+                   
                 }
             })
         }

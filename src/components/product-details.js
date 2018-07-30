@@ -15,7 +15,7 @@ import {Redirect } from 'react-router-dom'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {participateInAuction} from '../products'
+import {participateInAuction,getAuctionDetails} from '../products'
 
 
 let styles = (theme)=>{
@@ -284,19 +284,15 @@ class ProductDetails extends React.Component {
                                                          openDialog: false
                                                      })
                                                      let auction = this.state.auctionDetails
+                                                
                                                      participateInAuction(auction.auctionId)
                                                      .then(res =>{
-                                                        console.log("RESPONSE FROM CREATE_AUCTION",res)
-                                                        store.dispatch(subscribeAuctionAction(auction.auctionId))
+                                                        
+                                                        store.dispatch(subscribeAuctionAction(this.state.auctionDetails.auctionId))
+                                                        let auction = {...this.state.auctionDetails,id:this.state.auctionDetails.auctionId,state:'READY'}
 
-                                                         let auctions = [
-                                                             {
-                                                                 id: auction.auctionId,
-                                                                 state: 'READY'
-                                                             },
-                                                         ]
-                                                         // Check
-                                                         store.dispatch(updateAuctionListAction(auctions))
+                                                        console.log("auction details",this.state.auctionDetails)
+                                                         store.dispatch(updateAuctionListAction(auction))
                                                          console.log(store.getState())
                                                         this.setState({
                                                             participated: true
