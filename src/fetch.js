@@ -1,6 +1,6 @@
 import store from './store'
 
-function fetchApi(path, options){
+export function fetchApi(path, options){
     let headers = {
         'Authorization': store.getState().user.header,
     }
