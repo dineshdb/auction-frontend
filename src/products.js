@@ -35,3 +35,7 @@ export function getAuctionDetails(auctionId){
     return fetch(url)
         .then(res => res.json())
 }
+export function setBid(bidObject){
+    let url = `${baseUrl}/bids/saveBid`
+    return fetch(url,{method: 'POST',body:JSON.stringify(bidObject)}).then(res=>res.json())
+}

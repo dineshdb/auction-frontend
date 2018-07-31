@@ -15,12 +15,13 @@ import {Redirect } from 'react-router-dom'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {participateInAuction,getAuctionDetails} from '../products'
+import {participateInAuction,getAuctionDetails,setBid} from '../products'
 import BootStrappedInput from '../components/textFields'
 import moment from 'moment'
 import TextField from '@material-ui/core/TextField'
 import Favorite from '@material-ui/icons/Favorite'
 import Button from '@material-ui/core/Button'
+import {baseUrl} from "../config";
 
 
 let styles = (theme)=>{
@@ -137,30 +138,88 @@ class ProductDetails extends React.Component {
             alreadyParticipated: false,
             buttonName: "Participate",
             timeDifference: null,
-            eventDateTime: moment(),
-            days: 0,
-            hours: 0,
-            minutes: 0,
-            seconds: 0,
-            totalTime: 0
+            eventDateTime: null,
+            bidAmount: 0,
+            totalTime: 0,
+            eventStarted: false,
+            eventEnded: false,
+            seconds: 60,
+            minutes: 10
+
 
 
         }
     }
     componentDidMount(){
+
+       this.tick()
+
+    }
+    tick(){
         setInterval(this.handleDuration,1000)
+
     }
     handleDuration = ()=>{
-        let duration = moment.duration(this.state.eventDateTime-moment())
-        duration = duration._data
-        this.setState({
-            totalTime: duration,
-        })
+        if(this.state.eventStarted){
+            if(this.state.minutes >= 1){
+                if(this.state.seconds <= 0){
+                    this.setState({
+                        minutes: this.state.minutes-1,
+                        seconds: 60
+                    })
+                }
+                else{
+                    this.setState({
+                        seconds: this.state.seconds-1
+                    })
+                }
+            }
+
+            else{
+                this.setState({
+                    eventEnded: true
+                })
+            }
+        }
+        else{
+            let duration_ = moment.duration(this.state.eventDateTime-moment())
+            let duration=duration_._data
+
+            let total_minutes = Number(Math.abs(Number(duration.hours))*60+Math.abs(Number(duration.minutes))+Math.abs(Number(duration.seconds/60)))
+            let minutes = Math.floor(total_minutes)
+            let seconds = Math.floor((total_minutes-minutes)*60)
+
+
+            if(duration_ > 0){
+                duration = duration._data
+                this.setState({
+                    totalTime: duration,
+                })
+            }
+            else{
+
+                if (total_minutes < 11){
+                    console.log("duration",duration)
+                    console.log("minutes",minutes,"seonds",seconds)
+                    this.setState({
+                        minutes: 11-minutes,
+                        seconds: 60-seconds
+                    })
+                    this.setState({
+                        eventStarted: true
+                    })
+                }
+                else{
+                    this.setState({
+                        eventEnded: true
+                    })
+                }
+
+            }
+        }
+
     }
-    
-    componentDidUpdate(){
-       
-    }
+
     render(){
         // {setInterval(this.handleDuration,1000)}
         const {classes, match} = this.props
@@ -197,6 +256,8 @@ class ProductDetails extends React.Component {
                             'Authorization':store.getState().user.header
                         },
                     }).then(res=>{
+                        console.log("auctionDetails",res)
+                        console.log("in store",store.getState())
                         let participated = false
                         let buttonName = "Participate"
                         res.data.bidders.map((bidder)=>{
@@ -206,8 +267,8 @@ class ProductDetails extends React.Component {
                             }
                         })
                         let data = res.data
-                        let now = moment()
-                        
+
+                       console.log(moment(data.auctionDate+' '+data.auctionTime),"eventDateTime")
                         this.setState({
                             auctionDetails: res.data,
                             alreadyParticipated: participated,
@@ -258,75 +319,112 @@ class ProductDetails extends React.Component {
                                     <Grid item xs={7}>
                                     </Grid>
                                     <Grid item xs={5}>
-                                    <Typography className={classes.description} style={{color: "red"}}>
-                                      starts in  {`${this.state.totalTime.days}d ${this.state.totalTime.hours}h ${this.state.totalTime.minutes}m ${this.state.totalTime.seconds}s  `}
-                                    
-                                    </Typography>
+                                        {
+                                            !this.state.eventEnded ? (!this.state.eventStarted ?  <Typography className={classes.description} style={{color: "red"}}>
+                                                starts in  {`${this.state.totalTime.days}d ${this.state.totalTime.hours}h ${this.state.totalTime.minutes}m ${this.state.totalTime.seconds}s  `}
+
+                                            </Typography> : <Typography className={classes.description} style={{color: 'green'}}>Ends in {this.state.minutes}m {this.state.seconds}s</Typography>) : <Typography>Ended</Typography>
+                                        }
+                                        {
+
+                                        }
+
                                     </Grid>
                                     </Grid>
                                    
                                 <Divider/>
                                
-                                <Paper square className={classes.biddingForm}>
-                                    <br/>
-                                    <Typography className={classes.subTitle} style={{marginTop: "20px"}}>
-                                        Rs.{this.state.details.startingBid}
+                                {!this.state.eventEnded && (
+                                    <Paper square className={classes.biddingForm}>
+                                        <br/>
+                                        <Typography className={classes.subTitle} style={{marginTop: "20px"}}>
+                                            Rs.{this.state.details.startingBid}
                                         </Typography>
-                                    <TextField  
-                                        className={classes.textMargin}
-                                        placeholder="Your Bid"
-                                        style={{width: "80%"}}
-                                        fullWidth
-                                    />
-                                    <CustomButton
-                                         name="Place Bid"
-                                         color="primary"
-                                         variant="contained"
-                                         style={{
-                                             width: "80%",
-                                             borderRadius: 0,
-                                             marginTop: "20px"
-                                         }}
-                                         property={classes.textMargin}
-                                         handler={()=>{
-                                           
-                                            let auction = this.state.auctionDetails
-                                       
-                                            participateInAuction(auction.auctionId)
-                                            .then(res =>{
-                                               
-                                               store.dispatch(subscribeAuctionAction(this.state.auctionDetails.auctionId))
-                                               let auction = {...this.state.auctionDetails,id:this.state.auctionDetails.auctionId,state:'READY'}
+                                        <TextField
+                                            className={classes.textMargin}
+                                            placeholder="Your Bid"
+                                            style={{width: "80%"}}
+                                            fullWidth
+                                            onChange={(e)=>{
+                                                this.setState({
+                                                    bidAmount: e.target.value
+                                                })
+                                            }}
+                                        />
+                                        <CustomButton
+                                            name="Place Bid"
+                                            color="primary"
+                                            variant="contained"
+                                            style={{
+                                                width: "80%",
+                                                borderRadius: 0,
+                                                marginTop: "20px"
+                                            }}
+                                            property={classes.textMargin}
+                                            handler={()=>{
+                                                let today = moment()
+                                                let auction = this.state.auctionDetails
+                                                let biddingObject = {
+                                                    bidderId: store.getState().user.id,
+                                                    itemId: id,
+                                                    auctionId: auction.auctionId,
+                                                    bidAmount: this.state.bidAmount,
+                                                    bidDate: `${today.format('YYYY-MM-DD')}`,
+                                                    bidTime: `${today.format('HH:mm:ss')}`
 
-                                               console.log("auction details",this.state.auctionDetails)
-                                                store.dispatch(updateAuctionListAction(auction))
-                                                console.log(store.getState())
-                                               this.setState({
-                                                   participated: true
-                                               })
-                                            })
-                                        }}
+                                                }
+                                                console.log("BIDDING DATA",biddingObject)
+
+                                                axios({
+                                                    method: 'POST',
+                                                    url: `http://localhost:8080/bids/saveBid`,
+                                                    headers: {
+                                                        'Authorization':store.getState().user.header
+                                                    },
+                                                    data: biddingObject
+                                                }).then(res=>{
+                                                    console.log("ReSPONSE",res)
+                                                    participateInAuction(auction.auctionId)
+                                                        .then(res =>{
+
+                                                            store.dispatch(subscribeAuctionAction(this.state.auctionDetails.auctionId))
+                                                            let auction = {...this.state.auctionDetails,id:this.state.auctionDetails.auctionId,state:'READY'}
+
+                                                            console.log("auction details",this.state.auctionDetails)
+                                                            store.dispatch(updateAuctionListAction(auction))
+                                                            console.log(store.getState())
+                                                            this.setState({
+                                                                participated: true
+                                                            })
+                                                        })
+                                                })
+
+
+
+                                            }}
 
                                         />
-                                         <Divider style={{marginTop: "5px",marginBottom: "5px",marginLeft: "35px",marginRight: "50px"}}/>
-                                          <Button
-                                    
-                                         color="primary"
-                                         variant="outlined"
-                                         style={{
-                                             width: "80%",
-                                             borderRadius: 0
-                                         }}
-                                         className={classes.textMargin}
-                                         onClick={()=>{
+                                        <Divider style={{marginTop: "5px",marginBottom: "5px",marginLeft: "35px",marginRight: "50px"}}/>
+                                        <Button
 
-                                         }}>
-                                         <Favorite variant="outlined"/>
-                                         Save this item
-                                        
-                                         </Button>
-                                    
-                                </Paper>
+                                            color="primary"
+                                            variant="outlined"
+                                            style={{
+                                                width: "80%",
+                                                borderRadius: 0
+                                            }}
+                                            className={classes.textMargin}
+                                            onClick={()=>{
+
+                                            }}>
+                                            <Favorite variant="outlined"/>
+                                            Save this item
+
+                                        </Button>
+
+                                    </Paper>
+                                )
+                                }
 
                         
                             </Grid>

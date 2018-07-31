@@ -44,6 +44,7 @@ function auctionCallback(id){
         let msg = e.body
         console.log("auctionCallback",msg)
         if(msg.startsWith("bid")){
+            console.log("GOT ",msg)
             let params = msg.split(' ')
             auctionBid(id, Number.parseInt(params[1]), Number.parseInt(params[2]))
         } else if( msg.startsWith("end")){
