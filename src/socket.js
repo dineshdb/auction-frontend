@@ -23,13 +23,9 @@ function subscribeFutures(futureList){
     }
 }
 let connected = e => {
-
-    wsClient.subscribe("/auction/watch",e=>{
-        let body = e.body
-        console.log("auction",JSON.parse(body))
-    })
-
-    setTimeout(subscribeFutures, 2, futureList)
+   
+     setTimeout(subscribeFutures, 2, futureList)
+   
 
 
 }

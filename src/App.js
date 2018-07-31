@@ -42,7 +42,7 @@ class App extends React.Component {
     }
 
     render(props) {
-
+      
         return (
             <MuiThemeProvider theme={theme}>
                 <CssBaseline/>
