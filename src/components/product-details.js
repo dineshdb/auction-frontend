@@ -16,6 +16,11 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {participateInAuction,getAuctionDetails} from '../products'
+import BootStrappedInput from '../components/textFields'
+import moment from 'moment'
+import TextField from '@material-ui/core/TextField'
+import Favorite from '@material-ui/icons/Favorite'
+import Button from '@material-ui/core/Button'
 
 let styles = (theme)=>{
     return {
@@ -24,6 +29,12 @@ let styles = (theme)=>{
             marginRight: theme.spacing.unit * 15,
             marginTop: theme.spacing.unit*2
 
+        },
+        biddingForm: {
+           margin: theme.spacing.unit,
+           height: 300,
+           opacity: "0.7"
+        
         },
         card: {
             height: "60%",
@@ -40,22 +51,39 @@ let styles = (theme)=>{
             paddingTop: '56.25%'
         },
         title:{
-          fontSize: 40,
+          fontSize: 20,
           fontWeight: 300,
-          color: "#6b6b6b",
-            margin: theme.spacing.unit
+          color: "black",
+            marginLeft: theme.spacing.unit,
+            marginRight: theme.spacing.unit,
+            marginTop: theme.spacing.unit,
+            marginBottom: theme.spacing.unit,
+
         },
+        subTitle:{
+            fontSize: 20,
+            fontWeight: 300,
+            color: "black",
+              marginLeft: theme.spacing.unit*5,
+              marginRight: theme.spacing.unit,
+              marginTop: theme.spacing.unit*3,
+              marginBottom: theme.spacing.unit*2,
+  
+          },
         top: {
-            fontSize: 25,
+            fontSize: 20,
             fontWeight: 200,
             color: "#050505",
             marginTop: theme.spacing.unit
         },
         description: {
-            fontSize: 15,
+            fontSize: 14,
             fontWeight: 200,
             color: "#050505",
-            marginTop: theme.spacing.unit
+            marginLeft: theme.spacing.unit,
+            marginRight: theme.spacing.unit,
+            marginTop: theme.spacing.unit,
+            marginBottom: theme.spacing.unit,
         },
         actions: {
             display: 'flex',
@@ -83,7 +111,14 @@ let styles = (theme)=>{
             marginRight: theme.spacing.unit*30,
             marginTop: theme.spacing.unit*2,
 
-        }
+        },
+        textMargin: {
+            marginLeft: theme.spacing.unit*5,
+            marginTop: theme.spacing.unit,
+            marginRight: theme.spacing.unit,
+            marginBottom: theme.spacing.unit*1
+        },
+       
     }
 }
 
@@ -99,10 +134,34 @@ class ProductDetails extends React.Component {
             openDialog: false,
             participated: false,
             alreadyParticipated: false,
-            buttonName: "Participate"
+            buttonName: "Participate",
+            timeDifference: null,
+            eventDateTime: moment(),
+            days: 0,
+            hours: 0,
+            minutes: 0,
+            seconds: 0,
+            totalTime: 0
+
+
         }
     }
+    componentDidMount(){
+        setInterval(this.handleDuration,1000)
+    }
+    handleDuration = ()=>{
+        let duration = moment.duration(this.state.eventDateTime-moment())
+        duration = duration._data
+        this.setState({
+            totalTime: duration,
+        })
+    }
+    
+    componentDidUpdate(){
+       
+    }
     render(){
+        // {setInterval(this.handleDuration,1000)}
         const {classes, match} = this.props
         const id = this.props.match.params.id
         const userId = store.getState().user.id
@@ -145,10 +204,14 @@ class ProductDetails extends React.Component {
                                     buttonName="Participated"
                             }
                         })
+                        let data = res.data
+                        let now = moment()
+                        
                         this.setState({
                             auctionDetails: res.data,
                             alreadyParticipated: participated,
-                            buttonName: buttonName
+                            buttonName: buttonName,
+                            eventDateTime: moment(data.auctionDate+' '+data.auctionTime)
                         })
                     })
 
@@ -158,10 +221,9 @@ class ProductDetails extends React.Component {
         const {details,auctionDetails} = this.state
         return (
             <div className={classes.root}>
-                <Typography
-                    align="center"
-                    className={classes.title}
-                >Product Details</Typography>
+            <div style={{display: 'none'}}>
+            
+             </div>
                 <Paper
                     square
                     elevation={0}
@@ -173,147 +235,99 @@ class ProductDetails extends React.Component {
                         square
                         className={classes.card}>
                         <Grid container spacing={24} >
-                            <Grid item xs={8}>
-                                <Typography
-                                    align="center"
-                                    className={classes.title}
-                                >{details.itemName}
-                                    <Divider/>
-                                </Typography>
+                            <Grid item xs={6}>
                                 <CardMedia
                                     className={classes.media}
                                     image={this.state.image}
                                 />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={6}>
+                                    <Typography
+                                            align="left"
+                                            className={classes.title}
+                                        >{details.itemName}
+                                    
+                                        </Typography>
 
-
-                                <Typography
-                                    className={classes.top}
-
-                                >Description
-                                </Typography>
-                                <Divider/>
                                     <Typography
                                         className={classes.description}
                                     >{details.itemDescription}
                                     </Typography>
-                                    <Divider/>
-                                <Grid container spacing={24}>
-                                    <Grid item xs={4}>
-                                        <Typography
-                                            className={classes.top}
-
-                                        >Date
-                                        </Typography>
-                                        <Typography
-                                            className={classes.description}
-                                        >{auctionDetails.auctionDate}
-                                        </Typography>
+                                    <Grid container spacing={24}>
+                                    <Grid item xs={7}>
                                     </Grid>
-                                    <Grid item xs={4}>
-                                        <Typography
-                                            className={classes.top}
-
-                                        >Time
-                                        </Typography>
-                                        <Typography
-                                            className={classes.description}
-                                        >{auctionDetails.auctionTime}
-                                        </Typography>
+                                    <Grid item xs={5}>
+                                    <Typography className={classes.description} style={{color: "red"}}>
+                                      starts in  {`${this.state.totalTime.days}d ${this.state.totalTime.hours}h ${this.state.totalTime.minutes}m ${this.state.totalTime.seconds}s  `}
+                                    
+                                    </Typography>
                                     </Grid>
-                                    <Grid item xs={4}>
-                                        <Typography
-                                            className={classes.top}
-
-                                        >Duration
-                                        </Typography>
-                                        <Typography
-                                            className={classes.description}
-                                        >{auctionDetails.auctionDuration}
-                                        </Typography>
                                     </Grid>
-
-                                </Grid>
+                                   
                                 <Divider/>
-                                <Typography
-                                    className={classes.top}
+                               
+                                <Paper square className={classes.biddingForm}>
+                                    <br/>
+                                    <Typography className={classes.subTitle} style={{marginTop: "20px"}}>
+                                        Rs.{this.state.details.startingBid}
+                                        </Typography>
+                                    <TextField  
+                                        className={classes.textMargin}
+                                        placeholder="Your Bid"
+                                        style={{width: "80%"}}
+                                        fullWidth
+                                    />
+                                    <CustomButton
+                                         name="Place Bid"
+                                         color="primary"
+                                         variant="contained"
+                                         style={{
+                                             width: "80%",
+                                             borderRadius: 0,
+                                             marginTop: "20px"
+                                         }}
+                                         property={classes.textMargin}
+                                         handler={()=>{
+                                           
+                                            let auction = this.state.auctionDetails
+                                       
+                                            participateInAuction(auction.auctionId)
+                                            .then(res =>{
+                                               
+                                               store.dispatch(subscribeAuctionAction(this.state.auctionDetails.auctionId))
+                                               let auction = {...this.state.auctionDetails,id:this.state.auctionDetails.auctionId,state:'READY'}
 
-                                >Minimum Bid
-                                </Typography>
-                                <Typography
-                                    className={classes.description}
-                                >Rs. {details.startingBid}
-                                </Typography>
-
-                                   <CardActions>
-                                       <CustomButton
-                                           disabled={this.state.alreadyParticipated}
-                                           name={this.state.buttonName}
-                                           color="primary"
-                                           variant="contained"
-                                           style={{
-                                               width: "100%",
-                                               borderRadius: 0
-                                           }}
-                                           handler={()=>{
-                                                this.setState({
-                                                    openDialog: true
-                                                })
-
-                                           }}/>
-                                       <Dialog
-                                           open={this.state.openDialog}
-                                           onClose={()=>{
+                                               console.log("auction details",this.state.auctionDetails)
+                                                store.dispatch(updateAuctionListAction(auction))
+                                                console.log(store.getState())
                                                this.setState({
-                                                   openDialog: false
+                                                   participated: true
                                                })
-                                           }}
-                                           aria-labelledby="alert-dialog-title"
-                                           aria-describedby="alert-dialog-description"
-                                       >
-                                           <DialogTitle
-                                               id="alert-dialog-title"
-                                           >Do you want to participate?</DialogTitle>
-                                           <DialogActions>
-                                             <CustomButton
-                                                 name="Yes"
-                                                 handler={()=>{
-                                                     this.setState({
-                                                         openDialog: false
-                                                     })
-                                                     let auction = this.state.auctionDetails
-                                                
-                                                     participateInAuction(auction.auctionId)
-                                                     .then(res =>{
-                                                        
-                                                        store.dispatch(subscribeAuctionAction(this.state.auctionDetails.auctionId))
-                                                        let auction = {...this.state.auctionDetails,id:this.state.auctionDetails.auctionId,state:'READY'}
+                                            })
+                                        }}
 
-                                                        console.log("auction details",this.state.auctionDetails)
-                                                         store.dispatch(updateAuctionListAction(auction))
-                                                         console.log(store.getState())
-                                                        this.setState({
-                                                            participated: true
-                                                        })
-                                                     })
-                                                 }}
-                                                 color="primary"
-                                                 variant="contained"
-                                             />
-                                               <CustomButton
-                                                   name="No"
-                                                   handler={()=>{
-                                                       this.setState({
-                                                           openDialog: false
-                                                       })
-                                                   }}
-                                                   color="secondary"
-                                                   variant="outlined"
-                                               />
-                                           </DialogActions>
-                                       </Dialog>
-                                   </CardActions>
+                                        />
+                                         <Divider style={{marginTop: "5px",marginBottom: "5px",marginLeft: "35px",marginRight: "50px"}}/>
+                                          <Button
+                                    
+                                         color="primary"
+                                         variant="outlined"
+                                         style={{
+                                             width: "80%",
+                                             borderRadius: 0
+                                         }}
+                                         className={classes.textMargin}
+                                         onClick={()=>{
+
+                                         }}>
+                                         <Favorite variant="outlined"/>
+                                         Save this item
+                                        
+                                         </Button>
+                                    
+                                </Paper>
+
+                        
                             </Grid>
                         </Grid>
                     </Card>

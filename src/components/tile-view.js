@@ -15,7 +15,9 @@ let styles = theme => ({
     },
     mainRoot:{
         color: "white",
-        margin: theme.spacing.unit*10
+        marginLeft: theme.spacing.unit*10,
+        marginRight: theme.spacing.unit*10,
+        marginBottom: theme.spacing.unit*10
     }
 })
 class TileView extends React.Component {
@@ -33,7 +35,6 @@ class TileView extends React.Component {
             >
             <Grid container className={classes.root} spacing={10}>
                 {items.map(value =>{
-                console.log("ITEM DETAILS",value)
                 return(
                     <Grid key={value} item xs={12} sm={6} md={4} lg={3} xl={2} className={classes.item}>
                     <ProductCard 

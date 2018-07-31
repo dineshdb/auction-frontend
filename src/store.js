@@ -132,11 +132,8 @@ const reducer = ( state = initializeState(), action) => {
         }
 
         case AUCTION_STARTED:{
-            console.log("STATE",state)
             let id= action.payload
-            console.log("id",id)
             let auctions = state.auctions
-            console.log("auctions",auctions)
             let index = auctions.findIndex(el => el.auctionId === id)
             let auction = auctions[index]
             auctions = auctions.splice(index, 1)
@@ -147,7 +144,8 @@ const reducer = ( state = initializeState(), action) => {
                 return state
             }
             auctions[index].state = 'LIVE'
-            return Object.assign({}, state, {auctions})
+            let {auctionsStarted} = state
+            return {...state,auctions,auctionsStarted:[...auctionsStarted,auctions[index]]}
         }
 
         case UPDATE_USER_PROFILE: {

@@ -23,7 +23,7 @@ function subscribeFutures(futureList){
     }
 }
 let connected = e => {
-    setTimeout(subscribeFutures, 2, futureList)
+    setTimeout(subscribeFutures, 500, futureList)
 }
 let error = e => {
 	console.log("error " + e)
