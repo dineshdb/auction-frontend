@@ -31,29 +31,14 @@ class App extends React.Component {
         }
     }
     componentDidMount(){
-
         store.subscribe(()=>{
             this.setState({
                 isOnline: store.getState().user.isLoggedIn
             })
         })
-
-        store.dispatch(subscribeAuctionAction(1))
-        let auctions = [
-            {
-                id: 1,
-                state: 'READY'
-            },
-        ]
-        // Check 
-        store.dispatch(updateAuctionListAction(auctions))
-        console.log(store.getState())
-        store.dispatch(auctionStartedAction(1))
-        console.log(store.getState())
     }
 
     render(props) {
-
         return (
             <MuiThemeProvider theme={theme}>
                 <CssBaseline/>

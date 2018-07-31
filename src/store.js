@@ -19,7 +19,7 @@ export const AUCTION_STARTED = 'AUCTION_STARTED'
 export const AUCTION_ENDED = 'AUCTION_ENDED'
 export const TOGGLE_FAVORITE = 'TOGGLE_FAVORITE'
 export const UPDATE_AUCTION_LIST = 'UPDATE_AUCTION_LIST'
-
+export const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE'
 // Action creators
 export const signIn = user =>({
     type : SIGN_IN,
@@ -81,18 +81,22 @@ function initializeState(){
         auctionsStarted: [],
         cart: [],
         subscriptions: [],
-        favorites: []
+        favorites: [],
+        isLoggedIn: false
     }    
     let user = JSON.parse(localStorage.getItem(USER_KEY)) || {}
+    if(user.header)
+        initialState.isLoggedIn = true
     return Object.assign({}, initialState, {user})
 }
 const reducer = ( state = initializeState(), action) => {
     switch (action.type){
         case SIGN_IN:
-            console.log("NEW USER",action.user)
-            localStorage.setItem(USER_KEY, JSON.stringify(action.user))
+            let user = action.payload
+            user.header = user.userPassword
             let date = Date.now()
-            return Object.assign({}, state, {user: action.user, isLoggedIn : true, date})
+            localStorage.setItem(USER_KEY, JSON.stringify(user))
+            return Object.assign({}, state, {user, isLoggedIn : true, date})
         case SIGN_OUT:
             localStorage.removeItem(USER_KEY)
             return Object.assign({}, state, {user: {}, isLoggedIn: false, date: null})
@@ -128,9 +132,12 @@ const reducer = ( state = initializeState(), action) => {
         }
 
         case AUCTION_STARTED:{
+            console.log("STATE",state)
             let id= action.payload
+            console.log("id",id)
             let auctions = state.auctions
-            let index = auctions.findIndex(el => el.id === id)
+            console.log("auctions",auctions)
+            let index = auctions.findIndex(el => el.auctionId === id)
             let auction = auctions[index]
             auctions = auctions.splice(index, 1)
             //console.log("AUCTIONS STARTED",auctions)
@@ -143,10 +150,14 @@ const reducer = ( state = initializeState(), action) => {
             return Object.assign({}, state, {auctions})
         }
 
+        case UPDATE_USER_PROFILE: {
+
+        }
+
         case AUCTION_ENDED: {
             let {id}= action.payload
             let auctions = state.auctions
-            let index = auctions.findIndex(el => el.id === id)
+            let index = auctions.findIndex(el => el.auctionId === id)
             if(index === -1){
                 return state
             }
@@ -158,8 +169,9 @@ const reducer = ( state = initializeState(), action) => {
 
         case NEW_BID_PUSH: {
             let {id, userId, bidAmount} = action.payload
+            console.log("INSIDE NEW BID",action)
             let auctions = state.auctions
-            let index = auctions.findIndex(el => el.id === id)
+            let index = auctions.findIndex(el => el.auctionId === id)
             let auction = auctions[index]
             auctions = auctions.splice(index, 1)
             auction.bids.push({
@@ -174,7 +186,10 @@ const reducer = ( state = initializeState(), action) => {
         }
 
         case UPDATE_AUCTION_LIST: {
-            return Object.assign({}, state, {auctions: action.payload})
+            console.log("new auction",action.payload)
+            let current = state.auctions
+            current.push(action.payload)
+            return {...state,auctions:current}
         }
         case TOGGLE_FAVORITE:{
             let itemId = action.payload
@@ -207,7 +222,7 @@ export function getUserToken(state) {
 }
 
 export function isUserOnline(state){
-    return state.user.isLoggedIn
+    return state.isLoggedIn
 }
 
 export function getProducts(state){

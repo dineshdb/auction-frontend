@@ -10,13 +10,12 @@ import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid'
 import {CustomButton} from "./buttons";
 import Divider from '@material-ui/core/Divider'
-import store, {subscribeAuctionAction} from '../store'
+import store, {subscribeAuctionAction,updateAuctionListAction} from '../store'
 import {Redirect } from 'react-router-dom'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {participateInAuction} from '../products'
-
+import {participateInAuction,getAuctionDetails} from '../products'
 
 let styles = (theme)=>{
     return {
@@ -284,10 +283,16 @@ class ProductDetails extends React.Component {
                                                          openDialog: false
                                                      })
                                                      let auction = this.state.auctionDetails
+                                                
                                                      participateInAuction(auction.auctionId)
                                                      .then(res =>{
-                                                        console.log("RESPONSE FROM CREATE_AUCTION",res)
-                                                        store.dispatch(subscribeAuctionAction(auction.auctionId))
+                                                        
+                                                        store.dispatch(subscribeAuctionAction(this.state.auctionDetails.auctionId))
+                                                        let auction = {...this.state.auctionDetails,id:this.state.auctionDetails.auctionId,state:'READY'}
+
+                                                        console.log("auction details",this.state.auctionDetails)
+                                                         store.dispatch(updateAuctionListAction(auction))
+                                                         console.log(store.getState())
                                                         this.setState({
                                                             participated: true
                                                         })
