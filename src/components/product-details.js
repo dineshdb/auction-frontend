@@ -16,12 +16,10 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {participateInAuction,getAuctionDetails,setBid,getBidDetails} from '../products'
-import BootStrappedInput from '../components/textFields'
 import moment from 'moment'
 import TextField from '@material-ui/core/TextField'
 import Favorite from '@material-ui/icons/FavoriteBorder'
 import Button from '@material-ui/core/Button'
-import {baseUrl} from "../config";
 import {getFavorites} from "../products";
 import {subscribeAuction} from "../socket";
 
@@ -458,7 +456,6 @@ class ProductDetails extends React.Component {
                                         />
                                         <Divider style={{marginTop: "5px",marginBottom: "5px",marginLeft: "35px",marginRight: "50px"}}/>
                                         <Button
-
                                             color="primary"
                                             variant="outlined"
                                             style={{
@@ -488,12 +485,6 @@ class ProductDetails extends React.Component {
                     (this.state.isOnline === undefined || !(this.state.isOnline)) && (
                         <Redirect to = "/login"/>
                     )
-                }
-                {/*{*/}
-                    {/*(this.state.participated && (*/}
-                        {/*<Redirect to = "/" />*/}
-                        {/*)*/}
-                    {/*)*/}
                 }
             </div>
         )

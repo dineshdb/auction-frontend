@@ -47,27 +47,22 @@ class Product extends React.Component {
         super(props)
         this.state = {
             isFavorite : this.isFavorite(props.item.itemId),
+            item : props.item,
             hovered: false,
             elevation: 0,
-            itemId: 0,
+            itemId : props.item.itemId
         }
     }
-    isFavorite(id){
+    isFavorite = (id) => {
         return store.getState().favorites.includes(id)
     }
-    componentDidMount(){
-        this.setState({
-            item : this.props.item
-        })
-    }
     handleFavorite = (e) => {
-        let {itemId} = this.state.item
-        (this.isFavorite(itemId)?
-            unfavorite(itemId) : favorite(itemId))
+        (this.isFavorite(this.state.itemId)?
+            unfavorite(this.state.itemId) : favorite(this.state.itemId))
             .then(res => {
-                store.dispatch(toggleFavorite(itemId))
+                store.dispatch(toggleFavorite(this.state.itemId))
                 this.setState({
-                    isFavorite: this.isFavorite(this.props.item.itemId)
+                    isFavorite: this.isFavorite(this.state.itemId)
                 })    
             })
     }
@@ -75,8 +70,7 @@ class Product extends React.Component {
         const { itemName,maxBid, bid,image, actionName, itemDescription, itemId,startingBid,auction,isFavorite} = this.props.item;
         const { classes, baseUrl } = this.props
         return (<div>
-            <Card square elevation="2" className={classes.card}
-            >
+            <Card square elevation="2" className={classes.card}>
              <CardActions>
                     <Tooltip title="Save to favorites">
                     <IconButton color="secondary" size="small" onClick={this.handleFavorite}>
