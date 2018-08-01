@@ -94,7 +94,7 @@ function initializeState(){
         highestBid: [],
         highestBidder: [],
         currentBidder: 0,
-        currentBid: 0
+        currentBid: 0,
         isLoggedIn: false
     }    
     let user = JSON.parse(localStorage.getItem(USER_KEY)) || {}
