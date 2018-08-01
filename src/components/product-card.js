@@ -17,11 +17,13 @@ import Divider from '@material-ui/core/Divider'
 
 const styles = theme => ({
     card: {
-        marginTop: theme.spacing.unit*2,
-        marginBottom: theme.spacing.unit*2,
+        marginTop: theme.spacing.unit*1,
+        marginBottom: theme.spacing.unit*1,
         marginLeft: theme.spacing.unit*1,
         fontSize: '16px',
         maxWidth: 250,
+        margin: 0,
+        padding:0
        
     },
     media: {
@@ -88,7 +90,6 @@ class Product extends React.Component {
                 })
         }}
             >
-            
             <Card square elevation={this.state.elevation} className={classes.card}
             >
              <CardActions>
@@ -97,18 +98,14 @@ class Product extends React.Component {
                         <Icon>{(this.state.isFavorite | isFavorite) ? "favorite": "favorite_outline"}</Icon>
                     </IconButton>
                     </Tooltip>
+                    <Typography gutterBottom variant="headline" component="h3" className={classes.right}>
+                        Rs.{startingBid}</Typography>
                 </CardActions>
             
                 <Link to={baseUrl + itemId} className={classes.right}> 
                 <CardMedia  className={classes.media} image={image} itemName={itemName}>
                 
                 </CardMedia>
-                
-                    
-                    <Divider className={classes.divider}/>
-                   
-                
-               
                 <CardContent>
                     <div className={classes.flex}>
                         <Typography gutterBottom variant="headline" component="h3">
@@ -128,8 +125,6 @@ class Product extends React.Component {
                             color: "#6b6b6b"
                         }}
                     >{itemDescription}</Typography>
-                     <Typography gutterBottom variant="headline" component="h3">
-                        Rs.{startingBid}</Typography>
                 </CardContent>
                 </Link>
                 

@@ -4,10 +4,12 @@ import { withStyles } from '@material-ui/core/styles';
 import ProductCard from './product-card'
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
 let styles = theme => ({
     root: {
         flexGrow: 1,
-        margin: 20
+        margin: 20,
+        marginTop: 0,
     },
     item : {
         maxWidth: 260,
@@ -18,6 +20,11 @@ let styles = theme => ({
         marginLeft: theme.spacing.unit*5,
         marginRight: theme.spacing.unit*5,
         marginBottom: theme.spacing.unit*10
+    },
+    title:{
+        fontWeight: 'lighter',
+        fontSize: "20px",
+        padding: 25
     }
 })
 class TileView extends React.Component {
@@ -27,13 +34,18 @@ class TileView extends React.Component {
     componentDidMount(){
     }
     render(props){
-        const {classes, items, basePath} = this.props
+        const {classes, items, basePath, title} = this.props
+        if(items.length===0)
+            return(<i></i>)
         return (
             <Paper
                className={classes.mainRoot}
                square
-               elevation={0}
+               elevation={1}
             >
+            <Typography className={classes.title} align="center">
+                {title}
+            </Typography>
             <Grid container className={classes.root} spacing={10}>
                 {items.map(value =>{
                 return(
@@ -44,8 +56,7 @@ class TileView extends React.Component {
                     baseUrl={basePath}
                     />
                     </Grid>
-                    )
-                
+                    )  
                 }
                 )}
             </Grid>
@@ -57,6 +68,7 @@ class TileView extends React.Component {
 TileView.propTypes = {
     classes: PropTypes.object.isRequired,
     items: PropTypes.object.isRequired,
+    title: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(TileView);

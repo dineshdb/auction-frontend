@@ -149,9 +149,6 @@ class ProductDetails extends React.Component {
             highestBid: 0,
             bids: [],
             forHighestBid: []
-
-
-
         }
     }
     componentDidMount(){

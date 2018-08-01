@@ -5,14 +5,9 @@ import {withStyles} from '@material-ui/core/styles'
 import {connect} from 'react-redux'
 import TileView from '../components/tile-view'
 import {fetchProducts, fetchEach,getAuctionDetails,fetchFavorites} from '../products'
-import Typography from '@material-ui/core/Typography'
 import store from '../store'
 import Paper from '@material-ui/core/Paper'
 const styles = (theme) =>({
-    typo: {
-        fontSize: "30px",
-        fontWeight: "lighter"
-    },
     margin: {
         margin: theme.spacing.unit*5
     }
@@ -31,7 +26,6 @@ class Home extends React.Component {
         }
     }
     componentDidMount() {
-
         fetchProducts()
         .then(fetchEach)
         .then(gallery => {
@@ -62,20 +56,9 @@ class Home extends React.Component {
         return (
             <div>
                 <SearchBar/>
-                <Paper square className={classes.margin}>
-                <Typography align="center" className={classes.typo}>
-                        Favorites
-                    </Typography>
-                    <TileView items={this.state.favorites} basePath={"/product/"}/>
-                </Paper>
-
-                <Paper square className={classes.margin}>
-                <Typography align="center" className={classes.typo}>
-                        Gallery
-                    </Typography>
-                    <TileView items={this.state.gallery} basePath={"/product/"}/>
-                </Paper>
-
+                <TileView items={this.state.favorites} basePath={"/product/"} title="My Auctions" className={classes.margin}/>
+                <TileView items={this.state.favorites} basePath={"/product/"} title="Favorites" className={classes.margin}/>
+                <TileView items={this.state.gallery} basePath={"/product/"} title="Gallery" className={classes.margin}/>
             </div>
         )
     }
