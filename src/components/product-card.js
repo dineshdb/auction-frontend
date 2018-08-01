@@ -12,7 +12,7 @@ import Icon from '@material-ui/core/Icon';
 import store, {toggleFavorite} from '../store'
 import {connect} from 'react-redux'
 import Tooltip from '@material-ui/core/Tooltip';
-import {participateInAuction, unfavorite, favorite} from "../products";
+import {unfavorite, favorite} from "../products";
 
 const styles = theme => ({
     card: {
@@ -62,7 +62,6 @@ class Product extends React.Component {
     }
     handleFavorite = (e) => {
         let {itemId} = this.state.item
-        console.log(this.state.item)
         (this.isFavorite(itemId)?
             unfavorite(itemId) : favorite(itemId))
             .then(res => {
@@ -75,18 +74,8 @@ class Product extends React.Component {
     render() {
         const { itemName,maxBid, bid,image, actionName, itemDescription, itemId,startingBid,auction,isFavorite} = this.props.item;
         const { classes, baseUrl } = this.props
-        return (<div onMouseEnter={()=>{
-                this.setState({
-                    elevation: 20
-                })
-            }}
-            onMouseLeave={()=>{
-                this.setState({
-                    elevation: 0
-                })
-        }}
-            >
-            <Card square elevation={this.state.elevation} className={classes.card}
+        return (<div>
+            <Card square elevation="2" className={classes.card}
             >
              <CardActions>
                     <Tooltip title="Save to favorites">

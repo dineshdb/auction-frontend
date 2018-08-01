@@ -1,4 +1,4 @@
-import fetch, {postForm, fetchJSON} from './fetch'
+import {postForm, fetchJSON} from './fetch'
 import store from './store'
 import {baseUrl} from './config'
 

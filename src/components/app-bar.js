@@ -84,10 +84,10 @@ class HomeBar extends React.Component {
         this.setState({ anchorEl: null });
     };
 
-    gotoHelp(){
+    gotoHelp = () => {
         this.handleClose()
     }
-    openProfile(){
+    openProfile = () =>{
         this.handleClose()
     }
     render() {

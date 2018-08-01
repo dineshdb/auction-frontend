@@ -148,7 +148,9 @@ class ProductDetails extends React.Component {
             minutes: 10,
             highestBid: 0,
             bids: [],
-            forHighestBid: []
+            forHighestBid: [],
+            msg: '',
+            enabled: false,
         }
     }
     componentDidMount(){
@@ -322,39 +324,24 @@ class ProductDetails extends React.Component {
             <div style={{display: 'none'}}>
             
              </div>
-                <Paper
-                    square
-                    elevation={0}
-                    className={classes.paper}
-                >
-
-                    <Card
-                        elevation={0}
-                        square
-                        className={classes.card}>
-                        <Grid container spacing={24} >
+                <Paper square  elevation={0} className={classes.paper}>
+                    <Card elevation={0} square  className={classes.card}>               <Grid container spacing={24} >
                             <Grid item xs={6}>
-                                <CardMedia
-                                    className={classes.media}
-                                    image={details.image}
-                                />
+                                <CardMedia className={classes.media} image={details.image}/>
                             </Grid>
                             <Grid item xs={6}>
                                     <Typography
                                             align="left"
                                             className={classes.title}
-                                        >{details.itemName}
-                                    
-                                        </Typography>
-
-                                    <Typography
-                                        className={classes.description}
+                                        >{details.itemName}</Typography>
+                                    <Typography className={classes.description}
                                     >{details.itemDescription}
                                     </Typography>
                                     <Grid container spacing={24}>
                                     <Grid item xs={7}>
                                     </Grid>
                                     <Grid item xs={5}>
+                                        {this.state.msg}
                                         {
                                             !this.state.eventEnded ? (!this.state.eventStarted ?  <Typography className={classes.description} style={{color: "red"}}>
                                                 starts in  {`${this.state.totalTime.days}d ${this.state.totalTime.hours}h ${this.state.totalTime.minutes}m ${this.state.totalTime.seconds}s  `}
