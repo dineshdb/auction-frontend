@@ -13,6 +13,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Favorite from '@material-ui/icons/Favorite'
 import Gallery from '@material-ui/icons/Image'
+import Live from '@material-ui/icons/LiveTv'
+import moment from 'moment'
+
 const styles = (theme) =>({
     typo: {
         fontSize: "30px",
@@ -37,7 +40,8 @@ class Home extends React.Component {
             user: null,
             favorites: [],
             gallery: [],
-            value:0
+            value:1,
+            liveGallery: []
         }
     }
     componentDidMount() {
@@ -51,21 +55,44 @@ class Home extends React.Component {
                     .then(gallery => {
                         let withFavoritesGallery = []
                         let favorites = []
+                        let liveGallery = []
                         gallery.map(item=>{
+
                             let temp = false
-                            favoritesFromApi.map((id)=>{
-                                if (item.auction == id){
-                                    temp=true
-                                    favorites.push({...item,isFavorite: true})
+                            let live = false
+                            getAuctionDetails(item.auction)
+                                .then(res=>{
+                                   let eventDateTime=  moment(res.auctionDate+' '+res.auctionTime)
+                                    let duration_ = moment.duration(eventDateTime-moment())
+                                    let duration=duration_._data
+                                    let total_minutes = Number(Math.abs(Number(duration.hours))*60+Math.abs(Number(duration.minutes))+Math.abs(Number(duration.seconds/60)))
+                                    let minutes = Math.floor(total_minutes)
+                                    let seconds = Math.floor((total_minutes-minutes)*60)
+                                    if(duration_ < 0) {
+
+                                        if (total_minutes < 11) {
+                                            live = true
+                                        }
+                                    }
+                                    favoritesFromApi.map((id)=>{
+                                        if (item.auction == id){
+                                            temp=true
+                                            favorites.push({...item,isFavorite: true})
 
 
-                                }
-                            })
-                            withFavoritesGallery.push({...item,isFavorite: temp})
+
+                                        }
+                                    })
+                                    if(live){
+                                        liveGallery.push({...item})
+                                    }
+                                    withFavoritesGallery.push({...item,isFavorite: temp})
+                                })
+
 
                         })
 
-                        this.setState({gallery:withFavoritesGallery,favorites:favorites})
+                        this.setState({gallery:withFavoritesGallery,favorites:favorites,liveGallery: liveGallery})
                         console.log("FAVORITES",this.state)
 
                     })
@@ -88,12 +115,12 @@ class Home extends React.Component {
                     <Tabs value={value} onChange={this.handleChange}>
                         <Tab label="Favorites" icon={<Favorite/>} href="#basic-tabs"/>
                         <Tab label="Gallery" icon = {<Gallery/>} href="#basic-tabs"/>
-                        <Tab label="Live" href="#basic-tabs" />
+                        <Tab label="Live" icon = {<Live/>}href="#basic-tabs" />
                     </Tabs>
                 </AppBar>
                 {value === 0 && <TileView items={this.state.favorites} basePath={"/product/"}/>}
                 {value === 1 && <TileView items={this.state.gallery} basePath={"/product/"}/>}
-                {value === 2 && <TileView items={this.state.gallery} basePath={"/product/"}/>}
+                {value === 2 && <TileView items={this.state.liveGallery} basePath={"/product/"}/>}
 
 
 
