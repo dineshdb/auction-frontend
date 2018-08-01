@@ -72,9 +72,9 @@ class Product extends React.Component {
         return store.getState().favorites.includes(id)
     }
     handleFavorite = (e) => {
-        let {auction} = this.props.item
-       participateInAuction(auction).then(res=>{
-           store.dispatch(toggleFavorite(auction))
+        let {auctionId} = this.props.item.auction
+       participateInAuction(auctionId).then(res=>{
+           store.dispatch(toggleFavorite(auctionId))
        })
 
 /*
