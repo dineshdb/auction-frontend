@@ -18,9 +18,9 @@ import {getFavorites} from "./products";
 import {subscribeAuction} from "./socket";
 
 import store, {
-    subscribeAuctionAction, 
-    updateAuctionListAction, 
-    auctionStartedAction
+    subscribeAuctionAction,
+    updateAuctionListAction,
+    auctionStartedAction, updateFavorites
 } from './store'
 
 import AppBar from './components/app-bar'
@@ -41,9 +41,14 @@ class App extends React.Component {
         if(store.getState().isLoggedIn){
             getFavorites().then(res=>{
                 console.log("favorites",res)
-                res.map(favorite=>{
-                    subscribeAuction(favorite)
-                })
+                store.dispatch(updateFavorites({favorites:res}))
+                if(res.length){
+                    res.map(favorite=>{
+                        subscribeAuction(favorite)
+                    })
+                }
+
+
             })
         }
     }

@@ -15,6 +15,8 @@ import BootStrappedTextField from './textFields'
 import SelectItem from "./dialogs";
 import {Redirect} from 'react-router-dom'
 import store from '../store'
+import CloseIcon from "@material-ui/icons/Close"
+import IconButton from '@material-ui/core/IconButton'
 import {getCategories, uploadFile} from '../products'
 
 const styles = theme => ({
@@ -24,11 +26,16 @@ const styles = theme => ({
       marginTop: "20px",
     },
     paper: {
-      marginLeft: "20px",
-        marginTop: "40px"
+        marginTop: theme.spacing.unit*5,
+     marginLeft: theme.spacing.unit*30,
+        marginRight: theme.spacing.unit*30,
+
     },
     button: {
         margin: theme.spacing.unit*3,
+    },
+    close:{
+        marginLeft: theme.spacing.unit*80
     },
     card: {
         marginTop: "8%",
@@ -48,10 +55,10 @@ const styles = theme => ({
         margin: theme.spacing.unit,
     },
     leftName: {
-        marginTop: "10px",
-        marginBottom: "30px",
+       margin: theme.spacing.unit,
         fontSize: "25px",
-        fontWeight: "lighter"
+        fontWeight: "lighter",
+
     },
     bootstrapRoot: {
         padding: 0,
@@ -96,10 +103,11 @@ const styles = theme => ({
         fontWeight: "lighter"
     },
     typo:{
-      width: "300%"
+     marginLeft: theme.spacing.unit*5
     },
     initialTypo:{
-        width: "100%"
+        width: "100%",
+        marginLeft: theme.spacing.unit*2
     },
 });
 
@@ -163,6 +171,19 @@ class SellProductForm extends React.Component {
                     <Grid container spacing="24">
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
+                                <IconButton
+                                    key="close"
+                                    aria-label="Close"
+                                    color="inherit"
+                                    className={classes.close}
+                                    onClick={()=>{
+                                        this.setState({
+                                            fireSuccessful: true
+                                        })
+                                    }}
+                                >
+                                    <CloseIcon />
+                                </IconButton>,
                                 <Grid container spacing={24} className={classes.margin}>
                                     <Grid item xs={9}>
                                         <ToolBar >
@@ -214,7 +235,7 @@ class SellProductForm extends React.Component {
                                         </ToolBar>
                                         <ToolBar >
                                             <Grid container spacing="24">
-                                                <Grid item xs="5">
+                                                <Grid item xs="7">
                                                     <Typography
                                                         className={classes.leftName}>
                                                         Date*
@@ -229,45 +250,24 @@ class SellProductForm extends React.Component {
                                                         className={classes.date}
                                                     />
                                                 </Grid>
-                                                <Grid item xs="1">
-                                                    <Typography
-                                                        className={classes.leftName}>
-                                                        Starting*
+                                                <Grid item xs="5">
+                                                    <Typography className={classes.leftName}>
+                                                        Event Start
                                                     </Typography>
                                                     <SimpleTextField
                                                         id="time"
-                                                        label="Event Start"
                                                         type="time"
+                                                        style={{width: "60%"}}
                                                         defaultValue="12:00"
                                                         handler={(event)=>{
                                                             this.setState({
                                                                 eventTime: event.target.value
                                                             })
                                                         }}
-                                                        property={classes.typo}
+                                                        property={classes.leftName}
                                                     />
                                                 </Grid>
-                                                <Grid item xs="2">
-                                                </Grid>
-                                                <Grid item xs="1">
-                                                    <Typography
-                                                        className={classes.leftName}>
-                                                        Duration*
-                                                    </Typography>
-                                                    <SimpleTextField
-                                                        id="time"
-                                                        label="Duration"
-                                                        type="time"
-                                                        defaultValue="02:00"
-                                                        handler={(event)=>{
-                                                            this.setState({
-                                                                eventDuration: event.target.value
-                                                            })
-                                                        }}
-                                                        property={classes.typo}
 
-                                                    />
-                                                </Grid>
                                             </Grid>
                                         </ToolBar>
                                         <CustomButton

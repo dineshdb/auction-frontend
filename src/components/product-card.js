@@ -12,7 +12,12 @@ import Icon from '@material-ui/core/Icon';
 import store, {toggleFavorite} from '../store'
 import {connect} from 'react-redux'
 import Tooltip from '@material-ui/core/Tooltip';
-import {unfavorite, favorite} from "../products";
+
+import Divider from '@material-ui/core/Divider'
+import {subscribeAuction} from "../socket";
+
+
+import {participateInAuction, unfavorite, favorite} from "../products";
 
 const styles = theme => ({
     card: {
@@ -23,7 +28,9 @@ const styles = theme => ({
         maxWidth: 250,
     },
     media: {
-        margin: theme.spacing.unit*3,
+        marginLeft: theme.spacing.unit*3,
+        marginRight: theme.spacing.unit*3,
+        marginBottom: theme.spacing.unit,
         height: 0,
         paddingTop: '56.25%'
     },
@@ -33,6 +40,14 @@ const styles = theme => ({
     margin: {
         margin: theme.spacing.unit*3,
         width: "100%"
+    },
+    divider: {
+        marginTop: theme.spacing.unit*2,
+        marginLeft: theme.spacing.unit*3,
+        marginRight: theme.spacing.unit*3,
+        marginBottom: theme.spacing.unit,
+        height: 0,
+        paddingTop: "1%"
     },
     flex: {
         display: 'flex',
@@ -57,6 +72,12 @@ class Product extends React.Component {
         return store.getState().favorites.includes(id)
     }
     handleFavorite = (e) => {
+        let {auction} = this.props.item
+       participateInAuction(auction).then(res=>{
+           store.dispatch(toggleFavorite(auction))
+       })
+
+/*
         (this.isFavorite(this.state.itemId)?
             unfavorite(this.state.itemId) : favorite(this.state.itemId))
             .then(res => {
@@ -65,6 +86,7 @@ class Product extends React.Component {
                     isFavorite: this.isFavorite(this.state.itemId)
                 })    
             }).catch(console.log)
+      */
     }
     render() {
         const { itemName,maxBid, bid,image, actionName, itemDescription, itemId,startingBid,auction,isFavorite} = this.props.item;
@@ -85,7 +107,7 @@ class Product extends React.Component {
                 <CardMedia  className={classes.media} image={image} itemName={itemName}></CardMedia>
                 <CardContent>
                     <div className={classes.flex}>
-                        <Typography gutterBottom variant="headline" component="h3">
+                        <Typography gutterBottom variant="headline" component="h3" style={{fontWeight: "lighter"}}>
                         {itemName}</Typography>
                         <Typography
                             className={classes.right}

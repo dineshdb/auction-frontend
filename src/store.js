@@ -1,5 +1,6 @@
 import {createStore} from 'redux'
 import {subscribeAuction, unsubscribeAuction} from './socket'
+import {getFavorites} from "./products";
 
 const USER_KEY = 'user'
 
@@ -19,7 +20,9 @@ export const AUCTION_STARTED = 'AUCTION_STARTED'
 export const AUCTION_ENDED = 'AUCTION_ENDED'
 export const TOGGLE_FAVORITE = 'TOGGLE_FAVORITE'
 export const UPDATE_AUCTION_LIST = 'UPDATE_AUCTION_LIST'
+export const UPDATE_FAVORITES = 'UPDATE_FAVORITES'
 export const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE'
+
 // Action creators
 export const signIn = user =>({
     type : SIGN_IN,
@@ -72,6 +75,12 @@ export const updateAuctionListAction = payload => ({
     type: UPDATE_AUCTION_LIST,
     payload
 })
+
+export const updateFavorites = payload =>({
+    type: UPDATE_FAVORITES,
+        payload
+
+})
 // reducers
 function initializeState(){
     let initialState = {
@@ -84,6 +93,8 @@ function initializeState(){
         favorites: [],
         highestBid: [],
         highestBidder: [],
+        currentBidder: 0,
+        currentBid: 0
         isLoggedIn: false
     }    
     let user = JSON.parse(localStorage.getItem(USER_KEY)) || {}
@@ -110,6 +121,10 @@ const reducer = ( state = initializeState(), action) => {
             let withNewAuction = state.auctionsStarted
             withNewAuction.push(action.payload)
             return {...state,products: withNewAuction}
+        case UPDATE_FAVORITES:
+            let {favorites} = action.payload
+            console.log("favorites in store",favorites)
+            return {...state,favorites: favorites}
         case ADD_TO_CART:
 
             let newCartWithProduct = state.cart
@@ -193,6 +208,7 @@ const reducer = ( state = initializeState(), action) => {
             }
 
             console.log("Highest",state.highestBid)
+            console.log("state",state)
             let index = auctions.findIndex(el => el.auctionId === auctionId)
             if (index === -1){
                 console.log("INSIDE -1")
@@ -208,12 +224,12 @@ const reducer = ( state = initializeState(), action) => {
                             maximumBidder: maxBidder
                         }
                         console.log("STATE",state)
-                        return {...state,highestBid:temp}
+                        return {...state,highestBid:temp,currentBidder:userId,currentBid:bidAmount}
 
                     }
                 })
                 if(newAuction){
-                    return {...state,highestBid:[...state.highestBid,{auctionId:auctionId,maximumBid:maximum,maximumBidder: maxBidder}]}
+                    return {...state,currentBidder: userId,currentBid:bidAmount,highestBid:[...state.highestBid,{auctionId:auctionId,maximumBid:maximum,maximumBidder: maxBidder}]}
                 }
                 else{
                     return state
@@ -238,13 +254,13 @@ const reducer = ( state = initializeState(), action) => {
                         maximumBid: maximum,
                         maximumBidder: maxBidder
                     }
-                    Object.assign({}, state, {auctions: [...auctions, auction],highestBid:temp})
+                    Object.assign({}, state, {currentBid:bidAmount,auctions: [...auctions, auction],highestBid:temp,currentBidder:userId})
 
                 }
             })
             if(newUser){
                 console.log("STATE",state)
-                return Object.assign({}, state, {auctions: [...auctions, auction],highestBid:[...state.highestBid,{auctionId:auctionId,maximumBid:maximum,maximumBidder:maxBidder}]})
+                return Object.assign({}, state, {currentBid:bidAmount,currentBidder:userId,auctions: [...auctions, auction],highestBid:[...state.highestBid,{auctionId:auctionId,maximumBid:maximum,maximumBidder:maxBidder}]})
             }
             else{
                 return state
@@ -261,14 +277,15 @@ const reducer = ( state = initializeState(), action) => {
         case TOGGLE_FAVORITE:{
             let auctionId = action.payload
             let favorites = state.favorites
-            let index = favorites.indexOf(auctionId)
-            if(index > -1){
+                let index = favorites.indexOf(auctionId)
+                if(index > -1){
 
-                favorites.splice(index, 1)
-                return Object.assign({}, state, {favorites})
-            } else {
-                return Object.assign({}, state,{favorites: [...favorites, auctionId]})
-            }
+                    favorites.splice(index, 1)
+                    return Object.assign({}, state, {favorites})
+                } else {
+                    return Object.assign({}, state,{favorites: [...favorites, auctionId]})
+                }
+
         }
 
         case USER_STATUS:
