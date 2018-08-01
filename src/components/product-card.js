@@ -12,8 +12,7 @@ import Icon from '@material-ui/core/Icon';
 import store, {toggleFavorite} from '../store'
 import {connect} from 'react-redux'
 import Tooltip from '@material-ui/core/Tooltip';
-import {participateInAuction} from "../products";
-import Divider from '@material-ui/core/Divider'
+import {participateInAuction, unfavorite, favorite} from "../products";
 
 const styles = theme => ({
     card: {
@@ -22,9 +21,6 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit*1,
         fontSize: '16px',
         maxWidth: 250,
-        margin: 0,
-        padding:0
-       
     },
     media: {
         margin: theme.spacing.unit*3,
@@ -37,11 +33,6 @@ const styles = theme => ({
     margin: {
         margin: theme.spacing.unit*3,
         width: "100%"
-    },
-    divider: {
-        margin: theme.spacing.unit*3,
-        height: 0,
-        paddingTop: "1%"
     },
     flex: {
         display: 'flex',
@@ -57,24 +48,29 @@ class Product extends React.Component {
         this.state = {
             isFavorite : this.isFavorite(props.item.itemId),
             hovered: false,
-            elevation: 0
+            elevation: 0,
+            itemId: 0,
         }
     }
     isFavorite(id){
         return store.getState().favorites.includes(id)
     }
     componentDidMount(){
-        store.subscribe(() =>{
-            this.setState({
-                isFavorite: this.isFavorite(this.props.item.auction)
-            })
+        this.setState({
+            item : this.props.item
         })
     }
     handleFavorite = (e) => {
-        let {auction} = this.props.item
-        store.dispatch(toggleFavorite(auction))
-        console.log(this.state.isFavorite, store.getState().favorites)
-
+        let {itemId} = this.state.item
+        console.log(this.state.item)
+        (this.isFavorite(itemId)?
+            unfavorite(itemId) : favorite(itemId))
+            .then(res => {
+                store.dispatch(toggleFavorite(itemId))
+                this.setState({
+                    isFavorite: this.isFavorite(this.props.item.itemId)
+                })    
+            })
     }
     render() {
         const { itemName,maxBid, bid,image, actionName, itemDescription, itemId,startingBid,auction,isFavorite} = this.props.item;
@@ -103,9 +99,7 @@ class Product extends React.Component {
                 </CardActions>
             
                 <Link to={baseUrl + itemId} className={classes.right}> 
-                <CardMedia  className={classes.media} image={image} itemName={itemName}>
-                
-                </CardMedia>
+                <CardMedia  className={classes.media} image={image} itemName={itemName}></CardMedia>
                 <CardContent>
                     <div className={classes.flex}>
                         <Typography gutterBottom variant="headline" component="h3">
@@ -127,9 +121,7 @@ class Product extends React.Component {
                     >{itemDescription}</Typography>
                 </CardContent>
                 </Link>
-                
             </Card>
-           
             </div>
         );
     }

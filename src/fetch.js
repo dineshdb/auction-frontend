@@ -8,6 +8,9 @@ export function fetchApi(path, options){
     return fetch(path, options)
 }
 
+export function fetchJSON(path, options){
+    return fetchApi(path, options).then(res => res.json())
+}
 export function postForm(url, body){
     let options = {
         method: 'POST',
