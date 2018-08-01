@@ -10,7 +10,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid'
 import {CustomButton} from "./buttons";
 import Divider from '@material-ui/core/Divider'
-import store, {subscribeAuctionAction,updateAuctionListAction,getHighestBid} from '../store'
+import store, {subscribeAuctionAction,updateAuctionListAction,getHighestBid,newBid} from '../store'
 import {Redirect } from 'react-router-dom'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -311,10 +311,19 @@ class ProductDetails extends React.Component {
             })
         }
         const {details,auctionDetails,bids,forHighestBid} = this.state
-        let highestBid = this.state.details.startingBid
+
+        let localHighest = this.state.details.startingBid
         if(forHighestBid){
-            highestBid = Math.max.apply(null,forHighestBid)
+            localHighest = Math.max.apply(null,forHighestBid)
         }
+        let highestBid = 0
+        let highestBidder = ""
+        store.getState().highestBid.map(bid=>{
+            if(bid.auctionId === this.state.auctionDetails.auctionId){
+                highestBid = bid.maximumBid
+                highestBidder = bid.maximumBidder
+            }
+        })
 
         return (
             <div className={classes.root}>
@@ -379,7 +388,7 @@ class ProductDetails extends React.Component {
 
                                         {this.state.alreadyParticipated ?  (<div>
                                             <Typography className={classes.subTitle} style={{marginTop: "20px"}}>
-                                                Highest Bid Rs.{store.getState().highestBid > highestBid? store.getState().highestBid : highestBid}
+                                                Highest Bid Rs.{highestBid > localHighest? highestBid: localHighest}
                                             </Typography>
                                             <TextField
                                                 className={classes.textMargin}
