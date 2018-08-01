@@ -17,10 +17,6 @@ import Live from '@material-ui/icons/LiveTv'
 import moment from 'moment'
 
 const styles = (theme) =>({
-    typo: {
-        fontSize: "30px",
-        fontWeight: "lighter"
-    },
     margin: {
         margin: theme.spacing.unit*5
     },
@@ -41,7 +37,11 @@ class Home extends React.Component {
             favorites: [],
             gallery: [],
             value:1,
-            liveGallery: []
+            liveGallery: [],
+            endToday: [],
+            newToday: [],
+            mine: [],
+            value:0,
         }
     }
     componentDidMount() {
@@ -78,9 +78,6 @@ class Home extends React.Component {
                                         if (item.auction == id){
                                             temp=true
                                             favorites.push({...item,isFavorite: true})
-
-
-
                                         }
                                     })
                                     if(live){
@@ -121,10 +118,6 @@ class Home extends React.Component {
                 {value === 0 && <TileView items={this.state.favorites} basePath={"/product/"}/>}
                 {value === 1 && <TileView items={this.state.gallery} basePath={"/product/"}/>}
                 {value === 2 && <TileView items={this.state.liveGallery} basePath={"/product/"}/>}
-
-
-
-
 
             </div>
         )

@@ -16,12 +16,10 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {participateInAuction,getAuctionDetails,setBid,getBidDetails} from '../products'
-import BootStrappedInput from '../components/textFields'
 import moment from 'moment'
 import TextField from '@material-ui/core/TextField'
 import Favorite from '@material-ui/icons/FavoriteBorder'
 import Button from '@material-ui/core/Button'
-import {baseUrl} from "../config";
 import {getFavorites} from "../products";
 import {subscribeAuction} from "../socket";
 import ToolTip from '@material-ui/core/Tooltip'
@@ -142,7 +140,7 @@ class ProductDetails extends React.Component {
             count : 0,
             image: null,
             auctionDetails:{},
-            isOnline : store.getState().user.isLoggedIn,
+            isOnline : store.getState().isLoggedIn,
             openDialog: false,
             participated: false,
             alreadyParticipated: false,
@@ -161,10 +159,9 @@ class ProductDetails extends React.Component {
             bidReject: false,
             currentBidder: 0,
             currentBid: 0,
-            currentHighest:0
-
-
-
+            currentHighest:0,
+            msg: '',
+            enabled: false,
         }
     }
     componentDidMount(){
@@ -279,10 +276,6 @@ class ProductDetails extends React.Component {
                     },
                     responseType: 'blob'
                 }).then((response)=>{
-                    const url = window.URL.createObjectURL(new Blob([response.data]))
-                    this.setState({
-                        image: url
-                    })
                     axios({
                         method: 'GET',
                         url: `http://localhost:8080/auctions/${this.state.details.auction}`,
@@ -290,11 +283,10 @@ class ProductDetails extends React.Component {
                             'Authorization':store.getState().user.header
                         },
                     }).then(res=>{
-
                         let participated = false
                         let buttonName = "Participate"
                         res.data.bidders.map((bidder)=>{
-                            if(bidder == userId){
+                            if(bidder === userId){
                                 participated=true,
                                     buttonName="Bid"
                             }
@@ -357,17 +349,8 @@ class ProductDetails extends React.Component {
             <div style={{display: 'none'}}>
             
              </div>
-                <Paper
-                    square
-                    elevation={0}
-                    className={classes.paper}
-                >
-
-                    <Card
-                        elevation={0}
-                        square
-                        className={classes.card}>
-                        <Grid container spacing={24} >
+                <Paper square  elevation={0} className={classes.paper}>
+                    <Card elevation={0} square  className={classes.card}>               <Grid container spacing={24} >
                             <Grid item xs={6}>
                                 <CardMedia
                                     className={classes.media}
@@ -398,7 +381,6 @@ class ProductDetails extends React.Component {
                                     >Rs. {details.startingBid}
                                     </Typography>
                                 </div>
-
                             </Grid>
                             <Grid item xs={6}>
                                     <Typography
@@ -416,6 +398,7 @@ class ProductDetails extends React.Component {
                                     <Grid item xs={7}>
                                     </Grid>
                                     <Grid item xs={5}>
+                                        {this.state.msg}
                                         {
                                             !this.state.eventEnded ? (!this.state.eventStarted ?  <Typography className={classes.description} style={{color: "red"}}>
                                                 starts in  {`${this.state.totalTime.days}d ${this.state.totalTime.hours}h ${this.state.totalTime.minutes}m ${this.state.totalTime.seconds}s  `}
@@ -611,11 +594,10 @@ class ProductDetails extends React.Component {
                 />
 
                 {
-                    (this.state.isOnline === undefined | !(this.state.isOnline)) && (
+                    (this.state.isOnline === undefined || !(this.state.isOnline)) && (
                         <Redirect to = "/login"/>
                     )
                 }
-
             </div>
         )
     }

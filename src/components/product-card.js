@@ -12,18 +12,16 @@ import Icon from '@material-ui/core/Icon';
 import store, {toggleFavorite} from '../store'
 import {connect} from 'react-redux'
 import Tooltip from '@material-ui/core/Tooltip';
-import {participateInAuction} from "../products";
-import Divider from '@material-ui/core/Divider'
-import {subscribeAuction} from "../socket";
+
+import {unfavorite, favorite} from "../products";
 
 const styles = theme => ({
     card: {
-        marginTop: theme.spacing.unit*2,
-        marginBottom: theme.spacing.unit,
+        marginTop: theme.spacing.unit*1,
+        marginBottom: theme.spacing.unit*1,
         marginLeft: theme.spacing.unit*1,
         fontSize: '16px',
         maxWidth: 250,
-       
     },
     media: {
         marginLeft: theme.spacing.unit*3,
@@ -59,63 +57,44 @@ class Product extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            isFavorite : this.isFavorite(props.item.itemId),
+            isFavorite : this.isFavorite(props.item.auction.auctionId),
+            item : props.item,
+            auction: props.item.auction,
             hovered: false,
-            elevation: 0
+            elevation: 0,
+            itemId : props.item.itemId
         }
     }
-    isFavorite(id){
+    isFavorite = (id) => {
         return store.getState().favorites.includes(id)
     }
-    componentDidMount(){
-        store.subscribe(() =>{
-            this.setState({
-                isFavorite: this.isFavorite(this.props.item.auction)
-            })
-        })
-    }
     handleFavorite = (e) => {
-        let {auction} = this.props.item
-       participateInAuction(auction).then(res=>{
-           store.dispatch(toggleFavorite(auction))
-       })
-
+       (this.isFavorite(this.state.auction.auctionId)?
+       unfavorite(this.state.auction.auctionId) : favorite(this.state.auction.auctionId))
+       .then(res => {
+           store.dispatch(toggleFavorite(this.state.auction.auctionId))
+           this.setState({
+               isFavorite: this.isFavorite(this.state.auction.auctionId)
+           })    
+       }).catch(console.log)
     }
     render() {
-        const { itemName,maxBid, bid,image, actionName, itemDescription, itemId,startingBid,auction,isFavorite} = this.props.item;
+        const { itemName,maxBid,image, actionName, itemDescription, itemId,startingBid,auction,isFavorite} = this.props.item;
         const { classes, baseUrl } = this.props
-        return (<div onMouseEnter={()=>{
-                this.setState({
-                    elevation: 20
-                })
-            }}
-            onMouseLeave={()=>{
-                this.setState({
-                    elevation: 0
-                })
-        }}
-            >
-            
-            <Card square elevation={this.state.elevation} className={classes.card}
-            >
+        return (<div>
+            <Card square elevation="2" className={classes.card}>
              <CardActions>
                     <Tooltip title="Save to favorites">
                     <IconButton color="secondary" size="small" onClick={this.handleFavorite}>
                         <Icon>{(this.state.isFavorite | isFavorite) ? "favorite": "favorite_outline"}</Icon>
                     </IconButton>
                     </Tooltip>
+                    <Typography gutterBottom variant="headline" component="h3" className={classes.right}>
+                        Rs.{startingBid}</Typography>
                 </CardActions>
             
                 <Link to={baseUrl + itemId} className={classes.right}> 
-                <CardMedia  className={classes.media} image={image} itemName={itemName}>
-                
-                </CardMedia>
-                
-                    
-                    <Divider className={classes.divider}/>
-                   
-                
-               
+                <CardMedia  className={classes.media} image={image} itemName={itemName}></CardMedia>
                 <CardContent>
                     <div className={classes.flex}>
                         <Typography gutterBottom variant="headline" component="h3" style={{fontWeight: "lighter"}}>
@@ -128,13 +107,16 @@ class Product extends React.Component {
                             }}
                         > {maxBid} </Typography>
                     </div>
-                     <Typography gutterBottom variant="headline" component="h3">
-                        Rs.{startingBid}</Typography>
+                    <Typography
+                        className={classes.brief}
+                        style={{
+                            fontWeight: 400,
+                            color: "#6b6b6b"
+                        }}
+                    >{itemDescription}</Typography>
                 </CardContent>
                 </Link>
-                
             </Card>
-           
             </div>
         );
     }
