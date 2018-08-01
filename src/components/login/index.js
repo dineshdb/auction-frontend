@@ -9,6 +9,9 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import axios from 'axios'
 import {Redirect } from 'react-router-dom'
+import {getFavorites} from "../../products";
+import {subscribeAuction} from "../../socket";
+import {login} from '../../products'
 
 const styles = theme => ({
     root: {
@@ -142,16 +145,24 @@ class LoginForm extends React.Component{
                 userEmail: this.state.userEmail,
                 userPassword: this.state.userPassword
             }
-
             axios.post(`http://localhost:8080/login`, (postingData),{crossDomain: true})
             .then((response) => {
+                console.log("USER details",response)
                 let header = response.headers.authorization
                     let user = {
                         header,
                         isLoggedIn: true,
                         id: response.data.response
                     }
-                    this.props.dispatch({type: 'SIGN_IN', user })
+                this.props.dispatch({type: 'SIGN_IN', user })
+
+                getFavorites().then(res=>{
+                        console.log("favorites",res)
+                       res.map(favorite=>{
+                           subscribeAuction(favorite)
+                       })
+                    })
+
                     this.setState({
                         fireRedirect: true
                     })
@@ -163,7 +174,6 @@ class LoginForm extends React.Component{
                 })
                 throw err
             })
-
         }
         handleRedirect(){
             this.setState({

@@ -29,15 +29,12 @@ const styles = theme => ({
     },
     button: {
         margin: theme.spacing.unit*3,
-
     },
     card: {
-
         marginTop: "8%",
         height: "100%"
     },
     media: {
-
         paddingTop: '56.25%',
         height: "52.57%"// 16:9
     },
@@ -49,7 +46,6 @@ const styles = theme => ({
     },
     margin: {
         margin: theme.spacing.unit,
-
     },
     leftName: {
         marginTop: "10px",
@@ -57,7 +53,6 @@ const styles = theme => ({
         fontSize: "25px",
         fontWeight: "lighter"
     },
-
     bootstrapRoot: {
         padding: 0,
         'label + &': {
@@ -106,12 +101,9 @@ const styles = theme => ({
     initialTypo:{
         width: "100%"
     },
-
 });
 
 class SellProductForm extends React.Component {
-
-
     constructor(props){
         super(props)
         this.state={
@@ -192,7 +184,6 @@ class SellProductForm extends React.Component {
                                                                 title: event.target.value
                                                             })
                                                         }}
-
                                                     />
                                                 </Grid>
                                             </Grid>
@@ -372,17 +363,14 @@ class SellProductForm extends React.Component {
                                                             itemName: this.state.itemName,
                                                             itemDescription: this.state.itemDescription,
                                                             startingBid: Number(this.state.startingBid),
-                                                            seller:Number(store.getState().user.id),
+                                                            seller:Number(store.getState().user.userId),
                                                             image: this.state.image,
                                                             auction: null,
                                                             bids: [],
                                                             itemCategories: [categoryId]
-
-
-
                                                         }
                                                     ],
-                                                    seller: Number(store.getState().user.id),
+                                                    seller: store.getState().user.userId,
                                                     bids: [],
                                                     bidders: []
                                                   //  items: this.state.itemObject
@@ -409,7 +397,6 @@ class SellProductForm extends React.Component {
                                      <Grid item xs={3}>
                                     </Grid>
                                 </Grid>
-
                             </Paper>
                         </Grid>
                         <Grid item xs={4}>
@@ -423,7 +410,6 @@ class SellProductForm extends React.Component {
             </div>
         )
     }
-
 }
 
 SellProductForm.propTypes = {

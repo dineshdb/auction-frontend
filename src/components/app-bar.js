@@ -16,7 +16,7 @@ import Badge from '@material-ui/core/Badge';
 import {SIGN_OUT} from "../store";
 import {Redirect} from 'react-router-dom'
 import store from '../store'
-import {productsAdd} from "../store";
+import {productsAdd,addAuctionStarted} from "../store";
 
 const styles = theme => ({
     root: {
@@ -46,7 +46,7 @@ class HomeBar extends React.Component {
         super(props)
         let state = store.getState()
         this.state = {
-            isOnline: state.user.isLoggedIn,
+            isOnline: state.isLoggedIn,
             userId: "",
             fireHome: false,
             userName: "",
@@ -57,7 +57,7 @@ class HomeBar extends React.Component {
         store.subscribe(()=>{
             let state = store.getState()
             this.setState({
-                isOnline: store.getState().user.isLoggedIn,
+                isOnline: store.getState().isLoggedIn,
                 favoritesCount: state.favorites.length
             })
         })
@@ -168,14 +168,16 @@ class HomeBar extends React.Component {
                                 <div>
                                     <Link to="/signup">
                                         <Button
-                                            color="secondary"
-                                            className={classes.typoButton}
+                                            color="primary"
+                                            variant="contained"
                                             >Register
                                         </Button>
                                     </Link>
                                     <Link to="/login">
-                                        <Button color="secondary"
-                                            className={classes.typoButton}>
+                                        <Button
+                                            color="primary"
+                                            style={{color: "white"}}
+                                            >
                                             Login
                                         </Button>
                                     </Link>

@@ -14,6 +14,8 @@ import ProductDetails from './components/product-details'
 import Notifications from './components/notifications'
 import Favorites from './views/favs'
 import UserProfile from './components/user-profile'
+import {getFavorites} from "./products";
+import {subscribeAuction} from "./socket";
 
 import store, {
     subscribeAuctionAction, 
@@ -27,33 +29,26 @@ class App extends React.Component {
          console.log("store",store.getState())
         super(props)
         this.state = {
-            isOnline : store.getState().user.isLoggedIn
+            isOnline : store.getState().isLoggedIn
         }
     }
     componentDidMount(){
-
         store.subscribe(()=>{
             this.setState({
-                isOnline: store.getState().user.isLoggedIn
+                isOnline: store.getState().isLoggedIn
             })
         })
-
-        store.dispatch(subscribeAuctionAction(1))
-        let auctions = [
-            {
-                id: 1,
-                state: 'READY'
-            },
-        ]
-        // Check 
-        store.dispatch(updateAuctionListAction(auctions))
-        console.log(store.getState())
-        store.dispatch(auctionStartedAction(1))
-        console.log(store.getState())
+        if(store.getState().user.isLoggedIn){
+            getFavorites().then(res=>{
+                console.log("favorites",res)
+                res.map(favorite=>{
+                    subscribeAuction(favorite)
+                })
+            })
+        }
     }
 
     render(props) {
-
         return (
             <MuiThemeProvider theme={theme}>
                 <CssBaseline/>
