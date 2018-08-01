@@ -29,14 +29,13 @@ class App extends React.Component {
          console.log("store",store.getState())
         super(props)
         this.state = {
-            isOnline : store.getState().user.isLoggedIn
+            isOnline : store.getState().isLoggedIn
         }
     }
     componentDidMount(){
-
         store.subscribe(()=>{
             this.setState({
-                isOnline: store.getState().user.isLoggedIn
+                isOnline: store.getState().isLoggedIn
             })
         })
         if(store.getState().user.isLoggedIn){
@@ -47,13 +46,9 @@ class App extends React.Component {
                 })
             })
         }
-
-
-
     }
 
     render(props) {
-      
         return (
             <MuiThemeProvider theme={theme}>
                 <CssBaseline/>

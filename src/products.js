@@ -6,6 +6,7 @@ export const baseFavoritesUrl = `${baseUrl}/items`
 export const baseProductUrl = `${baseUrl}/items`
 export const categoriesUrl = `${baseUrl}/categories`
 export const auctionUrl = `${baseUrl}/auctions/`
+export const profileUser = `${baseUrl}/user/me`
 
 export function fetchProducts(){
     return fetch(baseProductUrl)
@@ -48,4 +49,13 @@ export function getBidDetails(bidId){
     let url = `${baseUrl}/bids/${bidId}`
     return fetch(url)
         .then(res=>res.json())
+}
+export function getUserDetails(){
+    return fetch(profileUser)
+        .then(res => res.json())
+}
+
+export function login(body){
+    return fetch(`${baseUrl}/login`, {method:'POST', body:JSON.stringify(body), mode:'cors'})
+        .then(res => res.json())
 }

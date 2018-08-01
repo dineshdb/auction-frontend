@@ -19,7 +19,7 @@ export const AUCTION_STARTED = 'AUCTION_STARTED'
 export const AUCTION_ENDED = 'AUCTION_ENDED'
 export const TOGGLE_FAVORITE = 'TOGGLE_FAVORITE'
 export const UPDATE_AUCTION_LIST = 'UPDATE_AUCTION_LIST'
-
+export const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE'
 // Action creators
 export const signIn = user =>({
     type : SIGN_IN,
@@ -84,17 +84,21 @@ function initializeState(){
         favorites: [],
         highestBid: [],
         highestBidder: []
+        isLoggedIn: false
     }    
     let user = JSON.parse(localStorage.getItem(USER_KEY)) || {}
+    if(user.header)
+        initialState.isLoggedIn = true
     return Object.assign({}, initialState, {user})
 }
 const reducer = ( state = initializeState(), action) => {
     switch (action.type){
         case SIGN_IN:
-
-            localStorage.setItem(USER_KEY, JSON.stringify(action.user))
+            let user = action.payload
+            user.header = user.userPassword
             let date = Date.now()
-            return Object.assign({}, state, {user: action.user, isLoggedIn : true, date})
+            localStorage.setItem(USER_KEY, JSON.stringify(user))
+            return Object.assign({}, state, {user, isLoggedIn : true, date})
         case SIGN_OUT:
             localStorage.removeItem(USER_KEY)
             return Object.assign({}, state, {user: {}, isLoggedIn: false, date: null})
@@ -143,6 +147,10 @@ const reducer = ( state = initializeState(), action) => {
             auctions[index].state = 'LIVE'
             let {auctionsStarted} = state
             return {...state,auctions,auctionsStarted:[...auctionsStarted,auctions[index]]}
+        }
+
+        case UPDATE_USER_PROFILE: {
+
         }
 
         case AUCTION_ENDED: {
@@ -280,7 +288,7 @@ export function getUserToken(state) {
 }
 
 export function isUserOnline(state){
-    return state.user.isLoggedIn
+    return state.isLoggedIn
 }
 export function getHighestBid(auctionId,state){
 

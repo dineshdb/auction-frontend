@@ -11,6 +11,7 @@ import axios from 'axios'
 import {Redirect } from 'react-router-dom'
 import {getFavorites} from "../../products";
 import {subscribeAuction} from "../../socket";
+import {login} from '../../products'
 
 const styles = theme => ({
     root: {
@@ -144,7 +145,6 @@ class LoginForm extends React.Component{
                 userEmail: this.state.userEmail,
                 userPassword: this.state.userPassword
             }
-
             axios.post(`http://localhost:8080/login`, (postingData),{crossDomain: true})
             .then((response) => {
                 console.log("USER details",response)
@@ -174,7 +174,6 @@ class LoginForm extends React.Component{
                 })
                 throw err
             })
-
         }
         handleRedirect(){
             this.setState({
