@@ -133,7 +133,7 @@ class ProductDetails extends React.Component {
             count : 0,
             image: null,
             auctionDetails:{},
-            isOnline : store.getState().user.isLoggedIn,
+            isOnline : store.getState().isLoggedIn,
             openDialog: false,
             participated: false,
             alreadyParticipated: false,
@@ -453,12 +453,6 @@ class ProductDetails extends React.Component {
                                                                     })
 
                                                                 })
-
-
-
-
-
-
                                                 }
                                                 else{
                                                     console.log("POST IT")
@@ -472,12 +466,7 @@ class ProductDetails extends React.Component {
                                                         },
                                                         data: biddingObject
                                                     })
-
                                                 }
-
-
-
-
                                             }
                                                 }
 
@@ -512,7 +501,7 @@ class ProductDetails extends React.Component {
                     </Card>
                 </Paper>
                 {
-                    (this.state.isOnline === undefined | !(this.state.isOnline)) && (
+                    (this.state.isOnline === undefined || !(this.state.isOnline)) && (
                         <Redirect to = "/login"/>
                     )
                 }
