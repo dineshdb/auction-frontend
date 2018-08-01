@@ -95,10 +95,14 @@ class SearchBar extends React.Component {
         }
     }
     componentDidMount(){
-        getCategories()
-            .then(cats => cats.sort((a,b) => a.categoryName < b.categoryName ? -1 : 1))
-            .then(categories => this.setState({ categories}))
-            .catch("Could not fetch categories")
+
+        if(store.getState().isLoggedIn){
+            getCategories()
+                .then(cats => cats.sort((a,b) => a.categoryName < b.categoryName ? -1 : 1))
+                .then(categories => this.setState({ categories}))
+                .catch("Could not fetch categories")
+        }
+
     }
         
     handleSearch(event){

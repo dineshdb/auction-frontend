@@ -7,10 +7,14 @@ import TileView from '../components/tile-view'
 import {fetchProducts, fetchEach,getAuctionDetails,fetchFavorites} from '../products'
 import Typography from '@material-ui/core/Typography'
 import store from '../store'
+import Paper from '@material-ui/core/Paper'
 const styles = (theme) =>({
     typo: {
-        fontSize: "50px",
+        fontSize: "30px",
         fontWeight: "lighter"
+    },
+    margin: {
+        margin: theme.spacing.unit*5
     }
 })
 class Home extends React.Component {
@@ -27,10 +31,25 @@ class Home extends React.Component {
         }
     }
     componentDidMount() {
+
         fetchProducts()
         .then(fetchEach)
         .then(gallery => {
-            this.setState({gallery})
+            let withFavoritesGallery = []
+            let favorites = []
+            gallery.map(item=>{
+                let temp = false
+                store.getState().favorites.map((id)=>{
+                    if (item.auction == id){
+                        temp=true
+                        favorites.push({...item,isFavorite: true})
+
+                    }
+                })
+                withFavoritesGallery.push({...item,isFavorite:temp})
+            })
+
+            this.setState({gallery:withFavoritesGallery,favorites})
             console.log("FAVORITES",store.getState())
 
         })
@@ -43,14 +62,20 @@ class Home extends React.Component {
         return (
             <div>
                 <SearchBar/>
+                <Paper square className={classes.margin}>
                 <Typography align="center" className={classes.typo}>
                         Favorites
                     </Typography>
-                <TileView items={this.state.favorites} basePath={"/product/"}/>
+                    <TileView items={this.state.favorites} basePath={"/product/"}/>
+                </Paper>
+
+                <Paper square className={classes.margin}>
                 <Typography align="center" className={classes.typo}>
                         Gallery
                     </Typography>
-                <TileView items={this.state.gallery} basePath={"/product/"}/>
+                    <TileView items={this.state.gallery} basePath={"/product/"}/>
+                </Paper>
+
             </div>
         )
     }

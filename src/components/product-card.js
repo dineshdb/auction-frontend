@@ -12,6 +12,7 @@ import Icon from '@material-ui/core/Icon';
 import store, {toggleFavorite} from '../store'
 import {connect} from 'react-redux'
 import Tooltip from '@material-ui/core/Tooltip';
+import {participateInAuction} from "../products";
 import Divider from '@material-ui/core/Divider'
 
 const styles = theme => ({
@@ -63,17 +64,18 @@ class Product extends React.Component {
     componentDidMount(){
         store.subscribe(() =>{
             this.setState({
-                isFavorite: this.isFavorite(this.props.item.itemId)
+                isFavorite: this.isFavorite(this.props.item.auction)
             })
         })
     }
     handleFavorite = (e) => {
-        let {itemId} = this.props.item
-        store.dispatch(toggleFavorite(itemId))
+        let {auction} = this.props.item
+        store.dispatch(toggleFavorite(auction))
         console.log(this.state.isFavorite, store.getState().favorites)
+
     }
     render() {
-        const { itemName,maxBid, bid,image, actionName, itemDescription, itemId,startingBid} = this.props.item;
+        const { itemName,maxBid, bid,image, actionName, itemDescription, itemId,startingBid,auction,isFavorite} = this.props.item;
         const { classes, baseUrl } = this.props
         return (<div onMouseEnter={()=>{
                 this.setState({
@@ -92,7 +94,7 @@ class Product extends React.Component {
              <CardActions>
                     <Tooltip title="Save to favorites">
                     <IconButton color="secondary" size="small" onClick={this.handleFavorite}>
-                        <Icon>{this.state.isFavorite ? "favorite": "favorite_outline"}</Icon>
+                        <Icon>{(this.state.isFavorite | isFavorite) ? "favorite": "favorite_outline"}</Icon>
                     </IconButton>
                     </Tooltip>
                 </CardActions>
