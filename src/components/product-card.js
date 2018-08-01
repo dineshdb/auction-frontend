@@ -61,8 +61,9 @@ class Product extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            isFavorite : this.isFavorite(props.item.itemId),
+            isFavorite : this.isFavorite(props.item.auction.auctionId),
             item : props.item,
+            auction: props.item.auction,
             hovered: false,
             elevation: 0,
             itemId : props.item.itemId
@@ -72,11 +73,20 @@ class Product extends React.Component {
         return store.getState().favorites.includes(id)
     }
     handleFavorite = (e) => {
-        let {auctionId} = this.props.item.auction
-       participateInAuction(auctionId).then(res=>{
-           store.dispatch(toggleFavorite(auctionId))
-       })
-
+    //    participateInAuction(auctionId).then(res=>{
+    //        store.dispatch(toggleFavorite(auctionId))
+    //        this.setState({
+    //            isFavorite: !this.isFavorite(this.state.auction.auctionId)
+    //        })
+    //    })
+       (this.isFavorite(this.state.auction.auctionId)?
+       unfavorite(this.state.auction.auctionId) : favorite(this.state.auction.auctionId))
+       .then(res => {
+           store.dispatch(toggleFavorite(this.state.auction.auctionId))
+           this.setState({
+               isFavorite: this.isFavorite(this.state.auction.auctionId)
+           })    
+       }).catch(console.log)
 /*
         (this.isFavorite(this.state.itemId)?
             unfavorite(this.state.itemId) : favorite(this.state.itemId))

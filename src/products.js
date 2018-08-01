@@ -1,4 +1,4 @@
-import {postForm, fetchJSON} from './fetch'
+import fetch, {postForm, fetchJSON} from './fetch'
 import store from './store'
 import {baseUrl} from './config'
 
@@ -35,12 +35,12 @@ export function favorite(auctionId){
 }
 
 export function unfavorite(auctionId){
-    let url = `${baseUrl}/auctions/${auctionId}/unfavorite/${store.getState().user.userId}`
-    return fetchJSON(url)    
+    let url = `${baseUrl}/auctions/${auctionId}/unfavorite`
+    return fetch(url)    
 }
 export function participateInAuction(auctionId){
     let url = `${baseUrl}/auctions/${auctionId}/participate`
-    return fetchJSON(url)
+    return fetch(url)
 }
 
 export function uploadFile(file){
