@@ -24,12 +24,14 @@ import Button from '@material-ui/core/Button'
 import {baseUrl} from "../config";
 import {getFavorites} from "../products";
 import {subscribeAuction} from "../socket";
-
+import ToolTip from '@material-ui/core/Tooltip'
+import SnackBar from '@material-ui/core/Snackbar'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
 let styles = (theme)=>{
     return {
         paper: {
-            marginLeft: theme.spacing.unit * 15,
-            marginRight: theme.spacing.unit * 15,
+
             marginTop: theme.spacing.unit*2
 
         },
@@ -54,7 +56,7 @@ let styles = (theme)=>{
             paddingTop: '56.25%'
         },
         title:{
-          fontSize: 20,
+          fontSize: 26,
           fontWeight: 300,
           color: "black",
             marginLeft: theme.spacing.unit,
@@ -64,15 +66,15 @@ let styles = (theme)=>{
 
         },
         subTitle:{
-            fontSize: 20,
-            fontWeight: 300,
+            fontSize: 16,
+            fontWeight: 200,
             color: "black",
-              marginLeft: theme.spacing.unit*5,
-              marginRight: theme.spacing.unit,
-              marginTop: theme.spacing.unit*3,
-              marginBottom: theme.spacing.unit*2,
-  
-          },
+            marginLeft: theme.spacing.unit*5,
+            marginRight: theme.spacing.unit*5,
+            marginTop: theme.spacing.unit,
+            marginBottom: theme.spacing.unit,
+
+        },
         top: {
             fontSize: 20,
             fontWeight: 200,
@@ -86,7 +88,6 @@ let styles = (theme)=>{
             marginLeft: theme.spacing.unit,
             marginRight: theme.spacing.unit,
             marginTop: theme.spacing.unit,
-            marginBottom: theme.spacing.unit,
         },
         actions: {
             display: 'flex',
@@ -115,12 +116,19 @@ let styles = (theme)=>{
             marginTop: theme.spacing.unit*2,
 
         },
+        baseMargin:{
+            margin: theme.spacing.unit*2
+        }
+        ,
         textMargin: {
             marginLeft: theme.spacing.unit*5,
             marginTop: theme.spacing.unit,
             marginRight: theme.spacing.unit,
             marginBottom: theme.spacing.unit*1
         },
+        innerDiv: {
+            marginRight: theme.spacing.unit*5
+        }
        
     }
 }
@@ -148,7 +156,8 @@ class ProductDetails extends React.Component {
             minutes: 10,
             highestBid: 0,
             bids: [],
-            forHighestBid: []
+            forHighestBid: [],
+            bidReject: false
 
 
 
@@ -158,9 +167,12 @@ class ProductDetails extends React.Component {
         if(store.getState().user.isLoggedIn){
             getFavorites().then(res=>{
                 console.log("favorites",res)
-                res.map(favorite=>{
-                    subscribeAuction(favorite)
-                })
+                if(res.length> 0){
+                    res.map(favorite=>{
+                        subscribeAuction(favorite)
+                    })
+                }
+
             })
         }
        // this.handleDuration()
@@ -346,6 +358,32 @@ class ProductDetails extends React.Component {
                                     className={classes.media}
                                     image={this.state.image}
                                 />
+                                <div className={classes.baseMargin}>
+                                    <Typography
+                                        align="left"
+                                        className={classes.title}
+                                        style={{fontSize: 20}}
+                                    >{details.itemName}
+
+                                    </Typography>
+
+                                    <Typography
+                                        className={classes.description}
+                                        style={{fontSize: 14}}
+                                    >{details.itemDescription}
+                                    </Typography>
+                                    <Typography
+                                        className={classes.description}
+                                        style={{fontSize: 17}}
+                                    >STARTING BID
+                                    </Typography>
+                                    <Typography
+                                        className={classes.description}
+                                        style={{fontSize: 17}}
+                                    >Rs. {details.startingBid}
+                                    </Typography>
+                                </div>
+
                             </Grid>
                             <Grid item xs={6}>
                                     <Typography
@@ -355,10 +393,6 @@ class ProductDetails extends React.Component {
                                     
                                         </Typography>
 
-                                    <Typography
-                                        className={classes.description}
-                                    >{details.itemDescription}
-                                    </Typography>
                                     <Grid container spacing={24}>
                                     <Grid item xs={7}>
                                     </Grid>
@@ -376,61 +410,70 @@ class ProductDetails extends React.Component {
                                     </Grid>
                                     </Grid>
                                    
-                                <Divider/>
+                                <Divider className={classes.paper}/>
                                
                                 {!this.state.eventEnded && (
                                     <Paper square className={classes.biddingForm}>
-                                        <br/>
-                                        <Typography className={classes.subTitle} style={{marginTop: "20px"}}>
-                                            Starting Bid Rs.{this.state.details.startingBid}
-                                        </Typography>
-
-
-                                        {this.state.alreadyParticipated ?  (<div>
+                                        <div className={classes.innerDiv}>
+                                            <br/>
                                             <Typography className={classes.subTitle} style={{marginTop: "20px"}}>
-                                                Highest Bid Rs.{highestBid > localHighest? highestBid: localHighest}
+                                                Starting Bid Rs.{this.state.details.startingBid}
                                             </Typography>
-                                            <TextField
-                                                className={classes.textMargin}
-                                                placeholder="Your Bid"
-                                                style={{width: "80%"}}
-                                                fullWidth
-                                                onChange={(e)=>{
-                                                    this.setState({
-                                                        bidAmount: e.target.value
-                                                    })
+
+
+                                            {this.state.alreadyParticipated ?  (<div>
+                                                <Typography className={classes.subTitle} style={{marginTop: "20px"}}>
+                                                    Highest Bid Rs.{highestBid > localHighest? highestBid: localHighest}
+                                                </Typography>
+                                                <TextField
+                                                    className={classes.textMargin}
+                                                    placeholder="Your Bid"
+                                                    style={{width: "90%"}}
+                                                    fullWidth
+                                                    onChange={(e)=>{
+                                                        this.setState({
+                                                            bidAmount: e.target.value
+                                                        })
+                                                    }}
+                                                />
+                                            </div>): <Typography className={classes.subTitle} style={{marginTop: "20px"}}>
+                                                Participate now to get the live update
+                                            </Typography> }
+
+                                            <CustomButton
+                                                name={this.state.buttonName}
+                                                color="primary"
+                                                variant="contained"
+                                                style={{
+                                                    width: "90%",
+                                                    borderRadius: 0,
+                                                    marginTop: "20px"
                                                 }}
-                                            />
-                                        </div>): <Typography className={classes.subTitle} style={{marginTop: "20px"}}>
-                                           Participate now to get the live update
-                                        </Typography> }
+                                                property={classes.textMargin}
+                                                handler={()=>{
 
-                                        <CustomButton
-                                            name={this.state.buttonName}
-                                            color="primary"
-                                            variant="contained"
-                                            style={{
-                                                width: "80%",
-                                                borderRadius: 0,
-                                                marginTop: "20px"
-                                            }}
-                                            property={classes.textMargin}
-                                            handler={()=>{
-                                                let today = moment()
-                                                let auction = this.state.auctionDetails
-                                                let biddingObject = {
-                                                    bidderId: store.getState().user.id,
-                                                    itemId: id,
-                                                    auctionId: auction.auctionId,
-                                                    bidAmount: this.state.bidAmount,
-                                                    bidDate: `${today.format('YYYY-MM-DD')}`,
-                                                    bidTime: `${today.format('HH:mm:ss')}`
+                                                    if((this.state.participated || this.state.alreadyParticipated) &&  (this.state.bidAmount < details.startingBid)){
+                                                        console.log("LESS")
+                                                      this.setState({
+                                                          bidReject: true
+                                                      })
+                                                    }
+                                                  else{
+                                                        let today = moment()
+                                                        let auction = this.state.auctionDetails
+                                                        let biddingObject = {
+                                                            bidderId: store.getState().user.id,
+                                                            itemId: id,
+                                                            auctionId: auction.auctionId,
+                                                            bidAmount: this.state.bidAmount,
+                                                            bidDate: `${today.format('YYYY-MM-DD')}`,
+                                                            bidTime: `${today.format('HH:mm:ss')}`
 
-                                                }
+                                                        }
 
-                                                if(!this.state.alreadyParticipated){
-                                                        console.log("NOT participated")
-                                                    subscribeAuction(auction.auctionId)
+                                                        if(!this.state.alreadyParticipated){
+                                                            console.log("NOT participated")
+                                                            subscribeAuction(auction.auctionId)
 
                                                             participateInAuction(auction.auctionId)
                                                                 .then(res => {
@@ -458,56 +501,55 @@ class ProductDetails extends React.Component {
                                                                     })
 
                                                                 })
+                                                        }
+                                                        else{
+                                                            console.log("POST IT")
+                                                            console.log(this.state,"store",store.getState())
+                                                            // store.dispatch(subscribeAuctionAction(this.state.auctionDetails.auctionId))
+                                                            axios({
+                                                                method: 'POST',
+                                                                url: `http://localhost:8080/bids/saveBid`,
+                                                                headers: {
+                                                                    'Authorization':store.getState().user.header
+                                                                },
+                                                                data: biddingObject
+                                                            })
+
+                                                        }
 
 
 
-
+                                                    }
 
 
                                                 }
-                                                else{
-                                                    console.log("POST IT")
-                                                    console.log(this.state,"store",store.getState())
-                                                   // store.dispatch(subscribeAuctionAction(this.state.auctionDetails.auctionId))
-                                                    axios({
-                                                        method: 'POST',
-                                                        url: `http://localhost:8080/bids/saveBid`,
-                                                        headers: {
-                                                            'Authorization':store.getState().user.header
-                                                        },
-                                                        data: biddingObject
-                                                    })
-
                                                 }
 
 
+                                            />
+                                            <Divider className={classes.subTitle}/>
+                                            <Button
+
+                                                color="primary"
+                                                variant="outlined"
+                                                style={{
+                                                    width: "90%",
+                                                    borderRadius: 0
+                                                }}
+                                                className={classes.textMargin}
+                                                onClick={()=>{
+                                                    participateInAuction(this.state.auctionDetails.auctionId).then(res=>{console.log("Auction Added",res)})
+
+                                                }}>
+                                                <Favorite variant="outlined"/>
+                                                Save this item
+
+                                            </Button>
 
 
-                                            }
-                                                }
-
-
-                                        />
-                                        <Divider style={{marginTop: "5px",marginBottom: "5px",marginLeft: "35px",marginRight: "50px"}}/>
-                                        <Button
-
-                                            color="primary"
-                                            variant="outlined"
-                                            style={{
-                                                width: "80%",
-                                                borderRadius: 0
-                                            }}
-                                            className={classes.textMargin}
-                                            onClick={()=>{
-                                                participateInAuction(this.state.auctionDetails.auctionId).then(res=>{console.log("Auction Added",res)})
-
-                                            }}>
-                                            <Favorite variant="outlined"/>
-                                            Save this item
-
-                                        </Button>
-
+                                        </div>
                                     </Paper>
+
                                 )
                                 }
 
@@ -516,17 +558,45 @@ class ProductDetails extends React.Component {
                         </Grid>
                     </Card>
                 </Paper>
+               <SnackBar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.state.bidReject}
+                    autoHideDuration={6000}
+                    onClose={()=>{
+                        this.setState({
+                            bidReject: false
+                        })
+                    }}
+                    ContentProps={{
+                        'aria-describedby': 'message-id',
+                    }}
+                    message={<span id="message-id">Oops!!! You must bid greater than starting bid </span>}
+                    action={[
+                        <IconButton
+                            key="close"
+                            aria-label="Close"
+                            color="inherit"
+                            className={classes.close}
+                            onClick={()=>{
+                                this.setState({
+                                    bidReject: false
+                                })
+                            }}
+                        >
+                            <CloseIcon />
+                        </IconButton>,
+                    ]}
+                />
+
                 {
                     (this.state.isOnline === undefined | !(this.state.isOnline)) && (
                         <Redirect to = "/login"/>
                     )
                 }
-                {/*{*/}
-                    {/*(this.state.participated && (*/}
-                        {/*<Redirect to = "/" />*/}
-                        {/*)*/}
-                    {/*)*/}
-                }
+
             </div>
         )
     }

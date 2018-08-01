@@ -42,9 +42,12 @@ class App extends React.Component {
         if(store.getState().user.isLoggedIn){
             getFavorites().then(res=>{
                 console.log("favorites",res)
-                res.map(favorite=>{
-                    subscribeAuction(favorite)
-                })
+                if(res.length){
+                    res.map(favorite=>{
+                        subscribeAuction(favorite)
+                    })
+                }
+
             })
         }
 

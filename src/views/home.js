@@ -10,8 +10,7 @@ import store from '../store'
 import Paper from '@material-ui/core/Paper'
 const styles = (theme) =>({
     typo: {
-        fontSize: "30px",
-        fontWeight: "lighter"
+        fontSize: "30px"
     },
     margin: {
         margin: theme.spacing.unit*5
@@ -62,19 +61,11 @@ class Home extends React.Component {
         return (
             <div>
                 <SearchBar/>
-                <Paper square className={classes.margin}>
-                <Typography align="center" className={classes.typo}>
-                        Favorites
-                    </Typography>
-                    <TileView items={this.state.favorites} basePath={"/product/"}/>
-                </Paper>
-
-                <Paper square className={classes.margin}>
-                <Typography align="center" className={classes.typo}>
+                <Typography align="center" className={classes.typo} variant="display1">
                         Gallery
                     </Typography>
                     <TileView items={this.state.gallery} basePath={"/product/"}/>
-                </Paper>
+
 
             </div>
         )

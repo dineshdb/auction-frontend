@@ -83,7 +83,8 @@ function initializeState(){
         subscriptions: [],
         favorites: [],
         highestBid: [],
-        highestBidder: []
+        highestBidder: [],
+        currentBidder: 0
     }    
     let user = JSON.parse(localStorage.getItem(USER_KEY)) || {}
     return Object.assign({}, initialState, {user})
@@ -200,12 +201,12 @@ const reducer = ( state = initializeState(), action) => {
                             maximumBidder: maxBidder
                         }
                         console.log("STATE",state)
-                        return {...state,highestBid:temp}
+                        return {...state,highestBid:temp,currentBidder:userId}
 
                     }
                 })
                 if(newAuction){
-                    return {...state,highestBid:[...state.highestBid,{auctionId:auctionId,maximumBid:maximum,maximumBidder: maxBidder}]}
+                    return {...state,currentBidder: userId,highestBid:[...state.highestBid,{auctionId:auctionId,maximumBid:maximum,maximumBidder: maxBidder}]}
                 }
                 else{
                     return state
@@ -230,13 +231,13 @@ const reducer = ( state = initializeState(), action) => {
                         maximumBid: maximum,
                         maximumBidder: maxBidder
                     }
-                    Object.assign({}, state, {auctions: [...auctions, auction],highestBid:temp})
+                    Object.assign({}, state, {auctions: [...auctions, auction],highestBid:temp,currentBidder:userId})
 
                 }
             })
             if(newUser){
                 console.log("STATE",state)
-                return Object.assign({}, state, {auctions: [...auctions, auction],highestBid:[...state.highestBid,{auctionId:auctionId,maximumBid:maximum,maximumBidder:maxBidder}]})
+                return Object.assign({}, state, {currentBidder:userId,auctions: [...auctions, auction],highestBid:[...state.highestBid,{auctionId:auctionId,maximumBid:maximum,maximumBidder:maxBidder}]})
             }
             else{
                 return state

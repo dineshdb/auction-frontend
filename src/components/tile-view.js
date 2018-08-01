@@ -10,7 +10,7 @@ let styles = theme => ({
         margin: 20
     },
     item : {
-        maxWidth: 260,
+        maxWidth: "250px",
         maxHeight: "80%"
     },
     mainRoot:{
@@ -24,16 +24,10 @@ class TileView extends React.Component {
     constructor(props){
         super(props)
     }
-    componentDidMount(){
-    }
     render(props){
         const {classes, items, basePath} = this.props
         return (
-            <Paper
-               className={classes.mainRoot}
-               square
-               elevation={0}
-            >
+            <Paper elevation={0} color="white">
             <Grid container className={classes.root} spacing={10}>
                 {items.map(value =>{
                 return(
@@ -50,6 +44,7 @@ class TileView extends React.Component {
                 )}
             </Grid>
             </Paper>
+
         )
     }
 }

@@ -18,14 +18,16 @@ import Divider from '@material-ui/core/Divider'
 const styles = theme => ({
     card: {
         marginTop: theme.spacing.unit*2,
-        marginBottom: theme.spacing.unit*2,
+        marginBottom: theme.spacing.unit,
         marginLeft: theme.spacing.unit*1,
         fontSize: '16px',
         maxWidth: 250,
        
     },
     media: {
-        margin: theme.spacing.unit*3,
+        marginLeft: theme.spacing.unit*3,
+        marginRight: theme.spacing.unit*3,
+        marginBottom: theme.spacing.unit,
         height: 0,
         paddingTop: '56.25%'
     },
@@ -37,7 +39,10 @@ const styles = theme => ({
         width: "100%"
     },
     divider: {
-        margin: theme.spacing.unit*3,
+        marginTop: theme.spacing.unit*2,
+        marginLeft: theme.spacing.unit*3,
+        marginRight: theme.spacing.unit*3,
+        marginBottom: theme.spacing.unit,
         height: 0,
         paddingTop: "1%"
     },
@@ -111,7 +116,7 @@ class Product extends React.Component {
                
                 <CardContent>
                     <div className={classes.flex}>
-                        <Typography gutterBottom variant="headline" component="h3">
+                        <Typography gutterBottom variant="headline" component="h3" style={{fontWeight: "lighter"}}>
                         {itemName}</Typography>
                         <Typography
                             className={classes.right}
@@ -121,13 +126,6 @@ class Product extends React.Component {
                             }}
                         > {maxBid} </Typography>
                     </div>
-                    <Typography
-                        className={classes.brief}
-                        style={{
-                            fontWeight: 400,
-                            color: "#6b6b6b"
-                        }}
-                    >{itemDescription}</Typography>
                      <Typography gutterBottom variant="headline" component="h3">
                         Rs.{startingBid}</Typography>
                 </CardContent>
