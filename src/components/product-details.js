@@ -159,7 +159,7 @@ class ProductDetails extends React.Component {
             bidReject: false,
             currentBidder: 0,
             currentBid: 0,
-            currentHighest:0
+            currentHighest:0,
             msg: '',
             enabled: false,
         }
