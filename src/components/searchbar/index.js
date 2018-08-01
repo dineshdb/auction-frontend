@@ -159,49 +159,20 @@ class SearchBar extends React.Component {
                                 item
                                 xs={8}
                             >
-                                <Toolbar>
-                                <Button
-                                    onClick = {this.handleCategoryClick.bind(this)}
-                                    className={classes.button}
-                                >
-                                    {this.state.selectedCategory}
-                                    {this.state.categoryOpen?<ExpandLess/>:<ExpandMore/>}
 
-                                </Button>
-                                <Button
-                                    className={classes.button}
-                                >
-                                    Ending Today
-                                </Button>
-                                <Button
-                                    className={classes.button}
-                                >
-                                    New Today
-                                </Button>
-                                    <Button
-                                        className={classes.button}
-                                        onClick={ ()=> {
-                                           let user = JSON.parse(localStorage.getItem(USER_TOKEN))
-                                            if(!user){
-                                               this.setState({
-                                                   login: true
-                                               })
-                                            }
-                                            else{
-                                                localStorage.setItem(USER_PRODUCTS,JSON.stringify({
-                                                    on: true
-                                                }))
-                                            }
-                                        }}
-                                    >
-                                        My Products
-                                    </Button>
-                                </Toolbar>
                             </Grid>
 
 
                             <Grid item xs={4}>
                                 <Toolbar>
+                                    <Button
+                                        onClick = {this.handleCategoryClick.bind(this)}
+                                        className={classes.button}
+                                    >
+                                        {this.state.selectedCategory}
+                                        {this.state.categoryOpen?<ExpandLess/>:<ExpandMore/>}
+
+                                    </Button>
                                 <TextField
                                     style={{color: "white"}}
                                     name="Search"

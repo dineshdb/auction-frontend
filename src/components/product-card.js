@@ -14,6 +14,7 @@ import {connect} from 'react-redux'
 import Tooltip from '@material-ui/core/Tooltip';
 import {participateInAuction} from "../products";
 import Divider from '@material-ui/core/Divider'
+import {subscribeAuction} from "../socket";
 
 const styles = theme => ({
     card: {
@@ -75,8 +76,9 @@ class Product extends React.Component {
     }
     handleFavorite = (e) => {
         let {auction} = this.props.item
-        store.dispatch(toggleFavorite(auction))
-        console.log(this.state.isFavorite, store.getState().favorites)
+       participateInAuction(auction).then(res=>{
+           store.dispatch(toggleFavorite(auction))
+       })
 
     }
     render() {

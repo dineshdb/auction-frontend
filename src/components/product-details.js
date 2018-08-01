@@ -28,6 +28,7 @@ import ToolTip from '@material-ui/core/Tooltip'
 import SnackBar from '@material-ui/core/Snackbar'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
+import Animate from 'react-simple-animate'
 let styles = (theme)=>{
     return {
         paper: {
@@ -157,7 +158,10 @@ class ProductDetails extends React.Component {
             highestBid: 0,
             bids: [],
             forHighestBid: [],
-            bidReject: false
+            bidReject: false,
+            currentBidder: 0,
+            currentBid: 0,
+            currentHighest:0
 
 
 
@@ -336,8 +340,19 @@ class ProductDetails extends React.Component {
                 highestBidder = bid.maximumBidder
             }
         })
+        if (highestBid>this.state.currentHighest){
+            this.setState({
+                minutes: this.state.minutes+2,
+                currentHighest: highestBid
+            })
+
+        }
+
+
+
 
         return (
+
             <div className={classes.root}>
             <div style={{display: 'none'}}>
             
@@ -392,8 +407,12 @@ class ProductDetails extends React.Component {
                                         >{details.itemName}
                                     
                                         </Typography>
+                                <Typography className={classes.title} style={{marginTop: "20px"}}>
+                                    Rs.{this.state.details.startingBid}
+                                </Typography>
 
-                                    <Grid container spacing={24}>
+
+                                <Grid container spacing={24}>
                                     <Grid item xs={7}>
                                     </Grid>
                                     <Grid item xs={5}>
@@ -416,9 +435,6 @@ class ProductDetails extends React.Component {
                                     <Paper square className={classes.biddingForm}>
                                         <div className={classes.innerDiv}>
                                             <br/>
-                                            <Typography className={classes.subTitle} style={{marginTop: "20px"}}>
-                                                Starting Bid Rs.{this.state.details.startingBid}
-                                            </Typography>
 
 
                                             {this.state.alreadyParticipated ?  (<div>
@@ -439,6 +455,9 @@ class ProductDetails extends React.Component {
                                             </div>): <Typography className={classes.subTitle} style={{marginTop: "20px"}}>
                                                 Participate now to get the live update
                                             </Typography> }
+
+                                                {store.getState().currentBid}
+
 
                                             <CustomButton
                                                 name={this.state.buttonName}
