@@ -83,7 +83,7 @@ function initializeState(){
         subscriptions: [],
         favorites: [],
         highestBid: [],
-        highestBidder: []
+        highestBidder: [],
         isLoggedIn: false
     }    
     let user = JSON.parse(localStorage.getItem(USER_KEY)) || {}
