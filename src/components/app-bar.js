@@ -46,7 +46,7 @@ class HomeBar extends React.Component {
         super(props)
         let state = store.getState()
         this.state = {
-            isOnline: state.user.isLoggedIn,
+            isOnline: state.isLoggedIn,
             userId: "",
             fireHome: false,
             userName: "",
@@ -57,24 +57,22 @@ class HomeBar extends React.Component {
         store.subscribe(()=>{
             let state = store.getState()
             this.setState({
-                isOnline: store.getState().user.isLoggedIn,
+                isOnline: store.getState().isLoggedIn,
                 favoritesCount: state.favorites.length
             })
         })
-        //remove
-
     }
-    handleLogOut(){
+    handleLogOut = () =>{
         store.dispatch({type: 'SIGN_OUT'})
         this.fireHome()        
     }
-    fireHome(){
+    fireHome = () =>{
         this.setState({
             fireHome: true,
             anchorEl: null
         })
     }
-    handleSearch(event){
+    handleSearch = (event) => {
         this.setState({
             searchName: event.target.value
         })
@@ -86,10 +84,10 @@ class HomeBar extends React.Component {
         this.setState({ anchorEl: null });
     };
 
-    gotoHelp(){
+    gotoHelp = () => {
         this.handleClose()
     }
-    openProfile(){
+    openProfile = () =>{
         this.handleClose()
     }
     render() {

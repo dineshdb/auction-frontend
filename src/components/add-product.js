@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+import { withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
-import Button from '@material-ui/core/Button'
 import axios from 'axios'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
@@ -17,9 +15,9 @@ import BootStrappedTextField from './textFields'
 import SelectItem from "./dialogs";
 import {Redirect} from 'react-router-dom'
 import store from '../store'
-import {getCategories} from '../products'
 import CloseIcon from "@material-ui/icons/Close"
 import IconButton from '@material-ui/core/IconButton'
+import {getCategories, uploadFile} from '../products'
 
 const styles = theme => ({
     root: {
@@ -35,18 +33,15 @@ const styles = theme => ({
     },
     button: {
         margin: theme.spacing.unit*3,
-
     },
     close:{
         marginLeft: theme.spacing.unit*80
     },
     card: {
-
         marginTop: "8%",
         height: "100%"
     },
     media: {
-
         paddingTop: '56.25%',
         height: "52.57%"// 16:9
     },
@@ -58,7 +53,6 @@ const styles = theme => ({
     },
     margin: {
         margin: theme.spacing.unit,
-
     },
     leftName: {
        margin: theme.spacing.unit,
@@ -66,7 +60,6 @@ const styles = theme => ({
         fontWeight: "lighter",
 
     },
-
     bootstrapRoot: {
         padding: 0,
         'label + &': {
@@ -116,12 +109,9 @@ const styles = theme => ({
         width: "100%",
         marginLeft: theme.spacing.unit*2
     },
-
 });
 
 class SellProductForm extends React.Component {
-
-
     constructor(props){
         super(props)
         this.state={
@@ -143,9 +133,6 @@ class SellProductForm extends React.Component {
             image: "",
             fireSuccessful: false,
             categoryId: null
-
-
-
         }
         this.fileInput = React.createRef()
     }
@@ -218,7 +205,6 @@ class SellProductForm extends React.Component {
                                                                 title: event.target.value
                                                             })
                                                         }}
-
                                                     />
                                                 </Grid>
                                             </Grid>
@@ -321,24 +307,15 @@ class SellProductForm extends React.Component {
                                                            startingBid: startingBid
                                                        }
                                                        //TODO LOTS OF CRABS
-                                                      let imagePostObject = new FormData()
-                                                       imagePostObject.append('file',selectedImage)
-                                                           axios({
-                                                               method: 'POST',
-                                                               url: `http://localhost:8080/uploadFile/`,
-                                                               headers: {
-                                                                   'Authorization': store.getState().user.header,
-                                                                    'Content-Type': 'multipart/form-data'
-                                                               },
-                                                               data: imagePostObject
-                                                           }).then((response)=>{
-                                                                this.setState({
-                                                                    image:response.data.fileDownloadUri
-                                                                })
-                                                               console.log(response,'url of image')
-
-                                                           })
-
+                                                        let imagePostObject = new FormData()
+                                                        imagePostObject.append('file',selectedImage)
+                                                        uploadFile( imagePostObject)
+                                                        .then(res => res.json())
+                                                        .then(res =>{
+                                                            this.setState({
+                                                                image:res.fileDownloadUri
+                                                            })                                                      
+                                                        })
                                                    }}
                                                    handleImage={this.handleSelectionOfImage.bind(this)}
                                                    handleDescription={(event)=>{
@@ -374,7 +351,6 @@ class SellProductForm extends React.Component {
                                                         categoryId = category.categoryId
                                                     }
                                                 })
-                                                console.log("user",store.getState().user)
                                                 let auctionObject = {
                                                     auctionName: this.state.title,
                                                     auctionTime: this.state.eventTime,
@@ -386,23 +362,21 @@ class SellProductForm extends React.Component {
                                                             itemName: this.state.itemName,
                                                             itemDescription: this.state.itemDescription,
                                                             startingBid: Number(this.state.startingBid),
-                                                            seller:Number(store.getState().user.id),
+                                                            seller:Number(store.getState().user.userId),
                                                             image: this.state.image,
                                                             auction: null,
                                                             bids: [],
                                                             itemCategories: [categoryId]
-
-
-
                                                         }
                                                     ],
-                                                    seller: Number(store.getState().user.id),
+                                                    seller: store.getState().user.userId,
                                                     bids: [],
                                                     bidders: []
                                                   //  items: this.state.itemObject
                                                 }
                                                 console.log("AUCTION OBJECT",auctionObject)
                                                 console.log("user",store.getState().user)
+
                                                 axios({
                                                     method: 'POST',
                                                     url: `http://localhost:8080/auctions/createAuction`,
@@ -422,7 +396,6 @@ class SellProductForm extends React.Component {
                                      <Grid item xs={3}>
                                     </Grid>
                                 </Grid>
-
                             </Paper>
                         </Grid>
                         <Grid item xs={4}>
@@ -436,7 +409,6 @@ class SellProductForm extends React.Component {
             </div>
         )
     }
-
 }
 
 SellProductForm.propTypes = {

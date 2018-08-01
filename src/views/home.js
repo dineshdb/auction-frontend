@@ -14,10 +14,6 @@ import Tab from '@material-ui/core/Tab';
 import Favorite from '@material-ui/icons/Favorite'
 import Gallery from '@material-ui/icons/Image'
 const styles = (theme) =>({
-    typo: {
-        fontSize: "30px",
-        fontWeight: "lighter"
-    },
     margin: {
         margin: theme.spacing.unit*5
     },
@@ -37,7 +33,10 @@ class Home extends React.Component {
             user: null,
             favorites: [],
             gallery: [],
-            value:0
+            endToday: [],
+            newToday: [],
+            mine: [],
+            value:0,
         }
     }
     componentDidMount() {
@@ -57,7 +56,6 @@ class Home extends React.Component {
                                 if (item.auction == id){
                                     temp=true
                                     favorites.push({...item,isFavorite: true})
-
 
                                 }
                             })
@@ -94,10 +92,6 @@ class Home extends React.Component {
                 {value === 0 && <TileView items={this.state.favorites} basePath={"/product/"}/>}
                 {value === 1 && <TileView items={this.state.gallery} basePath={"/product/"}/>}
                 {value === 2 && <TileView items={this.state.gallery} basePath={"/product/"}/>}
-
-
-
-
 
             </div>
         )
