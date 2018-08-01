@@ -46,7 +46,7 @@ function auctionCallback(id){
         if(msg.startsWith("bid")){
             console.log("GOT ",msg)
             let params = msg.split(' ')
-            auctionBid(id, Number.parseInt(params[1]), Number.parseInt(params[2]))
+            auctionBid(id, Number.parseInt(params[2]), Number.parseInt(params[3]))
         } else if( msg.startsWith("end")){
             auctionEnded(id)
         } else if(msg.startsWith("start")){
@@ -59,9 +59,9 @@ export function subscribeAuction(id){
     if(wsClient.connected){
         let subscription = wsClient.subscribe(`/auction/${id}`, auctionCallback(id))
         console.log("HEY DATA ON SUBSCRIBE",subscription)
-        if(subscriptions[id]){
-            subscriptions[id].unsubscribe()
-        }    
+        // if(subscriptions[id]){
+        //     subscriptions[id].unsubscribe()
+        // }
         subscriptions[id] = subscription
     } else {
         futureList.push(id)

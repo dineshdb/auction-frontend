@@ -14,6 +14,8 @@ import ProductDetails from './components/product-details'
 import Notifications from './components/notifications'
 import Favorites from './views/favs'
 import UserProfile from './components/user-profile'
+import {getFavorites} from "./products";
+import {subscribeAuction} from "./socket";
 
 import store, {
     subscribeAuctionAction, 
@@ -37,6 +39,15 @@ class App extends React.Component {
                 isOnline: store.getState().user.isLoggedIn
             })
         })
+        if(store.getState().user.isLoggedIn){
+            getFavorites().then(res=>{
+                console.log("favorites",res)
+                res.map(favorite=>{
+                    subscribeAuction(favorite)
+                })
+            })
+        }
+
 
 
     }

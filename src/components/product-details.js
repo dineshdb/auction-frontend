@@ -10,19 +10,20 @@ import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid'
 import {CustomButton} from "./buttons";
 import Divider from '@material-ui/core/Divider'
-import store, {subscribeAuctionAction,updateAuctionListAction} from '../store'
+import store, {subscribeAuctionAction,updateAuctionListAction,getHighestBid} from '../store'
 import {Redirect } from 'react-router-dom'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {participateInAuction,getAuctionDetails,setBid} from '../products'
+import {participateInAuction,getAuctionDetails,setBid,getBidDetails} from '../products'
 import BootStrappedInput from '../components/textFields'
 import moment from 'moment'
 import TextField from '@material-ui/core/TextField'
-import Favorite from '@material-ui/icons/Favorite'
+import Favorite from '@material-ui/icons/FavoriteBorder'
 import Button from '@material-ui/core/Button'
 import {baseUrl} from "../config";
-
+import {getFavorites} from "../products";
+import {subscribeAuction} from "../socket";
 
 let styles = (theme)=>{
     return {
@@ -34,7 +35,7 @@ let styles = (theme)=>{
         },
         biddingForm: {
            margin: theme.spacing.unit,
-           height: 300,
+           height: 350,
            opacity: "0.7"
         
         },
@@ -144,22 +145,36 @@ class ProductDetails extends React.Component {
             eventStarted: false,
             eventEnded: false,
             seconds: 60,
-            minutes: 10
+            minutes: 10,
+            highestBid: 0,
+            bids: [],
+            forHighestBid: []
 
 
 
         }
     }
     componentDidMount(){
-
+        if(store.getState().user.isLoggedIn){
+            getFavorites().then(res=>{
+                console.log("favorites",res)
+                res.map(favorite=>{
+                    subscribeAuction(favorite)
+                })
+            })
+        }
+       // this.handleDuration()
        this.tick()
 
     }
     tick(){
+
         setInterval(this.handleDuration,1000)
 
     }
     handleDuration = ()=>{
+       // let highest = getHighestBid(this.state.auctionDetails.auctionId,store.getState())
+
         if(this.state.eventStarted){
             if(this.state.minutes >= 1){
                 if(this.state.seconds <= 0){
@@ -191,7 +206,7 @@ class ProductDetails extends React.Component {
 
 
             if(duration_ > 0){
-                duration = duration._data
+
                 this.setState({
                     totalTime: duration,
                 })
@@ -199,8 +214,7 @@ class ProductDetails extends React.Component {
             else{
 
                 if (total_minutes < 11){
-                    console.log("duration",duration)
-                    console.log("minutes",minutes,"seonds",seconds)
+
                     this.setState({
                         minutes: 11-minutes,
                         seconds: 60-seconds
@@ -217,6 +231,9 @@ class ProductDetails extends React.Component {
 
             }
         }
+        // this.setState({
+        //     highestBid: highest
+        // })
 
     }
 
@@ -233,6 +250,7 @@ class ProductDetails extends React.Component {
                     'Authorization':store.getState().user.header
                 },
             }).then((res)=>{
+
                 this.setState({
                     details: res.data,
                     count: 1
@@ -256,19 +274,31 @@ class ProductDetails extends React.Component {
                             'Authorization':store.getState().user.header
                         },
                     }).then(res=>{
-                        console.log("auctionDetails",res)
-                        console.log("in store",store.getState())
+
                         let participated = false
                         let buttonName = "Participate"
                         res.data.bidders.map((bidder)=>{
                             if(bidder == userId){
                                 participated=true,
-                                    buttonName="Participated"
+                                    buttonName="Bid"
                             }
                         })
-                        let data = res.data
 
-                       console.log(moment(data.auctionDate+' '+data.auctionTime),"eventDateTime")
+                        res.data.bids.map((bid)=>{
+                            getBidDetails(bid)
+                                .then((res)=>{
+
+                                   this.setState({
+                                       bids: [...this.state.bids,{
+                                           auctionId: res.auction.auctionId,
+                                           userId: res.bidder,
+                                           bidAmount: res.bidAmount
+                                       }],
+                                       forHighestBid: [...this.state.forHighestBid,res.bidAmount]
+                                   })
+                                })
+                        })
+                        let data = res.data
                         this.setState({
                             auctionDetails: res.data,
                             alreadyParticipated: participated,
@@ -280,7 +310,12 @@ class ProductDetails extends React.Component {
                 })
             })
         }
-        const {details,auctionDetails} = this.state
+        const {details,auctionDetails,bids,forHighestBid} = this.state
+        let highestBid = this.state.details.startingBid
+        if(forHighestBid){
+            highestBid = Math.max.apply(null,forHighestBid)
+        }
+
         return (
             <div className={classes.root}>
             <div style={{display: 'none'}}>
@@ -338,21 +373,31 @@ class ProductDetails extends React.Component {
                                     <Paper square className={classes.biddingForm}>
                                         <br/>
                                         <Typography className={classes.subTitle} style={{marginTop: "20px"}}>
-                                            Rs.{this.state.details.startingBid}
+                                            Starting Bid Rs.{this.state.details.startingBid}
                                         </Typography>
-                                        <TextField
-                                            className={classes.textMargin}
-                                            placeholder="Your Bid"
-                                            style={{width: "80%"}}
-                                            fullWidth
-                                            onChange={(e)=>{
-                                                this.setState({
-                                                    bidAmount: e.target.value
-                                                })
-                                            }}
-                                        />
+
+
+                                        {this.state.alreadyParticipated ?  (<div>
+                                            <Typography className={classes.subTitle} style={{marginTop: "20px"}}>
+                                                Highest Bid Rs.{store.getState().highestBid > highestBid? store.getState().highestBid : highestBid}
+                                            </Typography>
+                                            <TextField
+                                                className={classes.textMargin}
+                                                placeholder="Your Bid"
+                                                style={{width: "80%"}}
+                                                fullWidth
+                                                onChange={(e)=>{
+                                                    this.setState({
+                                                        bidAmount: e.target.value
+                                                    })
+                                                }}
+                                            />
+                                        </div>): <Typography className={classes.subTitle} style={{marginTop: "20px"}}>
+                                           Participate now to get the live update
+                                        </Typography> }
+
                                         <CustomButton
-                                            name="Place Bid"
+                                            name={this.state.buttonName}
                                             color="primary"
                                             variant="contained"
                                             style={{
@@ -373,35 +418,65 @@ class ProductDetails extends React.Component {
                                                     bidTime: `${today.format('HH:mm:ss')}`
 
                                                 }
-                                                console.log("BIDDING DATA",biddingObject)
 
-                                                axios({
-                                                    method: 'POST',
-                                                    url: `http://localhost:8080/bids/saveBid`,
-                                                    headers: {
-                                                        'Authorization':store.getState().user.header
-                                                    },
-                                                    data: biddingObject
-                                                }).then(res=>{
-                                                    console.log("ReSPONSE",res)
-                                                    participateInAuction(auction.auctionId)
-                                                        .then(res =>{
+                                                if(!this.state.alreadyParticipated){
+                                                        console.log("NOT participated")
+                                                    subscribeAuction(auction.auctionId)
 
-                                                            store.dispatch(subscribeAuctionAction(this.state.auctionDetails.auctionId))
-                                                            let auction = {...this.state.auctionDetails,id:this.state.auctionDetails.auctionId,state:'READY'}
+                                                            participateInAuction(auction.auctionId)
+                                                                .then(res => {
+                                                                    let auction = {
+                                                                        ...this.state.auctionDetails,
+                                                                        id: this.state.auctionDetails.auctionId,
+                                                                        state: 'READY',
+                                                                        bids: this.state.bids
+                                                                    }
 
-                                                            console.log("auction details",this.state.auctionDetails)
-                                                            store.dispatch(updateAuctionListAction(auction))
-                                                            console.log(store.getState())
-                                                            this.setState({
-                                                                participated: true
-                                                            })
-                                                        })
-                                                })
+                                                                    let found = false
+                                                                    store.getState().auctions.map((auction) => {
+                                                                        if (auction.auctionId === auction) {
+                                                                            found = true
+                                                                        }
+                                                                    })
+                                                                    if (!found) {
+                                                                        store.dispatch(updateAuctionListAction(auction))
+                                                                    }
+
+                                                                    this.setState({
+                                                                        participated: true,
+                                                                        buttonName: "Bid",
+                                                                        alreadyParticipated: true
+                                                                    })
+
+                                                                })
 
 
 
-                                            }}
+
+
+
+                                                }
+                                                else{
+                                                    console.log("POST IT")
+                                                    console.log(this.state,"store",store.getState())
+                                                   // store.dispatch(subscribeAuctionAction(this.state.auctionDetails.auctionId))
+                                                    axios({
+                                                        method: 'POST',
+                                                        url: `http://localhost:8080/bids/saveBid`,
+                                                        headers: {
+                                                            'Authorization':store.getState().user.header
+                                                        },
+                                                        data: biddingObject
+                                                    })
+
+                                                }
+
+
+
+
+                                            }
+                                                }
+
 
                                         />
                                         <Divider style={{marginTop: "5px",marginBottom: "5px",marginLeft: "35px",marginRight: "50px"}}/>
@@ -415,6 +490,7 @@ class ProductDetails extends React.Component {
                                             }}
                                             className={classes.textMargin}
                                             onClick={()=>{
+                                                participateInAuction(this.state.auctionDetails.auctionId).then(res=>{console.log("Auction Added",res)})
 
                                             }}>
                                             <Favorite variant="outlined"/>
@@ -436,11 +512,11 @@ class ProductDetails extends React.Component {
                         <Redirect to = "/login"/>
                     )
                 }
-                {
-                    (this.state.participated && (
-                        <Redirect to = "/" />
-                        )
-                    )
+                {/*{*/}
+                    {/*(this.state.participated && (*/}
+                        {/*<Redirect to = "/" />*/}
+                        {/*)*/}
+                    {/*)*/}
                 }
             </div>
         )

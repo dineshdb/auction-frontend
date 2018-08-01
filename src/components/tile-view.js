@@ -15,8 +15,8 @@ let styles = theme => ({
     },
     mainRoot:{
         color: "white",
-        marginLeft: theme.spacing.unit*10,
-        marginRight: theme.spacing.unit*10,
+        marginLeft: theme.spacing.unit*5,
+        marginRight: theme.spacing.unit*5,
         marginBottom: theme.spacing.unit*10
     }
 })
@@ -32,13 +32,15 @@ class TileView extends React.Component {
             <Paper
                className={classes.mainRoot}
                square
+               elevation={0}
             >
             <Grid container className={classes.root} spacing={10}>
                 {items.map(value =>{
                 return(
                     <Grid key={value} item xs={12} sm={6} md={4} lg={3} xl={2} className={classes.item}>
                     <ProductCard 
-                    item={value} 
+                    item={value}
+                    isFavorite={value.isFavorite}
                     baseUrl={basePath}
                     />
                     </Grid>

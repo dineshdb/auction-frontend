@@ -81,7 +81,9 @@ function initializeState(){
         auctionsStarted: [],
         cart: [],
         subscriptions: [],
-        favorites: []
+        favorites: [],
+        highestBid: 0,
+        highestBidder: ""
     }    
     let user = JSON.parse(localStorage.getItem(USER_KEY)) || {}
     return Object.assign({}, initialState, {user})
@@ -89,7 +91,7 @@ function initializeState(){
 const reducer = ( state = initializeState(), action) => {
     switch (action.type){
         case SIGN_IN:
-            console.log("NEW USER",action.user)
+
             localStorage.setItem(USER_KEY, JSON.stringify(action.user))
             let date = Date.now()
             return Object.assign({}, state, {user: action.user, isLoggedIn : true, date})
@@ -97,21 +99,21 @@ const reducer = ( state = initializeState(), action) => {
             localStorage.removeItem(USER_KEY)
             return Object.assign({}, state, {user: {}, isLoggedIn: false, date: null})
         case PRODUCTS_ADD:
-            console.log("Products in store",action.payload)
+
             return {...state, products: action.payload}
         case ADD_AUCTION_STARTED:
-            console.log("NEW AUCTION",action.payload)
+
             let withNewAuction = state.auctionsStarted
             withNewAuction.push(action.payload)
             return {...state,products: withNewAuction}
         case ADD_TO_CART:
-            console.log("ADDING PRODUCT TO CART",action.payload)
+
             let newCartWithProduct = state.cart
             return {...state,cart: newCartWithProduct}
 
         case SUBSCRIBE_AUCTION:
             let auctionId = action.payload
-            console.log("auction subsribed",auctionId)
+
             subscribeAuction(auctionId)
             let subscriptions = Object.assign({}, state.subscriptions)
             return Object.assign({}, state, {subscriptions: [...subscriptions, auctionId]})
@@ -128,13 +130,10 @@ const reducer = ( state = initializeState(), action) => {
         }
 
         case AUCTION_STARTED:{
-            console.log("IN STORE",state)
             let id= action.payload
             let auctions = state.auctions
             let index = auctions.findIndex(el => el.auctionId === id)
             let auction = auctions[index]
-           // auctions = auctions.splice(index, 1)
-            console.log("Auctions",auctions)
             //console.log("AUCTIONS STARTED",auctions)
             //auction.state = 'LIVE'
            // return Object.assign({}, state, {auctions: [...auctions, auction]})
@@ -160,40 +159,64 @@ const reducer = ( state = initializeState(), action) => {
         }
 
         case NEW_BID_PUSH: {
-            let {id, userId, bidAmount} = action.payload
-            console.log("INSIDE NEW BID",action)
+            let {auctionId, userId, bidAmount} = action.payload
             let auctions = state.auctions
-            let index = auctions.findIndex(el => el.auctionId === id)
+            let bid = {}
+            let maximum = 0
+            let maxBidder = ""
+            auctions.map((auction)=>{
+
+                if(auction.auctionId === auctionId){
+
+                    auction.bids.map((bid,key)=>{
+                        if (bid.bidAmount > maximum){
+                            maximum = bid.bidAmount
+                            maxBidder = bid.userId
+                        }
+                    })
+
+
+                }
+
+            })
+            if(bidAmount>maximum){
+                maximum=bidAmount
+                maxBidder=userId
+            }
+
+
+            let index = auctions.findIndex(el => el.auctionId === auctionId)
+            if (index === -1){
+
+                return {...state,highestBid: maximum, highestBidder: maxBidder}
+            }
             let auction = auctions[index]
             auctions = auctions.splice(index, 1)
             auction.bids.push({
                 userId,
-                bidAmount
+                bidAmount,
+                auctionId
             })
-            if(auction.highestBid < bidAmount){
-                auction.highestBid = bidAmount
-                auction.highestBidder = userId
-            }
-            return Object.assign({}, state, {auctions: [...auctions, auction]})
+
+            return Object.assign({}, state, {auctions: [...auctions, auction],highestBidder:maxBidder,highestBid:maximum})
         }
 
         case UPDATE_AUCTION_LIST: {
-            console.log("new auction",action.payload)
+
             let current = state.auctions
             current.push(action.payload)
             return {...state,auctions:current}
         }
         case TOGGLE_FAVORITE:{
-            let itemId = action.payload
+            let auctionId = action.payload
             let favorites = state.favorites
-            let index = favorites.indexOf(itemId)
-            console.log(index, itemId)
+            let index = favorites.indexOf(auctionId)
             if(index > -1){
 
                 favorites.splice(index, 1)
                 return Object.assign({}, state, {favorites})
             } else {
-                return Object.assign({}, state,{favorites: [...favorites, itemId]})
+                return Object.assign({}, state,{favorites: [...favorites, auctionId]})
             }
         }
 
@@ -215,6 +238,27 @@ export function getUserToken(state) {
 
 export function isUserOnline(state){
     return state.user.isLoggedIn
+}
+export function getHighestBid(auctionId,state){
+
+    let auctions = state.auctions
+    let bid = {}
+    let maximum = 0
+    auctions.map((auction)=>{
+
+        if(auction.auctionId === auctionId){
+
+            auction.bids.map((bid,key)=>{
+                if (bid.bidAmount > maximum){
+                    maximum = bid.bidAmount
+                }
+            })
+
+
+        }
+
+    })
+    return maximum
 }
 
 export function getProducts(state){
