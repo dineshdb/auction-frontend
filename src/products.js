@@ -26,7 +26,6 @@ export function getCategories(){
     return fetchJSON(categoriesUrl)
 }
 export function getFavorites(){
-    console.log(store.getState().user, "sadfas")
     return fetchJSON(`${baseUrl}/users/${store.getState().user.userId}/favorites`)
 }
 

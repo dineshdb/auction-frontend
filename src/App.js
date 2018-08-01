@@ -38,12 +38,6 @@ class App extends React.Component {
                 isOnline: store.getState().isLoggedIn
             })
         })
-        if(store.getState().isLoggedIn){
-            getFavorites().then(res=>{
-                store.dispatch(updateFavorites({favorites:res}))
-                res.forEach(subscribeAuction)
-            })
-        }
     }
 
     render(props) {

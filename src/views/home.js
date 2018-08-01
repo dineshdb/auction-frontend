@@ -6,7 +6,6 @@ import {connect} from 'react-redux'
 import TileView from '../components/tile-view'
 import {fetchProducts, fetchEach,getAuctionDetails,getFavorites} from '../products'
 import Typography from '@material-ui/core/Typography'
-import store from '../store'
 import Paper from '@material-ui/core/Paper'
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -15,6 +14,11 @@ import Favorite from '@material-ui/icons/Favorite'
 import Gallery from '@material-ui/icons/Image'
 import Live from '@material-ui/icons/LiveTv'
 import moment from 'moment'
+import store, {
+    subscribeAuctionAction,
+    updateAuctionListAction,
+    auctionStartedAction, updateFavorites
+} from '../store'
 
 const styles = (theme) =>({
     margin: {
@@ -46,6 +50,11 @@ class Home extends React.Component {
     }
     componentDidMount() {
         let favoritesFromApi = []
+        getFavorites().then(res=>{
+            store.dispatch(updateFavorites({favorites:res}))
+//            res.forEach(subscribeAuction)
+        }).catch(console.log)
+
         getFavorites()
             .then(res=>{
                 console.log("res,",res)
@@ -60,7 +69,7 @@ class Home extends React.Component {
 
                             let temp = false
                             let live = false
-                            getAuctionDetails(item.auction)
+                            getAuctionDetails(item.auction.auctionId)
                                 .then(res=>{
                                    let eventDateTime=  moment(res.auctionDate+' '+res.auctionTime)
                                     let duration_ = moment.duration(eventDateTime-moment())
