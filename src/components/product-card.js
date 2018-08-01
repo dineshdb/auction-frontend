@@ -13,11 +13,7 @@ import store, {toggleFavorite} from '../store'
 import {connect} from 'react-redux'
 import Tooltip from '@material-ui/core/Tooltip';
 
-import Divider from '@material-ui/core/Divider'
-import {subscribeAuction} from "../socket";
-
-
-import {participateInAuction, unfavorite, favorite} from "../products";
+import {unfavorite, favorite} from "../products";
 
 const styles = theme => ({
     card: {
@@ -73,12 +69,6 @@ class Product extends React.Component {
         return store.getState().favorites.includes(id)
     }
     handleFavorite = (e) => {
-    //    participateInAuction(auctionId).then(res=>{
-    //        store.dispatch(toggleFavorite(auctionId))
-    //        this.setState({
-    //            isFavorite: !this.isFavorite(this.state.auction.auctionId)
-    //        })
-    //    })
        (this.isFavorite(this.state.auction.auctionId)?
        unfavorite(this.state.auction.auctionId) : favorite(this.state.auction.auctionId))
        .then(res => {
@@ -87,19 +77,9 @@ class Product extends React.Component {
                isFavorite: this.isFavorite(this.state.auction.auctionId)
            })    
        }).catch(console.log)
-/*
-        (this.isFavorite(this.state.itemId)?
-            unfavorite(this.state.itemId) : favorite(this.state.itemId))
-            .then(res => {
-                store.dispatch(toggleFavorite(this.state.itemId))
-                this.setState({
-                    isFavorite: this.isFavorite(this.state.itemId)
-                })    
-            }).catch(console.log)
-      */
     }
     render() {
-        const { itemName,maxBid, bid,image, actionName, itemDescription, itemId,startingBid,auction,isFavorite} = this.props.item;
+        const { itemName,maxBid,image, actionName, itemDescription, itemId,startingBid,auction,isFavorite} = this.props.item;
         const { classes, baseUrl } = this.props
         return (<div>
             <Card square elevation="2" className={classes.card}>
