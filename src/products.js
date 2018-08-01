@@ -65,3 +65,10 @@ export function getUserDetails(){
 export function login(body){
     return fetchJSON(`${baseUrl}/login`, {method:'POST', body:JSON.stringify(body), mode:'cors'})
 }
+
+export function newToday(){
+    return fetchJSON(`${baseUrl}/end-today`)
+}
+export function endToday(){
+    return fetchJSON(`${baseUrl}/new-today`)
+}

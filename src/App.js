@@ -38,7 +38,7 @@ class App extends React.Component {
                 isOnline: store.getState().isLoggedIn
             })
         })
-        if(store.getState().user.isLoggedIn){
+        if(store.getState().isLoggedIn){
             getFavorites().then(res=>{
                 console.log("favorites",res)
                 res.map(favorite=>{

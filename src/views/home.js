@@ -22,7 +22,10 @@ class Home extends React.Component {
             count: 0,
             user: null,
             favorites: [],
-            gallery: []
+            gallery: [],
+            endToday: [],
+            newToday: [],
+            mine: [],
         }
     }
     componentDidMount() {
@@ -56,9 +59,11 @@ class Home extends React.Component {
         return (
             <div>
                 <SearchBar/>
-                <TileView items={this.state.favorites} basePath={"/product/"} title="My Auctions" className={classes.margin}/>
-                <TileView items={this.state.favorites} basePath={"/product/"} title="Favorites" className={classes.margin}/>
-                <TileView items={this.state.gallery} basePath={"/product/"} title="Gallery" className={classes.margin}/>
+                <TileView items={this.state.mine} title="My Auctions" className={classes.margin} basePath={"/product/"}/>
+                <TileView items={this.state.favorites}  title="Favorites" className={classes.margin} basePath={"/product/"}/>
+                <TileView items={this.state.endToday}  title="Ending Today" className={classes.margin} basePath={"/product/"}/>
+                <TileView items={this.state.newToday}  title="New Today" className={classes.margin} basePath={"/product/"}/>
+                <TileView items={this.state.gallery} title="Gallery" className={classes.margin} basePath={"/product/"}/>
             </div>
         )
     }

@@ -270,7 +270,7 @@ class ProductDetails extends React.Component {
                         let participated = false
                         let buttonName = "Participate"
                         res.data.bidders.map((bidder)=>{
-                            if(bidder == userId){
+                            if(bidder === userId){
                                 participated=true,
                                     buttonName="Bid"
                             }

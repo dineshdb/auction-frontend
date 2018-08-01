@@ -64,7 +64,7 @@ class Product extends React.Component {
                 this.setState({
                     isFavorite: this.isFavorite(this.state.itemId)
                 })    
-            })
+            }).catch(console.log)
     }
     render() {
         const { itemName,maxBid, bid,image, actionName, itemDescription, itemId,startingBid,auction,isFavorite} = this.props.item;

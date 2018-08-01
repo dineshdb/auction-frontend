@@ -62,17 +62,17 @@ class HomeBar extends React.Component {
             })
         })
     }
-    handleLogOut(){
+    handleLogOut = () =>{
         store.dispatch({type: 'SIGN_OUT'})
         this.fireHome()        
     }
-    fireHome(){
+    fireHome = () =>{
         this.setState({
             fireHome: true,
             anchorEl: null
         })
     }
-    handleSearch(event){
+    handleSearch = (event) => {
         this.setState({
             searchName: event.target.value
         })

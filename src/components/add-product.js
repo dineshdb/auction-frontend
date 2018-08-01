@@ -351,7 +351,6 @@ class SellProductForm extends React.Component {
                                                         categoryId = category.categoryId
                                                     }
                                                 })
-                                                console.log("user",store.getState().user)
                                                 let auctionObject = {
                                                     auctionName: this.state.title,
                                                     auctionTime: this.state.eventTime,
