@@ -47,8 +47,6 @@ class App extends React.Component {
                         subscribeAuction(favorite)
                     })
                 }
-
-
             })
         }
     }

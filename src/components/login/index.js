@@ -84,7 +84,6 @@ class LoginForm extends React.Component{
         }
     }
     componentWillUnmount(){
-      
     }
     
         handleUserName(event){
@@ -166,7 +165,7 @@ class LoginForm extends React.Component{
                 throw err
             })
         }
-        handleRedirect(){
+        handleRedirect= () =>{
             this.setState({
                 fireRedirect: true
             })

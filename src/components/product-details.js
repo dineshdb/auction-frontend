@@ -165,7 +165,7 @@ class ProductDetails extends React.Component {
         }
     }
     componentDidMount(){
-        if(store.getState().user.isLoggedIn){
+        if(store.getState().isLoggedIn){
             getFavorites().then(res=>{
                 console.log("favorites",res)
                 if(res.length> 0){
@@ -181,9 +181,7 @@ class ProductDetails extends React.Component {
 
     }
     tick(){
-
         setInterval(this.handleDuration,1000)
-
     }
     handleDuration = ()=>{
        // let highest = getHighestBid(this.state.auctionDetails.auctionId,store.getState())
@@ -339,10 +337,6 @@ class ProductDetails extends React.Component {
             })
 
         }
-
-
-
-
         return (
 
             <div className={classes.root}>

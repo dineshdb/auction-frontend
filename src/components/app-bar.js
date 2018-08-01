@@ -61,7 +61,7 @@ class HomeBar extends React.Component {
             getFavorites()
                 .then(res => {
                     this.setState({
-                        isOnline: store.getState().user.isLoggedIn,
+                        isOnline: store.getState().isLoggedIn,
                         favoritesCount: res.length
                     })
                 })
