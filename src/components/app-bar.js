@@ -17,6 +17,7 @@ import {SIGN_OUT} from "../store";
 import {Redirect} from 'react-router-dom'
 import store from '../store'
 import {productsAdd,addAuctionStarted} from "../store";
+import {getFavorites} from "../products";
 
 const styles = theme => ({
     root: {
@@ -50,17 +51,22 @@ class HomeBar extends React.Component {
             userId: "",
             fireHome: false,
             userName: "",
-            favoritesCount: state.favorites.length
+            favoritesCount: 0
         }
     }
     componentDidMount(){
-        store.subscribe(()=>{
+        let length = 0
+        store.subscribe(()=> {
             let state = store.getState()
-            this.setState({
-                isOnline: store.getState().isLoggedIn,
-                favoritesCount: state.favorites.length
-            })
+            getFavorites()
+                .then(res => {
+                    this.setState({
+                        isOnline: store.getState().user.isLoggedIn,
+                        favoritesCount: res.length
+                    })
+                })
         })
+
     }
     handleLogOut = () =>{
         store.dispatch({type: 'SIGN_OUT'})
@@ -94,6 +100,7 @@ class HomeBar extends React.Component {
         const {classes} = this.props;
         const {anchorEl} = this.state
         const open = Boolean(anchorEl);
+
         
         return (
                 <div >
