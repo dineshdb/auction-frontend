@@ -99,12 +99,20 @@ class Home extends React.Component {
                                     })
                                     if(live){
                                         liveGallery.push({...item,state:'LIVE',color:'#77e27b'})
+
                                     }
+
                                     if(ended){
                                         withFavoritesGallery.push({...item,isFavorite: temp,state:'ENDED',color:'#ea000a'})
                                     }
                                     else{
-                                        withFavoritesGallery.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#ff74ad'})
+                                        if(live){
+                                            withFavoritesGallery.push({...item,isFavorite: temp,state:'LIVE',color:'#77e27b'})
+                                        }
+                                        else{
+                                            withFavoritesGallery.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#ff74ad'})
+                                        }
+
                                     }
 
                                 })
