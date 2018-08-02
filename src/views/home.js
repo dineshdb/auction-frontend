@@ -51,6 +51,7 @@ class Home extends React.Component {
     componentDidMount() {
         let favoritesFromApi = []
         getFavorites().then(res=>{
+            console.log("FAVS",res)
             store.dispatch(updateFavorites({favorites:res}))
 //            res.forEach(subscribeAuction)
         }).catch(console.log)
@@ -83,6 +84,7 @@ class Home extends React.Component {
                                             live = true
                                         }
                                     }
+                                    console.log("favoritesFromApi",favoritesFromApi)
                                     favoritesFromApi.map((id)=>{
                                         if (item.auction == id){
                                             temp=true
