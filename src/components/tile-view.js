@@ -17,9 +17,9 @@ let styles = theme => ({
     },
     mainRoot:{
         color: "white",
-        marginLeft: theme.spacing.unit*5,
-        marginRight: theme.spacing.unit*5,
-        marginBottom: theme.spacing.unit*10
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        marginBottom: theme.spacing.unit
     },
     title:{
         fontWeight: 'lighter',
@@ -39,7 +39,7 @@ class TileView extends React.Component {
             <Paper
                className={classes.mainRoot}
                square
-               elevation={1}
+               elevation={0}
             >
             <Typography className={classes.title} align="center">
                 {title}
