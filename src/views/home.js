@@ -146,7 +146,7 @@ class Home extends React.Component {
     render(){
         const {classes} = this.props
         const {value} = this.state
-        console.log("STORE",store.getState())
+
         return (
             <div>
                 <AppBar position="static">
