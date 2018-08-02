@@ -121,8 +121,8 @@ class SellProductForm extends React.Component {
             title: "",
             description: "",
             eventDate: moment(),
-            eventTime: "12:00",
-            eventDuration: "02:00",
+            eventTime: moment().format('H:m'),
+            eventDuration: '00:10',
             categories: [],
             openItemMenu: false,
             itemName: "",
@@ -132,7 +132,8 @@ class SellProductForm extends React.Component {
             itemObject: {},
             image: "",
             fireSuccessful: false,
-            categoryId: null
+            categoryId: null,
+            duration: 0
         }
         this.fileInput = React.createRef()
     }
@@ -235,7 +236,7 @@ class SellProductForm extends React.Component {
                                         </ToolBar>
                                         <ToolBar >
                                             <Grid container spacing="24">
-                                                <Grid item xs="7">
+                                                <Grid item xs="6">
                                                     <Typography
                                                         className={classes.leftName}>
                                                         Date*
@@ -250,24 +251,44 @@ class SellProductForm extends React.Component {
                                                         className={classes.date}
                                                     />
                                                 </Grid>
-                                                <Grid item xs="5">
-                                                    <Typography className={classes.leftName}>
+                                                <Grid item xs="3">
+                                                    <br/>
+                                                    <br/>
+                                                    <Typography className={classes.description} style={{fontWeight: "lighter"}}>
                                                         Event Start
                                                     </Typography>
                                                     <SimpleTextField
                                                         id="time"
                                                         type="time"
                                                         style={{width: "60%"}}
-                                                        defaultValue="12:00"
+                                                        defaultValue={this.state.eventTime}
                                                         handler={(event)=>{
                                                             this.setState({
                                                                 eventTime: event.target.value
                                                             })
                                                         }}
-                                                        property={classes.leftName}
+                                                        property={classes.description}
                                                     />
                                                 </Grid>
-
+                                                <Grid item xs="3">
+                                                    <br/>
+                                                    <br/>
+                                                    <Typography className={classes.description} style={{fontWeight: 'lighter'}}>
+                                                        Duration
+                                                    </Typography>
+                                                    <SimpleTextField
+                                                        id="time"
+                                                        type="time"
+                                                        style={{width: "60%"}}
+                                                        defaultValue={this.state.eventDuration}
+                                                        handler={(event)=>{
+                                                            this.setState({
+                                                                eventDuration: event.target.value
+                                                            })
+                                                        }}
+                                                        property={classes.description}
+                                                    />
+                                                </Grid>
                                             </Grid>
                                         </ToolBar>
                                         <CustomButton
@@ -351,12 +372,23 @@ class SellProductForm extends React.Component {
                                                         categoryId = category.categoryId
                                                     }
                                                 })
+                                                let duration = this.state.eventDuration
+                                                duration = duration.split(':')
+                                                let totalTime = 0
+                                                duration.map((instant,key)=>{
+                                                    if(key === 0){
+                                                        totalTime+= instant*60*60
+                                                    }
+                                                    else{
+                                                        totalTime+= instant*60
+                                                    }
+                                                })
                                                 let auctionObject = {
                                                     auctionName: this.state.title,
                                                     auctionTime: this.state.eventTime,
                                                     auctionDate: this.state.eventDate.format("YYYY-MM-DD"),
                                                     auctionDetails: this.state.description,
-                                                    auctionDuration: this.state.eventDuration,
+                                                    auctionDuration: totalTime,
                                                     itemHolderList: [
                                                         {
                                                             itemName: this.state.itemName,
@@ -374,9 +406,6 @@ class SellProductForm extends React.Component {
                                                     bidders: []
                                                   //  items: this.state.itemObject
                                                 }
-                                                console.log("AUCTION OBJECT",auctionObject)
-                                                console.log("user",store.getState().user)
-
                                                 axios({
                                                     method: 'POST',
                                                     url: `http://localhost:8080/auctions/createAuction`,

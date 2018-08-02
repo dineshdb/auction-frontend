@@ -29,6 +29,7 @@ import SnackBar from '@material-ui/core/Snackbar'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import Animate from 'react-simple-animate'
+import LinearProgress from '@material-ui/core/LinearProgress';
 let styles = (theme)=>{
     return {
         paper: {
@@ -182,6 +183,7 @@ class ProductDetails extends React.Component {
             })
         }
         // this.handleDuration()
+
         this.tick()
 
     }
@@ -290,6 +292,7 @@ class ProductDetails extends React.Component {
                         image: url
                     })
                     let auction = details.auction
+                    console.log("AUCTION",auction)
                         let participated = false
                         let buttonName = "Participate"
                         auction.bidders.map((bidder)=>{
@@ -298,9 +301,7 @@ class ProductDetails extends React.Component {
                                     buttonName="Bid"
                             }
                         })
-                        console.log("auction",auction)
 
-                        console.log("inside",auction.bids)
                             auction.bids.map((bid)=>{
                                 getBidDetails(bid.bidId)
                                     .then((res)=>{
@@ -425,7 +426,11 @@ class ProductDetails extends React.Component {
                                             !this.state.eventEnded ? (!this.state.eventStarted ?  <Typography className={classes.description} style={{color: "red"}}>
                                                 starts in  {`${this.state.totalTime.days}d ${this.state.totalTime.hours}h ${this.state.totalTime.minutes}m ${this.state.totalTime.seconds}s  `}
 
-                                            </Typography> : <Typography className={classes.description} style={{color: 'green'}}>Ends in {this.state.minutes}m {this.state.seconds}s</Typography>) : <Typography>Ended</Typography>
+                                            </Typography> : <div>
+
+
+                                                <Typography className={classes.description} style={{color: 'green'}}>Ends in {this.state.minutes}m {this.state.seconds}s</Typography>
+                                            </div>) : <Typography>Ended</Typography>
                                         }
                                         {
 
@@ -433,9 +438,15 @@ class ProductDetails extends React.Component {
 
                                     </Grid>
                                 </Grid>
-
+                                {this.state.eventStarted &&  <LinearProgress />}
                                 <Divider className={classes.paper}/>
+                                {
+                                    this.state.eventEnded && (
+                                        <div>
 
+                                        </div>
+                                    )
+                                }
                                 {!this.state.eventEnded && (
                                     <Paper square className={classes.biddingForm}>
                                         <div className={classes.innerDiv}>

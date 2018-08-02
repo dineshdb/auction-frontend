@@ -113,7 +113,6 @@ class Home extends React.Component {
                                             if(seller == user){
                                                 myItems.push({...item,isFavorite: temp,state:'LIVE',color:'#77e27b'})
                                             }
-                                            upcomingGallery.push({...item,isFavorite: temp,state:'LIVE',color:'#77e27b'})
                                             withFavoritesGallery.push({...item,isFavorite: temp,state:'LIVE',color:'#77e27b'})
                                         }
                                         else{
@@ -149,7 +148,7 @@ class Home extends React.Component {
 
         return (
             <div>
-                <AppBar position="static">
+                <AppBar position="sticky">
                     <Tabs value={value} onChange={this.handleChange}>
                         <Tab label="Gallery" icon = {<Gallery/>} href="#basic-tabs"/>
                         <Tab label="Live" icon = {<Live/>}href="#basic-tabs" />

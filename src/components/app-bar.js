@@ -104,7 +104,7 @@ class HomeBar extends React.Component {
         
         return (
                 <div >
-                    <AppBar position="static" className={classes.root}>
+                    <AppBar position="sticky" className={classes.root}>
                         <Toolbar>
 
                             
@@ -117,9 +117,9 @@ class HomeBar extends React.Component {
                             {(this.state.isOnline) && (
                                 <div>
                                     <Link to="/add">
-                                        <Button>
-                                            <Icon>add</Icon>
-                                        </Button>
+                                        <IconButton >
+                                            <Icon style={{color: "black"}}>add</Icon>
+                                        </IconButton>
                                     </Link>
                                     <Link to="/favs">
                                         <Badge className={classes.badge} badgeContent={this.state.favoritesCount} color="secondary">
