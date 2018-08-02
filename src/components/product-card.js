@@ -79,19 +79,31 @@ class Product extends React.Component {
        }).catch(console.log)
     }
     render() {
-        const { itemName,maxBid,image, actionName, itemDescription, itemId,startingBid,auction,isFavorite} = this.props.item;
+        const { itemName,maxBid,image,state,color, itemId,startingBid,auction,isFavorite} = this.props.item;
         const { classes, baseUrl } = this.props
-        return (<div>
-            <Card square elevation="2" className={classes.card}>
+        return (<div
+                    onMouseEnter={()=>{
+                        this.setState({
+                            elevation: 20
+                    })
+                        }}
+                     onMouseLeave={()=>{
+                         this.setState({
+                             elevation: 0
+                         })
+                     }}>
+            <Card square elevation={this.state.elevation} className={classes.card}>
              <CardActions>
                     <Tooltip title="Save to favorites">
                     <IconButton color="secondary" size="small" onClick={this.handleFavorite}>
-                        <Icon>{(this.state.isFavorite | isFavorite) ? "favorite": "favorite_outline"}</Icon>
+                        <Icon>{(this.state.isFavorite) ? "favorite": "favorite_outline"}</Icon>
                     </IconButton>
                     </Tooltip>
                     <Typography gutterBottom variant="headline" component="h3" className={classes.right}>
                         Rs.{startingBid}</Typography>
                 </CardActions>
+                <Typography style={{color:color,fontWeight: "lighter"}} className={classes.margin} gutterBottom variant="headline" component="h3">
+                    {state}</Typography>
             
                 <Link to={baseUrl + itemId} className={classes.right}> 
                 <CardMedia  className={classes.media} image={image} itemName={itemName}></CardMedia>
@@ -107,13 +119,7 @@ class Product extends React.Component {
                             }}
                         > {maxBid} </Typography>
                     </div>
-                    <Typography
-                        className={classes.brief}
-                        style={{
-                            fontWeight: 400,
-                            color: "#6b6b6b"
-                        }}
-                    >{itemDescription}</Typography>
+
                 </CardContent>
                 </Link>
             </Card>

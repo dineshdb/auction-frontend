@@ -45,19 +45,18 @@ class Home extends React.Component {
             endToday: [],
             newToday: [],
             mine: [],
-            value:0,
         }
     }
     componentDidMount() {
         let favoritesFromApi = []
         getFavorites().then(res=>{
+            console.log("FAVS",res)
             store.dispatch(updateFavorites({favorites:res}))
 //            res.forEach(subscribeAuction)
         }).catch(console.log)
 
         getFavorites()
             .then(res=>{
-                console.log("res,",res)
                 favoritesFromApi=res
                 fetchProducts()
                     .then(fetchEach)
@@ -69,6 +68,7 @@ class Home extends React.Component {
 
                             let temp = false
                             let live = false
+                            let ended = false
                             getAuctionDetails(item.auction.auctionId)
                                 .then(res=>{
                                    let eventDateTime=  moment(res.auctionDate+' '+res.auctionTime)
@@ -82,17 +82,39 @@ class Home extends React.Component {
                                         if (total_minutes < 11) {
                                             live = true
                                         }
+                                        else{
+                                            ended = true
+                                        }
                                     }
                                     favoritesFromApi.map((id)=>{
-                                        if (item.auction == id){
+                                        if (item.auction.auctionId == id){
                                             temp=true
-                                            favorites.push({...item,isFavorite: true})
+                                            if(ended){
+                                                favorites.push({...item,isFavorite: true,state:'ENDED',color:'red'})
+                                            }
+                                            else{
+                                                favorites.push({...item,isFavorite: true,state:'ON AUCTION',color:'blue'})
+                                            }
                                         }
                                     })
                                     if(live){
-                                        liveGallery.push({...item})
+                                        liveGallery.push({...item,state:'LIVE',color:'#77e27b'})
+
                                     }
-                                    withFavoritesGallery.push({...item,isFavorite: temp})
+
+                                    if(ended){
+                                        withFavoritesGallery.push({...item,isFavorite: temp,state:'ENDED',color:'#ea000a'})
+                                    }
+                                    else{
+                                        if(live){
+                                            withFavoritesGallery.push({...item,isFavorite: temp,state:'LIVE',color:'#77e27b'})
+                                        }
+                                        else{
+                                            withFavoritesGallery.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#ff74ad'})
+                                        }
+
+                                    }
+
                                 })
 
 
@@ -119,14 +141,13 @@ class Home extends React.Component {
                 <SearchBar/>
                 <AppBar position="static">
                     <Tabs value={value} onChange={this.handleChange}>
-                        <Tab label="Favorites" icon={<Favorite/>} href="#basic-tabs"/>
                         <Tab label="Gallery" icon = {<Gallery/>} href="#basic-tabs"/>
                         <Tab label="Live" icon = {<Live/>}href="#basic-tabs" />
                     </Tabs>
                 </AppBar>
-                {value === 0 && <TileView items={this.state.favorites} basePath={"/product/"}/>}
-                {value === 1 && <TileView items={this.state.gallery} basePath={"/product/"}/>}
-                {value === 2 && <TileView items={this.state.liveGallery} basePath={"/product/"}/>}
+                {value === 0 && <TileView items={this.state.gallery} basePath={"/product/"}/>}
+                {value === 1 && <TileView items={this.state.liveGallery} basePath={"/product/"}/>}
+
 
             </div>
         )

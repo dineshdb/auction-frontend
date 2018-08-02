@@ -16,10 +16,12 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {participateInAuction,getAuctionDetails,setBid,getBidDetails} from '../products'
+import BootStrappedInput from '../components/textFields'
 import moment from 'moment'
 import TextField from '@material-ui/core/TextField'
 import Favorite from '@material-ui/icons/FavoriteBorder'
 import Button from '@material-ui/core/Button'
+import {baseUrl} from "../config";
 import {getFavorites} from "../products";
 import {subscribeAuction} from "../socket";
 import ToolTip from '@material-ui/core/Tooltip'
@@ -35,10 +37,10 @@ let styles = (theme)=>{
 
         },
         biddingForm: {
-           margin: theme.spacing.unit,
-           height: 350,
-           opacity: "0.7"
-        
+            margin: theme.spacing.unit,
+            height: 350,
+            opacity: "0.7"
+
         },
         card: {
             height: "60%",
@@ -55,9 +57,9 @@ let styles = (theme)=>{
             paddingTop: '56.25%'
         },
         title:{
-          fontSize: 26,
-          fontWeight: 300,
-          color: "black",
+            fontSize: 26,
+            fontWeight: 300,
+            color: "black",
             marginLeft: theme.spacing.unit,
             marginRight: theme.spacing.unit,
             marginTop: theme.spacing.unit,
@@ -128,7 +130,7 @@ let styles = (theme)=>{
         innerDiv: {
             marginRight: theme.spacing.unit*5
         }
-       
+
     }
 }
 
@@ -159,14 +161,17 @@ class ProductDetails extends React.Component {
             bidReject: false,
             currentBidder: 0,
             currentBid: 0,
-            currentHighest:0,
-            msg: '',
-            enabled: false,
+            currentHighest:0
+
+
+
         }
     }
     componentDidMount(){
+        console.log("STORE",store.getState())
         if(store.getState().isLoggedIn){
             getFavorites().then(res=>{
+                console.log("INSIDE")
                 console.log("favorites",res)
                 if(res.length> 0){
                     res.map(favorite=>{
@@ -176,15 +181,17 @@ class ProductDetails extends React.Component {
 
             })
         }
-       // this.handleDuration()
-       this.tick()
+        // this.handleDuration()
+        this.tick()
 
     }
     tick(){
+
         setInterval(this.handleDuration,1000)
+
     }
     handleDuration = ()=>{
-       // let highest = getHighestBid(this.state.auctionDetails.auctionId,store.getState())
+        // let highest = getHighestBid(this.state.auctionDetails.auctionId,store.getState())
 
         if(this.state.eventStarted){
             if(this.state.minutes >= 1){
@@ -241,6 +248,7 @@ class ProductDetails extends React.Component {
                 }
 
             }
+
         }
         // this.setState({
         //     highestBid: highest
@@ -252,8 +260,9 @@ class ProductDetails extends React.Component {
         // {setInterval(this.handleDuration,1000)}
         const {classes, match} = this.props
         const id = this.props.match.params.id
-        const userId = store.getState().user.id
+        const userId = store.getState().user.userId
         if (this.state.count === 0){
+            console.log("status",this.state)
             axios({
                 method: 'GET',
                 url: `http://localhost:8080/items/${id}`,
@@ -261,61 +270,67 @@ class ProductDetails extends React.Component {
                     'Authorization':store.getState().user.header
                 },
             }).then((res)=>{
-
+                console.log("RESPONSE",res)
+                let details = res.data
                 this.setState({
-                    details: res.data,
+                    details: details,
                     count: 1
                 })
                 axios({
                     method: 'GET',
-                    url: this.state.details.image,
+                    url: details.image,
                     headers: {
                         'Authorization':store.getState().user.header
                     },
                     responseType: 'blob'
                 }).then((response)=>{
-                    axios({
-                        method: 'GET',
-                        url: `http://localhost:8080/auctions/${this.state.details.auction}`,
-                        headers: {
-                            'Authorization':store.getState().user.header
-                        },
-                    }).then(res=>{
+                    console.log(response)
+                    const url = window.URL.createObjectURL(new Blob([response.data]))
+                    this.setState({
+                        image: url
+                    })
+                    let auction = details.auction
                         let participated = false
                         let buttonName = "Participate"
-                        res.data.bidders.map((bidder)=>{
-                            if(bidder === userId){
+                        auction.bidders.map((bidder)=>{
+                            if(bidder == userId){
                                 participated=true,
                                     buttonName="Bid"
                             }
                         })
+                        console.log("auction",auction)
 
-                        res.data.bids.map((bid)=>{
-                            getBidDetails(bid)
-                                .then((res)=>{
+                        console.log("inside",auction.bids)
+                            auction.bids.map((bid)=>{
+                                getBidDetails(bid.bidId)
+                                    .then((res)=>{
+                                            console.log("DETAILS",res)
+                                        this.setState({
+                                            bids: [...this.state.bids,{
+                                                auctionId: res.auction.auctionId,
+                                                userId: res.bidder,
+                                                bidAmount: res.bidAmount
+                                            }],
+                                            forHighestBid: [...this.state.forHighestBid,res.bidAmount]
+                                        })
+                                        console.log(this.state)
+                                    })
+                            })
+                            let data = auction
+                            this.setState({
+                                auctionDetails: auction,
+                                alreadyParticipated: participated,
+                                buttonName: buttonName,
+                                eventDateTime: moment(data.auctionDate+' '+data.auctionTime)
+                            })
 
-                                   this.setState({
-                                       bids: [...this.state.bids,{
-                                           auctionId: res.auction.auctionId,
-                                           userId: res.bidder,
-                                           bidAmount: res.bidAmount
-                                       }],
-                                       forHighestBid: [...this.state.forHighestBid,res.bidAmount]
-                                   })
-                                })
-                        })
-                        let data = res.data
-                        this.setState({
-                            auctionDetails: res.data,
-                            alreadyParticipated: participated,
-                            buttonName: buttonName,
-                            eventDateTime: moment(data.auctionDate+' '+data.auctionTime)
-                        })
-                    })
+
+
 
                 })
             })
         }
+
         const {details,auctionDetails,bids,forHighestBid} = this.state
 
         let localHighest = this.state.details.startingBid
@@ -337,14 +352,27 @@ class ProductDetails extends React.Component {
             })
 
         }
+
+
+
+
         return (
 
             <div className={classes.root}>
-            <div style={{display: 'none'}}>
-            
-             </div>
-                <Paper square  elevation={0} className={classes.paper}>
-                    <Card elevation={0} square  className={classes.card}>               <Grid container spacing={24} >
+                <div style={{display: 'none'}}>
+
+                </div>
+                <Paper
+                    square
+                    elevation={0}
+                    className={classes.paper}
+                >
+
+                    <Card
+                        elevation={0}
+                        square
+                        className={classes.card}>
+                        <Grid container spacing={24} >
                             <Grid item xs={6}>
                                 <CardMedia
                                     className={classes.media}
@@ -375,14 +403,15 @@ class ProductDetails extends React.Component {
                                     >Rs. {details.startingBid}
                                     </Typography>
                                 </div>
+
                             </Grid>
                             <Grid item xs={6}>
-                                    <Typography
-                                            align="left"
-                                            className={classes.title}
-                                        >{details.itemName}
-                                    
-                                        </Typography>
+                                <Typography
+                                    align="left"
+                                    className={classes.title}
+                                >{details.itemName}
+
+                                </Typography>
                                 <Typography className={classes.title} style={{marginTop: "20px"}}>
                                     Rs.{this.state.details.startingBid}
                                 </Typography>
@@ -392,7 +421,6 @@ class ProductDetails extends React.Component {
                                     <Grid item xs={7}>
                                     </Grid>
                                     <Grid item xs={5}>
-                                        {this.state.msg}
                                         {
                                             !this.state.eventEnded ? (!this.state.eventStarted ?  <Typography className={classes.description} style={{color: "red"}}>
                                                 starts in  {`${this.state.totalTime.days}d ${this.state.totalTime.hours}h ${this.state.totalTime.minutes}m ${this.state.totalTime.seconds}s  `}
@@ -404,10 +432,10 @@ class ProductDetails extends React.Component {
                                         }
 
                                     </Grid>
-                                    </Grid>
-                                   
+                                </Grid>
+
                                 <Divider className={classes.paper}/>
-                               
+
                                 {!this.state.eventEnded && (
                                     <Paper square className={classes.biddingForm}>
                                         <div className={classes.innerDiv}>
@@ -433,7 +461,7 @@ class ProductDetails extends React.Component {
                                                 Participate now to get the live update
                                             </Typography> }
 
-                                                {store.getState().currentBid}
+
 
 
                                             <CustomButton
@@ -450,15 +478,15 @@ class ProductDetails extends React.Component {
 
                                                     if((this.state.participated || this.state.alreadyParticipated) &&  (this.state.bidAmount < details.startingBid)){
                                                         console.log("LESS")
-                                                      this.setState({
-                                                          bidReject: true
-                                                      })
+                                                        this.setState({
+                                                            bidReject: true
+                                                        })
                                                     }
-                                                  else{
+                                                    else{
                                                         let today = moment()
                                                         let auction = this.state.auctionDetails
                                                         let biddingObject = {
-                                                            bidderId: store.getState().user.id,
+                                                            bidderId: store.getState().user.userId,
                                                             itemId: id,
                                                             auctionId: auction.auctionId,
                                                             bidAmount: this.state.bidAmount,
@@ -501,6 +529,7 @@ class ProductDetails extends React.Component {
                                                         else{
                                                             console.log("POST IT")
                                                             console.log(this.state,"store",store.getState())
+                                                            console.log(biddingObject)
                                                             // store.dispatch(subscribeAuctionAction(this.state.auctionDetails.auctionId))
                                                             axios({
                                                                 method: 'POST',
@@ -549,12 +578,12 @@ class ProductDetails extends React.Component {
                                 )
                                 }
 
-                        
+
                             </Grid>
                         </Grid>
                     </Card>
                 </Paper>
-               <SnackBar
+                <SnackBar
                     anchorOrigin={{
                         vertical: 'bottom',
                         horizontal: 'left',
@@ -588,10 +617,11 @@ class ProductDetails extends React.Component {
                 />
 
                 {
-                    (this.state.isOnline === undefined || !(this.state.isOnline)) && (
+                    (this.state.isOnline === undefined | !(this.state.isOnline)) && (
                         <Redirect to = "/login"/>
                     )
                 }
+
             </div>
         )
     }
