@@ -106,9 +106,7 @@ class HomeBar extends React.Component {
                 <div >
                     <AppBar position="static" className={classes.root}>
                         <Toolbar>
-                            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-                                <Icon>menu</Icon>
-                            </IconButton>
+
                             
                                 <Typography variant="title" color="inherit" className={classes.flex}>
                                 <Link to="/">
@@ -128,12 +126,7 @@ class HomeBar extends React.Component {
                                             <Icon>favorite</Icon>
                                         </Badge>
                                     </Link>
-
-                                    <Link to="/notifications">
-                                        <Badge className={classes.badge} badgeContent={4}>
-                                            <Icon>notifications</Icon>
-                                        </Badge>
-                                    </Link>
+                                    
 
                                     <IconButton
                                     aria-owns={open ? 'menu-appbar' : null}

@@ -21,7 +21,7 @@ const styles = theme => ({
         marginBottom: theme.spacing.unit*1,
         marginLeft: theme.spacing.unit*1,
         fontSize: '16px',
-        maxWidth: 250,
+        maxWidth: 249,
     },
     media: {
         marginLeft: theme.spacing.unit*3,

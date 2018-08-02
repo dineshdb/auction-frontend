@@ -27,7 +27,7 @@ class Favorites extends React.Component {
                         let favorites = []
                         gallery.map(item => {
                             favoritesFromApi.map((id) => {
-                                if (item.auction == id) {
+                                if (item.auction.auctionId == id) {
                                     favorites.push({...item, isFavorite: true})
                                 }
                             })
