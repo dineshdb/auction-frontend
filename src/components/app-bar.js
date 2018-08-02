@@ -110,7 +110,7 @@ class HomeBar extends React.Component {
                             
                                 <Typography variant="title" color="inherit" className={classes.flex}>
                                 <Link to="/">
-                                BidSteller.com
+                                BidStellar
                                 </Link>
                                 </Typography>
                             
