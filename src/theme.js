@@ -4,14 +4,14 @@ export default createMuiTheme({
     palette: {
         primary: {
             light: '#536bea',
-            main: '#fbf0ed',
-            dark: '#ff74ad',
+            main: '#f8fbe4',
+            dark: '#deff97',
             contrastText: '#333333',
         },
         secondary: {
             light: '#4fffa5',
-            main: "#9296b1",
-            dark: '#11a6e5',
+            main: "#34a4ff",
+            dark: '#e56edc',
             contrastText: '#000',
         },
     },

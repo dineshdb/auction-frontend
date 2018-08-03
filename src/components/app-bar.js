@@ -70,6 +70,11 @@ class HomeBar extends React.Component {
         })
 
     }
+    handleCloseProfile=()=>{
+        this.setState({
+            showProfile: false
+        })
+    }
     handleLogOut = () =>{
         store.dispatch({type: 'SIGN_OUT'})
         this.fireHome()        
@@ -213,13 +218,17 @@ class HomeBar extends React.Component {
                             <Redirect to = "/" />
                         )
                     }
-                    {
-                        this.state.showProfile && (
-                            <UserProfile
-                                userObject={this.state.userData}
-                            />
-                        )
+                  <UserProfile
+                    isOpen={this.state.showProfile}
+                    handleClose={() => {
+                        console.log("CLICKED")
+                        this.setState({
+                            showProfile: false
+                        })
                     }
+                    }
+                    userObject = {this.state.userData}
+                  />
                 </div>
         )
     }

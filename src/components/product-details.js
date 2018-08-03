@@ -30,6 +30,8 @@ import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import Animate from 'react-simple-animate'
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Result from '../components/result'
+import DropDown from '@material-ui/icons/ArrowDropDown'
 let styles = (theme)=>{
     return {
         paper: {
@@ -159,11 +161,15 @@ class ProductDetails extends React.Component {
             highestBid: 0,
             bids: [],
             forHighestBid: [],
+            forHighestBidder: [],
             bidReject: false,
             currentBidder: 0,
             currentBid: 0,
             currentHighest:0,
-            timeSlice: 0
+            timeSlice: 0,
+            localHighest:0,
+            openResult: false
+
 
 
 
@@ -307,16 +313,16 @@ class ProductDetails extends React.Component {
                             auction.bids.map((bid)=>{
                                 getBidDetails(bid.bidId)
                                     .then((res)=>{
-                                            console.log("DETAILS",res)
+
                                         this.setState({
                                             bids: [...this.state.bids,{
                                                 auctionId: res.auction.auctionId,
                                                 userId: res.bidder,
                                                 bidAmount: res.bidAmount
                                             }],
+                                            forHighestBidder: [...this.state.forHighestBidder,res.bidder],
                                             forHighestBid: [...this.state.forHighestBid,res.bidAmount]
                                         })
-                                        console.log(this.state)
                                     })
                             })
                             let data = auction
@@ -325,7 +331,7 @@ class ProductDetails extends React.Component {
                                 alreadyParticipated: participated,
                                 buttonName: buttonName,
                                 minutes: Number(data.auctionDuration)*60,
-                                timeSlice: Number(data.auctionDuration)*60,
+                                timeSlice: Number(data.auctionDuration)/60,
                                 eventDateTime: moment(data.auctionDate+' '+data.auctionTime)
                             })
 
@@ -336,12 +342,16 @@ class ProductDetails extends React.Component {
             })
         }
 
-        const {details,auctionDetails,bids,forHighestBid} = this.state
+        const {details,auctionDetails,bids,forHighestBid,forHighestBidder} = this.state
 
         let localHighest = this.state.details.startingBid
+        let localHighestBidder = 0
         if(forHighestBid){
             localHighest = Math.max.apply(null,forHighestBid)
+            localHighestBidder = Math.max.apply(null,forHighestBidder)
         }
+
+
         let highestBid = 0
         let highestBidder = ""
         store.getState().highestBid.map(bid=>{
@@ -350,13 +360,7 @@ class ProductDetails extends React.Component {
                 highestBidder = bid.maximumBidder
             }
         })
-        if (highestBid>this.state.currentHighest){
-            this.setState({
-                minutes: this.state.minutes+2,
-                currentHighest: highestBid
-            })
 
-        }
 
 
 
@@ -434,7 +438,7 @@ class ProductDetails extends React.Component {
 
 
                                                 <Typography className={classes.description} style={{color: 'green'}}>Ends in {this.state.minutes}m {this.state.seconds}s</Typography>
-                                            </div>) : <Typography>Ended</Typography>
+                                            </div>) : <Typography style={{fontSize: "15px",fontWeight: "lighter"}} align="left">Ended  On {this.state.auctionDetails.auctionDate}</Typography>
                                         }
                                         {
 
@@ -442,6 +446,38 @@ class ProductDetails extends React.Component {
 
                                     </Grid>
                                 </Grid>
+
+
+                                {this.state.eventEnded && (
+                                    <div>
+                                        {!this.state.openResult && <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={()=>{
+                                                this.setState({
+                                                    openResult: true
+                                                })
+                                            }}
+                                        >Result <DropDown/>
+                                        </Button>}
+
+                                    </div>
+                                )}
+                                {
+                                    this.state.eventEnded && (
+                                        <Result
+                                            isOpen={this.state.openResult}
+                                            handleClose={()=>{
+                                                this.setState({
+                                                    openResult: false
+                                                })
+                                            }}
+                                            highestBidder = {localHighestBidder}
+                                            auctionObject = {this.state.auctionDetails}
+                                            highestBid = {localHighest}
+                                        />
+                                    )
+                                }
                                 {this.state.eventStarted &&  <LinearProgress />}
                                 <Divider className={classes.paper}/>
                                 {
@@ -542,10 +578,6 @@ class ProductDetails extends React.Component {
                                                                 })
                                                         }
                                                         else{
-                                                            console.log("POST IT")
-                                                            console.log(this.state,"store",store.getState())
-                                                            console.log(biddingObject)
-                                                            // store.dispatch(subscribeAuctionAction(this.state.auctionDetails.auctionId))
                                                             axios({
                                                                 method: 'POST',
                                                                 url: `http://localhost:8080/bids/saveBid`,
@@ -570,7 +602,7 @@ class ProductDetails extends React.Component {
                                             <Divider className={classes.subTitle}/>
                                             <Button
 
-                                                color="primary"
+                                                color="secondary"
                                                 variant="outlined"
                                                 style={{
                                                     width: "90%",

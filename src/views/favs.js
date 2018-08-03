@@ -39,6 +39,7 @@ class Favorites extends React.Component {
                                         let live = false
                                         let ended = false
                                         let res = item.auction
+                                        let timeSlice = Number(res.auctionDuration)/60
                                         let eventDateTime=  moment(res.auctionDate+' '+res.auctionTime)
                                         let duration_ = moment.duration(eventDateTime-moment())
                                         let duration=duration_._data
@@ -47,18 +48,12 @@ class Favorites extends React.Component {
                                         let seconds = Math.floor((total_minutes-minutes)*60)
                                         if(duration_ < 0) {
 
-                                            if (total_minutes < 11) {
+                                            if (total_minutes < timeSlice) {
                                                 live = true
                                             }
                                             else{
                                                 ended = true
                                             }
-                                        }
-
-                                        if(live){
-
-                                            favorites.push({...item,state:'LIVE',color:'#77e27b'})
-
                                         }
 
                                         if(ended){

@@ -62,23 +62,15 @@ class UserProfile extends React.Component{
             open: true
         })
     }
-    handleClose = () => {
-        this.setState({ open: false });
-    };
-    handleOpen = () => {
-        this.setState({ open: true });
-    };
 
     render(){
-        const {userObject,classes,handleClose} = this.props
-        console.log("USER",userObject)
-        console.log("STATE",this.state.open)
+        const {userObject,classes,handleClose,isOpen} = this.props
         return<div >
-            <Dialog  open = {this.state.open} onClose={this.handleClose}>
+            <Dialog  open = {isOpen} onClose={handleClose}>
            <DialogContent>
                 <Close
                     className={classes.close}
-                    onClick={this.handleClose}
+                    onClick={handleClose}
                 />
                <Grid container spacing={24}>
                    <Grid item xs={4} xl={4} sm={4} lg={4}>

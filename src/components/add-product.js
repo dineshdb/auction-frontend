@@ -133,14 +133,22 @@ class SellProductForm extends React.Component {
             image: "",
             fireSuccessful: false,
             categoryId: null,
-            duration: 0
+            duration: 0,
+            newCategory: null
         }
         this.fileInput = React.createRef()
     }
     componentDidMount() {
         getCategories()
-        .then(cats => cats.sort((a,b) => a.categoryName < b.categoryName ? -1 : 1))
-        .then(categories => this.setState({ categories}))
+        .then(cats => {
+            console.log("Cats",cats)
+            return cats.sort((a,b) => a.categoryName < b.categoryName ? -1 : 1)
+        })
+        .then(categories =>
+        {
+              console.log("categories",categories)
+            return this.setState({ categories})
+        })
         .catch("Could not fetch categories")
     }
     handleAddItem = (event) => {
@@ -361,6 +369,11 @@ class SellProductForm extends React.Component {
                                                            itemCategory: event.target.value,
                                                        })
                                                    }}
+                                                   handleNewCategory={(event)=>{
+                                                       this.setState({
+                                                           newCategory: event.target.value
+                                                       })
+                                                   }}
                                                    title="Pick Item"/>
                                         <CustomButton
                                             name="Submit"
@@ -385,43 +398,97 @@ class SellProductForm extends React.Component {
                                                         totalTime+= instant*60
                                                     }
                                                 })
+                                                let catId = null
                                                 console.log("TOTALTIME",totalTime)
-                                                let auctionObject = {
-                                                    auctionName: this.state.title,
-                                                    auctionTime: this.state.eventTime,
-                                                    auctionDate: this.state.eventDate.format("YYYY-MM-DD"),
-                                                    auctionDetails: this.state.description,
-                                                    auctionDuration: totalTime,
-                                                    itemHolderList: [
-                                                        {
-                                                            itemName: this.state.itemName,
-                                                            itemDescription: this.state.itemDescription,
-                                                            startingBid: Number(this.state.startingBid),
-                                                            seller:Number(store.getState().user.userId),
-                                                            image: this.state.image,
-                                                            auction: null,
+                                                if(this.state.newCategory !== null){
+                                                    console.log("NEW CATEGORY",this.state.newCategory)
+                                                    axios({
+                                                        method: 'POST',
+                                                        url: `http://localhost:8080/categories`,
+                                                        headers: {
+                                                            'Authorization':store.getState().user.header,
+                                                        },
+                                                        data: {categoryName: this.state.newCategory}
+                                                    }).then(res=>{
+                                                        let auctionObject = {
+                                                            auctionName: this.state.title,
+                                                            auctionTime: this.state.eventTime,
+                                                            auctionDate: this.state.eventDate.format("YYYY-MM-DD"),
+                                                            auctionDetails: this.state.description,
+                                                            auctionDuration: totalTime,
+                                                            itemHolderList: [
+                                                                {
+                                                                    itemName: this.state.itemName,
+                                                                    itemDescription: this.state.itemDescription,
+                                                                    startingBid: Number(this.state.startingBid),
+                                                                    seller:Number(store.getState().user.userId),
+                                                                    image: this.state.image,
+                                                                    auction: null,
+                                                                    bids: [],
+                                                                    itemCategories: res.data.categoryId
+                                                                }
+                                                            ],
+                                                            seller: store.getState().user.userId,
                                                             bids: [],
-                                                            itemCategories: [categoryId]
+                                                            bidders: []
+                                                            //  items: this.state.itemObject
                                                         }
-                                                    ],
-                                                    seller: store.getState().user.userId,
-                                                    bids: [],
-                                                    bidders: []
-                                                  //  items: this.state.itemObject
+                                                        console.log("AUCTION OBJECT",auctionObject)
+                                                        axios({
+                                                            method: 'POST',
+                                                            url: `http://localhost:8080/auctions/createAuction`,
+                                                            headers: {
+                                                                'Authorization':store.getState().user.header,
+                                                            },
+                                                            data: auctionObject
+                                                        }).then(response=>{
+                                                            console.log("SUCCESSFUL",response)
+                                                            this.setState({
+                                                                fireSuccessful: true
+                                                            })}
+                                                        )
+                                                    })
                                                 }
-                                                axios({
-                                                    method: 'POST',
-                                                    url: `http://localhost:8080/auctions/createAuction`,
-                                                    headers: {
-                                                        'Authorization':store.getState().user.header,
-                                                    },
-                                                    data: auctionObject
-                                                }).then(response=>{
-                                                    console.log("SUCCESSFUL",response)
-                                                    this.setState({
-                                                        fireSuccessful: true
-                                                    })}
-                                                )
+                                               else{
+                                                    let auctionObject = {
+                                                        auctionName: this.state.title,
+                                                        auctionTime: this.state.eventTime,
+                                                        auctionDate: this.state.eventDate.format("YYYY-MM-DD"),
+                                                        auctionDetails: this.state.description,
+                                                        auctionDuration: totalTime,
+                                                        itemHolderList: [
+                                                            {
+                                                                itemName: this.state.itemName,
+                                                                itemDescription: this.state.itemDescription,
+                                                                startingBid: Number(this.state.startingBid),
+                                                                seller:Number(store.getState().user.userId),
+                                                                image: this.state.image,
+                                                                auction: null,
+                                                                bids: [],
+                                                                itemCategories: [categoryId]
+                                                            }
+                                                        ],
+                                                        seller: store.getState().user.userId,
+                                                        bids: [],
+                                                        bidders: []
+                                                        //  items: this.state.itemObject
+                                                    }
+                                                    console.log("AUCTION OBJECT",auctionObject)
+                                                    axios({
+                                                        method: 'POST',
+                                                        url: `http://localhost:8080/auctions/createAuction`,
+                                                        headers: {
+                                                            'Authorization':store.getState().user.header,
+                                                        },
+                                                        data: auctionObject
+                                                    }).then(response=>{
+                                                        console.log("SUCCESSFUL",response)
+                                                        this.setState({
+                                                            fireSuccessful: true
+                                                        })}
+                                                    )
+                                                }
+
                                             }}
                                         />
                                     </Grid>

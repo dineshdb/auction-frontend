@@ -47,7 +47,9 @@ class Home extends React.Component {
             newToday: [],
             mine: [],
             upcoming: [],
-            myItems: []
+            myItems: [],
+            wonItems: [],
+            forHighestBidder: [],
         }
     }
     componentDidMount() {
@@ -79,6 +81,7 @@ class Home extends React.Component {
                             if(item.auction !== null){
                                 getAuctionDetails(item.auction.auctionId)
                                     .then(res=>{
+                                        console.log("AUCTION",res)
                                         let seller = res.seller.userId
                                         let eventDateTime=  moment(res.auctionDate+' '+res.auctionTime)
                                         let timeSlice = Number(res.auctionDuration)/60
@@ -87,9 +90,7 @@ class Home extends React.Component {
                                         let total_minutes = Number(Math.abs(Number(duration.hours))*60+Math.abs(Number(duration.minutes))+Math.abs(Number(duration.seconds/60)))
                                         let minutes = Math.floor(total_minutes)
                                         let seconds = Math.floor((total_minutes-minutes)*60)
-                                        console.log("TIMESLICE",timeSlice,res)
                                         if(duration_ < 0) {
-                                            console.log("TIMESLICE",timeSlice)
                                             if (total_minutes < timeSlice) {
                                                 live = true
                                             }
@@ -99,9 +100,6 @@ class Home extends React.Component {
                                         }
 
                                         if(live){
-                                            if(seller == user){
-                                                myItems.push({...item,isFavorite: true,state:'LIVE',color:'#77e27b'})
-                                            }
                                             liveGallery.push({...item,state:'LIVE',color:'#77e27b'})
 
                                         }
