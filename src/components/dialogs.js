@@ -22,10 +22,12 @@ import {connect} from 'react-redux'
 import axios from 'axios'
 import {USER_TOKEN} from "../definitions/index";
 import Typography from '@material-ui/core/Typography'
+import IconButton from '@material-ui/core/IconButton'
 import Collapse from '@material-ui/core/Collapse'
 import TextField from '@material-ui/core/TextField'
 import store from '../store'
-
+import Close from '@material-ui/icons/Close'
+import ToolBar from '@material-ui/core/Toolbar'
 const styles = (theme) => {
     return{
         textField: {
@@ -97,6 +99,7 @@ class SelectItem  extends React.Component{
             handleImage,
             handleSubmit,
             handleCategory,
+            handleNewCategory,
             classes,
             imageUrl,
             category
@@ -116,11 +119,13 @@ class SelectItem  extends React.Component{
                     fullWidth
                     style={{height: "80%"}}
                 >
-                    <DialogTitle id="select-item">
-                        {title}
-                    </DialogTitle>
                     <DialogContent>
+                        <IconButton
+                            onClick={handleClose}
+                        ><Close/>
+                        </IconButton>
                         <Grid container spacing="24">
+
                             <Grid item xs = {6}>
                                 <Card className={classes.card}>
                                     {
@@ -141,6 +146,8 @@ class SelectItem  extends React.Component{
                             </Grid>
                             <Grid item xs = {6}>
                                 <div>
+
+
                                     <SimpleTextField
                                         type="text"
                                         handler={handleName}
@@ -169,93 +176,84 @@ class SelectItem  extends React.Component{
                                         handler={handleStartingBid}
                                         placeholder="Starting Bid"
                                         property={classes.textField}
-                                        style={{width: "50%"}}
 
                                     />
                                 </div>
                                 {
                                     (
                                         <div>
-                                            <FormControl className={classes.formControl}>
-                                            <InputLabel htmlFor="demo-controlled-open-select">Category  </InputLabel>
-                                            <Select
-                                                value={this.props.category}
-                                                onChange={handleCategory}
-                                                name="category"
-                                                inputProps={{
-                                                    id: 'demo-controlled-open-select',
-                                                    name: 'category'
-                                                }}
-                                            >
-                                                {
-                                                    this.state.categories.map((category)=>{
+                                            <Collapse in={!this.state.newCategoryOpen}>
+                                                <FormControl className={classes.formControl}>
+                                                    <InputLabel
+                                                        htmlFor="demo-controlled-open-select">Category </InputLabel>
+                                                    <Select
+                                                        value={this.props.category}
+                                                        onChange={handleCategory}
+                                                        name="category"
+                                                        inputProps={{
+                                                            id: 'demo-controlled-open-select',
+                                                            name: 'category'
+                                                        }}
+                                                    >
+                                                        {
+                                                            this.state.categories.map((category) => {
 
-                                                        return <MenuItem
-                                                            value={category.categoryName}
-                                                        >{category.categoryName}
-                                                        </MenuItem>
-                                                    })
+                                                                return <MenuItem
+                                                                    value={category.categoryName}
+                                                                >{category.categoryName}
+                                                                </MenuItem>
+                                                            })
 
-                                                }
-                                            </Select>
-                                            </FormControl>
-                                            <a
-                                                style={{
-                                                        color: '#ff74ad',
-                                                       float: "right",
-                                                        '&:hover':{
-                                                           color: "#11a6e5"
                                                         }
-                                                }}
-                                                href='#'
-                                                color="secondary"
-                                                onClick={()=>{
-                                                    this.setState({
-                                                        newCategoryOpen: true
-                                                    })
-                                                }}
-                                            >
-                                                Add New <Add/>
-                                            </a>
-                                            <Collapse in = {this.state.newCategoryOpen}>
+                                                    </Select>
+                                                </FormControl>
+                                            </Collapse>
+                                            <Collapse in={this.state.newCategoryOpen}>
                                                 <TextField
                                                     type="text"
-                                                    onChange={(event)=>{
-                                                       this.setState({
-                                                       newCategory: event.target.value
-                                                    })
-                                                    }}
+                                                    placeholder="New Category"
+                                                    className={classes.textField}
+                                                    onChange={handleNewCategory}
 
                                                 />
                                             </Collapse>
+
+                                            <ToolBar>
+
+                                                <Button
+                                                    style={{marginTop: 5,float: 'left'}}
+                                                    variant="outlined"
+                                                    color="secondary"
+                                                    onClick={() => {
+                                                        this.setState({
+                                                            newCategoryOpen: !this.state.newCategoryOpen
+                                                        })
+                                                    }}
+                                                >
+                                                    {this.state.newCategoryOpen ? <span>categories</span> :
+                                                        <span>New Category</span>}
+                                                </Button>
+
+                                                <Button
+                                                    variant="outlined"
+                                                    color="secondary"
+                                                    aria-label="Add"
+                                                    onClick={() => this.fileInput.click()}
+                                                    style={{marginTop: 5,float: 'right'}}
+                                                >Upload Image
+                                                    <Add/>
+                                                </Button>
+                                            </ToolBar>
+
+
                                         </div>
                                     )
                                 }
-
-                                <div style={{margin: "5%"}}>
-                                    <Button
-                                        variant="outlined"
-                                        color="primary"
-                                        aria-label="Add"
-                                        className={classes.button}
-                                        onClick = {()=>this.fileInput.click()}
-                                        style={{marginLeft: "1%"}}
-                                    >Upload Image
-                                        <Add />
-                                    </Button>
-                                </div>
-
                             </Grid>
                         </Grid>
 
                     </DialogContent>
                     <DialogActions>
-                        <CustomButton
-                            name="Cancel"
-                            handler={handleClose}
-                            variant="outlined"
-                            color="secondary"
-                        />
 
                         <CustomButton
                             name="Submit"

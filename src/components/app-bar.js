@@ -16,9 +16,8 @@ import Badge from '@material-ui/core/Badge';
 import {SIGN_OUT} from "../store";
 import {Redirect} from 'react-router-dom'
 import store from '../store'
-import {productsAdd,addAuctionStarted} from "../store";
-import {getFavorites} from "../products";
-
+import {getFavorites,userProfile} from "../products";
+import UserProfile from '../components/userProfile'
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -51,7 +50,9 @@ class HomeBar extends React.Component {
             userId: "",
             fireHome: false,
             userName: "",
-            favoritesCount: 0
+            favoritesCount: 0,
+            showProfile: false,
+            userData: {}
         }
     }
     componentDidMount(){
@@ -67,6 +68,11 @@ class HomeBar extends React.Component {
                 })
         })
 
+    }
+    handleCloseProfile=()=>{
+        this.setState({
+            showProfile: false
+        })
     }
     handleLogOut = () =>{
         store.dispatch({type: 'SIGN_OUT'})
@@ -94,7 +100,27 @@ class HomeBar extends React.Component {
         this.handleClose()
     }
     openProfile = () =>{
-        this.handleClose()
+        let data = {}
+        console.log("State",this.state)
+        if(!this.state.showProfile){
+            userProfile(store.getState().user.userId)
+                .then(res=>{
+                    this.setState({
+                        showProfile: true,
+                        userData: res
+                    })
+                })
+        }
+        else{
+            this.setState({
+                showProfile : false
+            })
+        }
+
+
+
+
+
     }
     render() {
         const {classes} = this.props;
@@ -104,22 +130,22 @@ class HomeBar extends React.Component {
         
         return (
                 <div >
-                    <AppBar position="static" className={classes.root}>
+                    <AppBar position="sticky" className={classes.root}>
                         <Toolbar>
 
                             
                                 <Typography variant="title" color="inherit" className={classes.flex}>
                                 <Link to="/">
-                                BidSteller.com
+                                BidStellar
                                 </Link>
                                 </Typography>
                             
                             {(this.state.isOnline) && (
                                 <div>
                                     <Link to="/add">
-                                        <Button>
-                                            <Icon>add</Icon>
-                                        </Button>
+                                        <IconButton >
+                                            <Icon style={{color: "black"}}>add</Icon>
+                                        </IconButton>
                                     </Link>
                                     <Link to="/favs">
                                         <Badge className={classes.badge} badgeContent={this.state.favoritesCount} color="secondary">
@@ -175,8 +201,8 @@ class HomeBar extends React.Component {
                                     </Link>
                                     <Link to="/login">
                                         <Button
-                                            color="primary"
-                                            style={{color: "white"}}
+                                            color="secondary"
+                                            variant="outlined"
                                             >
                                             Login
                                         </Button>
@@ -191,6 +217,16 @@ class HomeBar extends React.Component {
                             <Redirect to = "/" />
                         )
                     }
+                  <UserProfile
+                    isOpen={this.state.showProfile}
+                    handleClose={() => {
+                        this.setState({
+                            showProfile: false
+                        })
+                    }
+                    }
+                    userObject = {this.state.userData}
+                  />
                 </div>
         )
     }
