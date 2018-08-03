@@ -410,6 +410,7 @@ class SellProductForm extends React.Component {
                                                         },
                                                         data: {categoryName: this.state.newCategory}
                                                     }).then(res=>{
+                                                        console.log('res',res)
                                                         let auctionObject = {
                                                             auctionName: this.state.title,
                                                             auctionTime: this.state.eventTime,
@@ -425,7 +426,7 @@ class SellProductForm extends React.Component {
                                                                     image: this.state.image,
                                                                     auction: null,
                                                                     bids: [],
-                                                                    itemCategories: res.data.categoryId
+                                                                    itemCategories: [res.data.categoryId]
                                                                 }
                                                             ],
                                                             seller: store.getState().user.userId,

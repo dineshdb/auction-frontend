@@ -25,8 +25,10 @@ export function fetchEach(items){
 export function getCategories(){
     return fetchJSON(categoriesUrl)
 }
+export function getSearched(search){
+    return fetchJSON(`${baseUrl}/items/query/${search}`)
+}
 export function getFavorites(){
-    console.log("favs",store.getState())
     return fetchJSON(`${baseUrl}/users/${store.getState().user.userId}/favorites`)
 }
 

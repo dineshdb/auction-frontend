@@ -16,7 +16,6 @@ import Badge from '@material-ui/core/Badge';
 import {SIGN_OUT} from "../store";
 import {Redirect} from 'react-router-dom'
 import store from '../store'
-import {productsAdd,addAuctionStarted} from "../store";
 import {getFavorites,userProfile} from "../products";
 import UserProfile from '../components/userProfile'
 const styles = theme => ({
@@ -202,8 +201,8 @@ class HomeBar extends React.Component {
                                     </Link>
                                     <Link to="/login">
                                         <Button
-                                            color="primary"
-                                            style={{color: "white"}}
+                                            color="secondary"
+                                            variant="outlined"
                                             >
                                             Login
                                         </Button>
@@ -221,7 +220,6 @@ class HomeBar extends React.Component {
                   <UserProfile
                     isOpen={this.state.showProfile}
                     handleClose={() => {
-                        console.log("CLICKED")
                         this.setState({
                             showProfile: false
                         })
