@@ -176,12 +176,8 @@ class ProductDetails extends React.Component {
         }
     }
     componentDidMount(){
-        console.log("STORE",store.getState())
-
         if(store.getState().isLoggedIn){
             getFavorites().then(res=>{
-                console.log("INSIDE")
-                console.log("favorites",res)
                 if(res.length> 0){
                     res.map(favorite=>{
                         subscribeAuction(favorite)
@@ -190,18 +186,16 @@ class ProductDetails extends React.Component {
 
             })
         }
-        // this.handleDuration()
 
         this.tick()
 
     }
     tick(){
-        console.log("State",this.state)
         setInterval(this.handleDuration,1000)
 
     }
     handleDuration = ()=>{
-        // let highest = getHighestBid(this.state.auctionDetails.auctionId,store.getState())
+
 
         if(this.state.eventStarted){
             if(this.state.minutes >= 1){
@@ -272,7 +266,7 @@ class ProductDetails extends React.Component {
         const id = this.props.match.params.id
         const userId = store.getState().user.userId
         if (this.state.count === 0){
-            console.log("status",this.state)
+
             axios({
                 method: 'GET',
                 url: `http://localhost:8080/items/${id}`,
@@ -280,7 +274,6 @@ class ProductDetails extends React.Component {
                     'Authorization':store.getState().user.header
                 },
             }).then((res)=>{
-                console.log("RESPONSE",res)
                 let details = res.data
                 this.setState({
                     details: details,
@@ -294,13 +287,11 @@ class ProductDetails extends React.Component {
                     },
                     responseType: 'blob'
                 }).then((response)=>{
-                    console.log(response)
                     const url = window.URL.createObjectURL(new Blob([response.data]))
                     this.setState({
                         image: url
                     })
                     let auction = details.auction
-                    console.log("AUCTION",auction)
                         let participated = false
                         let buttonName = "Participate"
                         auction.bidders.map((bidder)=>{
@@ -547,7 +538,6 @@ class ProductDetails extends React.Component {
                                                         }
 
                                                         if(!this.state.alreadyParticipated){
-                                                            console.log("NOT participated")
                                                             subscribeAuction(auction.auctionId)
 
                                                             participateInAuction(auction.auctionId)

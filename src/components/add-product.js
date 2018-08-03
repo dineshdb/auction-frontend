@@ -262,7 +262,7 @@ class SellProductForm extends React.Component {
                                                 <Grid item xs="3">
                                                     <br/>
                                                     <br/>
-                                                    <Typography className={classes.description} style={{fontWeight: "lighter"}}>
+                                                    <Typography className={classes.description} style={{fontWeight: "lighter",opacity:0.5}}>
                                                         Event Start
                                                     </Typography>
                                                     <SimpleTextField
@@ -281,7 +281,7 @@ class SellProductForm extends React.Component {
                                                 <Grid item xs="3">
                                                     <br/>
                                                     <br/>
-                                                    <Typography className={classes.description} style={{fontWeight: 'lighter'}}>
+                                                    <Typography className={classes.description} style={{fontWeight: 'lighter',opacity:0.5}}>
                                                         Duration
                                                     </Typography>
                                                     <SimpleTextField
@@ -300,10 +300,9 @@ class SellProductForm extends React.Component {
                                             </Grid>
                                         </ToolBar>
                                         <CustomButton
-                                            color="primary"
+                                            color="secondary"
                                             variant="outlined"
                                             name="Add Item"
-                                            style={{color: "black"}}
                                             handler={this.handleAddItem}
                                             property={classes.button}
                                         />
@@ -399,7 +398,6 @@ class SellProductForm extends React.Component {
                                                     }
                                                 })
                                                 let catId = null
-                                                console.log("TOTALTIME",totalTime)
                                                 if(this.state.newCategory !== null){
                                                     console.log("NEW CATEGORY",this.state.newCategory)
                                                     axios({

@@ -2,7 +2,6 @@ import React from 'react'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import {CustomButton} from "./buttons";
 import PropTypes from 'prop-types'
@@ -15,19 +14,17 @@ import Add from '@material-ui/icons/Add'
 import Button from '@material-ui/core/Button'
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import {connect} from 'react-redux'
 import axios from 'axios'
-import {USER_TOKEN} from "../definitions/index";
-import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import Collapse from '@material-ui/core/Collapse'
 import TextField from '@material-ui/core/TextField'
 import store from '../store'
 import Close from '@material-ui/icons/Close'
 import ToolBar from '@material-ui/core/Toolbar'
+import {getCategories} from "../products";
+
 const styles = (theme) => {
     return{
         textField: {
@@ -70,15 +67,11 @@ class SelectItem  extends React.Component{
     componentDidMount() {
         let categories = []
         if(store.getState().user.header){
-            axios({
-                method: 'GET',
-                url: `http://localhost:8080/categories`,
-                headers: {
-                    'Authorization':store.getState().user.header
-                }
-            }).then((response)=> {
-
-                response.data.map((category) => {
+           getCategories().then((response)=> {
+               console.log(response,"RESPONSE")
+                let setOfResponse = new Set(response)
+                setOfResponse = Array.from(setOfResponse)
+                setOfResponse.map((category) => {
                     categories.push(category)
                 })
                 this.setState({

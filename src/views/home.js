@@ -3,16 +3,18 @@ import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import {connect} from 'react-redux'
 import TileView from '../components/tile-view'
-import {fetchProducts, fetchEach,getAuctionDetails,getFavorites,fetchProduct} from '../products'
-import Typography from '@material-ui/core/Typography'
-import Paper from '@material-ui/core/Paper'
+import {fetchProducts, fetchEach, getAuctionDetails, getFavorites, fetchProduct, getCategories,fetchItemsFromCategory} from '../products'
+import Drawer from '@material-ui/core/Drawer'
 import IconButton from '@material-ui/core/IconButton'
+import ListItem from '@material-ui/core/ListItem'
 import Toolbar from '@material-ui/core/Toolbar'
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import List from '@material-ui/core/List'
+import Browse from '@material-ui/icons/Menu'
 import Favorite from '@material-ui/icons/Favorite'
-import Gallery from '@material-ui/icons/Image'
+import Gallery from '@material-ui/icons/PhotoAlbum'
 import Live from '@material-ui/icons/LiveTv'
 import Upcoming from '@material-ui/icons/NewReleases'
 import MyItems from '@material-ui/icons/Dashboard'
@@ -25,10 +27,15 @@ import store, {
     updateAuctionListAction,
     auctionStartedAction, updateFavorites
 } from '../store'
+import categories from "../reducers/categories";
+
 
 const styles = (theme) =>({
     margin: {
         margin: theme.spacing.unit*5
+    },
+    list: {
+        width: 250,
     },
     root: {
         flexGrow: 1,
@@ -57,15 +64,26 @@ class Home extends React.Component {
             forHighestBidder: [],
             search: [],
             searchValue: false,
-            searchString: ""
+            searchString: "",
+            categories: [],
+            fromCategory: [],
+            left: false,
+            categoryRender: false
         }
     }
     componentDidMount() {
         let favoritesFromApi = []
         let user = store.getState().user.userId
+        getCategories()
+            .then(response=>{
+                this.setState({
+                    categories: response
+                })
+            })
+            .catch("err",console.log)
+
         getFavorites().then(res=>{
             store.dispatch(updateFavorites({favorites:res}))
-//            res.forEach(subscribeAuction)
         }).catch(console.log)
 
         getFavorites()
@@ -124,10 +142,10 @@ class Home extends React.Component {
                                             }
                                             else{
                                                 if(seller == user){
-                                                    myItems.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#ff74ad'})
+                                                    myItems.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#abacff'})
                                                 }
-                                                upcomingGallery.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#ff74ad'})
-                                                withFavoritesGallery.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#ff74ad'})
+                                                upcomingGallery.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#abacff'})
+                                                withFavoritesGallery.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#abacff'})
                                             }
 
                                         }
@@ -146,6 +164,12 @@ class Home extends React.Component {
             })
 
     }
+    toggleDrawer = (side, open) => () => {
+        this.setState({
+            [side]: open,
+            value: 5
+        });
+    };
     handleChange = (event, value) => {
         this.setState({ value });
     };
@@ -153,6 +177,70 @@ class Home extends React.Component {
     render(){
         const {classes} = this.props
         const {value} = this.state
+        const sideList = (
+            <div className={classes.list}>
+                <List>
+                    <ListItem disabled>Categories</ListItem>
+                    {this.state.categories.map((category, key) => {
+                            return <ListItem button onClick={()=>{
+                                fetchItemsFromCategory(category.categoryId)
+                                    .then(fetchEach)
+                                    .then(gallery => {
+                                        let favorites = []
+                                        gallery.map(item => {
+                                            let temp = false
+                                            let live = false
+                                            let ended = false
+                                            let res = item.auction
+                                            if(res !== null){
+                                                let timeSlice = Number(res.auctionDuration)/60
+                                                let eventDateTime=  moment(res.auctionDate+' '+res.auctionTime)
+                                                let duration_ = moment.duration(eventDateTime-moment())
+                                                let duration=duration_._data
+                                                let total_minutes = Number(Math.abs(Number(duration.hours))*60+Math.abs(Number(duration.minutes))+Math.abs(Number(duration.seconds/60)))
+                                                let minutes = Math.floor(total_minutes)
+                                                let seconds = Math.floor((total_minutes-minutes)*60)
+                                                if(duration_ < 0) {
+
+                                                    if (total_minutes < timeSlice) {
+                                                        live = true
+                                                    }
+                                                    else{
+                                                        ended = true
+                                                    }
+                                                }
+
+                                                if(ended){
+
+                                                    favorites.push({...item,isFavorite: temp,state:'ENDED',color:'#ea000a'})
+                                                }
+                                                else{
+                                                    if(live){
+                                                        favorites.push({...item,isFavorite: temp,state:'LIVE',color:'#77e27b'})
+                                                    }
+                                                    else{
+                                                        favorites.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#ff74ad'})
+                                                    }
+
+                                                }
+
+                                            }
+
+
+
+
+                                        })
+                                        console.log("fAV",favorites)
+                                        this.setState({fromCategory:favorites,categoryRender: true})
+                                    })
+                            }} key = {key} >{category.categoryName}</ListItem>
+
+                        }
+                    )
+                    }
+                </List>
+            </div>
+        );
         return (
             <div>
                 <AppBar position="sticky">
@@ -162,7 +250,9 @@ class Home extends React.Component {
                         <Tab label="Live" icon = {<Live/>}href="#basic-tabs" />
                         <Tab label="Upcoming Auctions" icon = {<Upcoming/>}href="#basic-tabs" />
                         <Tab label="My Items" icon = {<MyItems/>}href="#basic-tabs" />
+                        <Tab label="Categories" icon = {<Browse/>}href="#basic-tabs" />
                         <Tab label="Searched" icon = {<Search/>}href="#basic-tabs" />
+
                     </Tabs>
                     <TextField placeholder="Search" onChange={(event)=>{
                         this.setState({
@@ -179,7 +269,6 @@ class Home extends React.Component {
                                                     let live = false
                                                     let ended = false
                                                     let res = item.auction
-                                        console.log("RES",res)
                                         if(res !== null){
                                             let timeSlice = Number(res.auctionDuration)/60
                                             let eventDateTime=  moment(res.auctionDate+' '+res.auctionTime)
@@ -219,7 +308,7 @@ class Home extends React.Component {
 
                                         })
                                     console.log("fAV",favorites)
-                                    this.setState({search:favorites,searchValue: true,value: 4})
+                                    this.setState({search:favorites,searchValue: true,value: 5})
                                     })
 
 
@@ -232,7 +321,23 @@ class Home extends React.Component {
                 {value === 1 && <TileView items={this.state.liveGallery} basePath={"/product/"}/>}
                 {value === 2 && <TileView items={this.state.upcoming} basePath={"/product/"}/>}
                 {value === 3 && <TileView items={this.state.myItems} basePath={"/product/"}/>}
-                {this.state.searchValue && value === 4 && <TileView items={this.state.search} basePath={'/product/'}/>}
+                {value === 4 && <div>
+                    <Drawer open={true} onClose={this.toggleDrawer('left', false)}>
+                        <div>
+                        <div
+                            tabIndex={0}
+                            role="button"
+                            onClick={this.toggleDrawer('left', false)}
+                            onKeyDown={this.toggleDrawer('left', false)}
+                        >
+                            {sideList}
+
+                        </div>
+                        </div>
+                    </Drawer>
+                </div>}
+                {this.state.searchValue && value === 5 && <TileView items={this.state.search} basePath={'/product/'}/>}
+                {value === 5 && this.state.categoryRender && <TileView items={this.state.fromCategory} basePath={"/product/"}/>}
 
 
             </div>

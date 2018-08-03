@@ -26,7 +26,6 @@ import store, {
 import AppBar from './components/app-bar'
 class App extends React.Component {
     constructor(props){
-         console.log("store",store.getState())
         super(props)
         this.state = {
             isOnline : store.getState().isLoggedIn

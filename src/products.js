@@ -14,6 +14,9 @@ export function fetchProducts(){
 export function fetchFavorites(){
     return fetchJSON(baseFavoritesUrl)
 }
+export function fetchItemsFromCategory(id){
+    return fetchJSON(`${baseUrl}/categories/${id}/items`)
+}
 
 export function fetchProduct(id){
     return fetchJSON(`${baseProductUrl}/${id}`)

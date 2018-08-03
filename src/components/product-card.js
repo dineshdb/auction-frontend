@@ -106,7 +106,7 @@ class Product extends React.Component {
                     {state}</Typography>
             
                 <Link to={baseUrl + itemId} className={classes.right}> 
-                <CardMedia  className={classes.media} image={image} itemName={itemName}></CardMedia>
+                <CardMedia  className={classes.media} image={image}></CardMedia>
                 <CardContent>
                     <div className={classes.flex}>
                         <Typography gutterBottom variant="headline" component="h3" style={{fontWeight: "lighter"}}>

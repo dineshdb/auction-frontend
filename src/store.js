@@ -123,7 +123,6 @@ const reducer = ( state = initializeState(), action) => {
             return {...state,products: withNewAuction}
         case UPDATE_FAVORITES:
             let {favorites} = action.payload
-            console.log("favorites in store",favorites)
             return {...state,favorites: favorites}
         case ADD_TO_CART:
 
@@ -206,13 +205,8 @@ const reducer = ( state = initializeState(), action) => {
                 maximum=bidAmount
                 maxBidder=userId
             }
-
-            console.log("Highest",state.highestBid)
-            console.log("state",state)
             let index = auctions.findIndex(el => el.auctionId === auctionId)
             if (index === -1){
-                console.log("INSIDE -1")
-
                 let newAuction = true
                 state.highestBid.map((auction,key)=>{
                     if(auction.auctionId === auctionId){
@@ -223,7 +217,6 @@ const reducer = ( state = initializeState(), action) => {
                             maximumBid: maximum,
                             maximumBidder: maxBidder
                         }
-                        console.log("STATE",state)
                         return {...state,highestBid:temp,currentBidder:userId,currentBid:bidAmount}
 
                     }
@@ -259,7 +252,6 @@ const reducer = ( state = initializeState(), action) => {
                 }
             })
             if(newUser){
-                console.log("STATE",state)
                 return Object.assign({}, state, {currentBid:bidAmount,currentBidder:userId,auctions: [...auctions, auction],highestBid:[...state.highestBid,{auctionId:auctionId,maximumBid:maximum,maximumBidder:maxBidder}]})
             }
             else{
