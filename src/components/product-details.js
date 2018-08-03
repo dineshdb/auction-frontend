@@ -162,7 +162,8 @@ class ProductDetails extends React.Component {
             bidReject: false,
             currentBidder: 0,
             currentBid: 0,
-            currentHighest:0
+            currentHighest:0,
+            timeSlice: 0
 
 
 
@@ -170,6 +171,7 @@ class ProductDetails extends React.Component {
     }
     componentDidMount(){
         console.log("STORE",store.getState())
+
         if(store.getState().isLoggedIn){
             getFavorites().then(res=>{
                 console.log("INSIDE")
@@ -188,7 +190,7 @@ class ProductDetails extends React.Component {
 
     }
     tick(){
-
+        console.log("State",this.state)
         setInterval(this.handleDuration,1000)
 
     }
@@ -233,10 +235,10 @@ class ProductDetails extends React.Component {
             }
             else{
 
-                if (total_minutes < 11){
+                if (total_minutes < this.state.timeSlice){
 
                     this.setState({
-                        minutes: 11-minutes,
+                        minutes: this.state.timeSlice-minutes,
                         seconds: 60-seconds
                     })
                     this.setState({
@@ -322,6 +324,8 @@ class ProductDetails extends React.Component {
                                 auctionDetails: auction,
                                 alreadyParticipated: participated,
                                 buttonName: buttonName,
+                                minutes: Number(data.auctionDuration)*60,
+                                timeSlice: Number(data.auctionDuration)*60,
                                 eventDateTime: moment(data.auctionDate+' '+data.auctionTime)
                             })
 

@@ -385,6 +385,7 @@ class SellProductForm extends React.Component {
                                                         totalTime+= instant*60
                                                     }
                                                 })
+                                                console.log("TOTALTIME",totalTime)
                                                 let auctionObject = {
                                                     auctionName: this.state.title,
                                                     auctionTime: this.state.eventTime,

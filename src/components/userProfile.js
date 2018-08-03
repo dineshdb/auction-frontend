@@ -8,6 +8,11 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import Avatar from '@material-ui/core/Avatar';
 import classNames from 'classnames'
+import Grid from '@material-ui/core/Grid'
+import Location from '@material-ui/icons/LocationOn'
+import Phone from '@material-ui/icons/Phone'
+import Email from '@material-ui/icons/Email'
+import User from '@material-ui/icons/VerifiedUser'
 const styles= (theme)=>{
     return {
         margin: {
@@ -21,21 +26,28 @@ const styles= (theme)=>{
             height: 500
         },
         close:{
-            marginLeft: theme.spacing.unit*100
+            marginLeft: theme.spacing.unit*60
         },
         avatar: {
             margin: 10,
-            marginLeft:150
+            marginLeft:20
         },
         bigAvatar: {
-            width: 200,
-            height: 200,
+            width: 140,
+            height: 140,
+            color:'#fff',
+            backgroundColor: '#4351aa'
         },
         purpleAvatar: {
             margin: 10,
             color: '#fff',
             backgroundColor: "#4351aa",
         },
+        typo:{
+            margin: theme.spacing.unit,
+            color: '#11a6e5',
+            fontWeight: 'lighter',
+        }
     }
 }
 class UserProfile extends React.Component{
@@ -68,19 +80,24 @@ class UserProfile extends React.Component{
                     className={classes.close}
                     onClick={this.handleClose}
                 />
-               <Avatar className={classNames(classes.avatar, classes.bigAvatar)}>AB</Avatar>
-                <Typography>
-                    {userObject.userName}
-                </Typography>
-                <Typography>
-                    {userObject.userEmail}
-                </Typography>
-                <Typography>
-                    {userObject.userAddress}
-                </Typography>
-                <Typography>
-                    {userObject.userPhone}
-                </Typography>
+               <Grid container spacing={24}>
+                   <Grid item xs={4} xl={4} sm={4} lg={4}>
+                       <Avatar className={classNames(classes.avatar, classes.bigAvatar)}><User/>{userObject.userName}</Avatar>
+                   </Grid>
+                   <Grid item xs={8} xl={8} sm={8} lg={8}>
+                       <Typography className={classes.typo}>
+                           <Email/>{userObject.userEmail}
+                       </Typography>
+                       <Typography className={classes.typo}>
+                           <Phone/>{userObject.userPhone}
+                       </Typography>
+                       <Typography className={classes.typo}>
+                          <Location/> {userObject.userAddress}
+                       </Typography>
+                   </Grid>
+               </Grid>
+
+
 
 
            </DialogContent>
