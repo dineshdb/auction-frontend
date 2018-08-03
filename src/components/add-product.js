@@ -295,6 +295,7 @@ class SellProductForm extends React.Component {
                                             color="primary"
                                             variant="outlined"
                                             name="Add Item"
+                                            style={{color: "black"}}
                                             handler={this.handleAddItem}
                                             property={classes.button}
                                         />
@@ -331,7 +332,8 @@ class SellProductForm extends React.Component {
                                                         let imagePostObject = new FormData()
                                                         imagePostObject.append('file',selectedImage)
                                                         uploadFile( imagePostObject)
-                                                        .then(res => res.json())
+                                                        .then(res => {
+                                                            return res.json()})
                                                         .then(res =>{
                                                             this.setState({
                                                                 image:res.fileDownloadUri

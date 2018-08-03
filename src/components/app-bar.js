@@ -17,8 +17,8 @@ import {SIGN_OUT} from "../store";
 import {Redirect} from 'react-router-dom'
 import store from '../store'
 import {productsAdd,addAuctionStarted} from "../store";
-import {getFavorites} from "../products";
-
+import {getFavorites,userProfile} from "../products";
+import UserProfile from '../components/userProfile'
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -51,7 +51,9 @@ class HomeBar extends React.Component {
             userId: "",
             fireHome: false,
             userName: "",
-            favoritesCount: 0
+            favoritesCount: 0,
+            showProfile: false,
+            userData: {}
         }
     }
     componentDidMount(){
@@ -94,7 +96,27 @@ class HomeBar extends React.Component {
         this.handleClose()
     }
     openProfile = () =>{
-        this.handleClose()
+        let data = {}
+        console.log("State",this.state)
+        if(!this.state.showProfile){
+            userProfile(store.getState().user.userId)
+                .then(res=>{
+                    this.setState({
+                        showProfile: true,
+                        userData: res
+                    })
+                })
+        }
+        else{
+            this.setState({
+                showProfile : false
+            })
+        }
+
+
+
+
+
     }
     render() {
         const {classes} = this.props;
@@ -189,6 +211,13 @@ class HomeBar extends React.Component {
                     {
                         this.state.fireHome && (
                             <Redirect to = "/" />
+                        )
+                    }
+                    {
+                        this.state.showProfile && (
+                            <UserProfile
+                                userObject={this.state.userData}
+                            />
                         )
                     }
                 </div>

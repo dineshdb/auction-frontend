@@ -65,6 +65,7 @@ class Home extends React.Component {
                 fetchProducts()
                     .then(fetchEach)
                     .then(gallery => {
+                        console.log("gallery",gallery)
                         let withFavoritesGallery = []
                         let favorites = []
                         let liveGallery = []
@@ -75,57 +76,61 @@ class Home extends React.Component {
                             let temp = false
                             let live = false
                             let ended = false
-                            getAuctionDetails(item.auction.auctionId)
-                                .then(res=>{
-                                    let seller = res.seller.userId
-                                   let eventDateTime=  moment(res.auctionDate+' '+res.auctionTime)
-                                    let duration_ = moment.duration(eventDateTime-moment())
-                                    let duration=duration_._data
-                                    let total_minutes = Number(Math.abs(Number(duration.hours))*60+Math.abs(Number(duration.minutes))+Math.abs(Number(duration.seconds/60)))
-                                    let minutes = Math.floor(total_minutes)
-                                    let seconds = Math.floor((total_minutes-minutes)*60)
-                                    if(duration_ < 0) {
+                            if(item.auction !== null){
+                                getAuctionDetails(item.auction.auctionId)
+                                    .then(res=>{
+                                        console.log("res",res)
+                                        let seller = res.seller.userId
+                                        let eventDateTime=  moment(res.auctionDate+' '+res.auctionTime)
+                                        let duration_ = moment.duration(eventDateTime-moment())
+                                        let duration=duration_._data
+                                        let total_minutes = Number(Math.abs(Number(duration.hours))*60+Math.abs(Number(duration.minutes))+Math.abs(Number(duration.seconds/60)))
+                                        let minutes = Math.floor(total_minutes)
+                                        let seconds = Math.floor((total_minutes-minutes)*60)
+                                        if(duration_ < 0) {
 
-                                        if (total_minutes < 11) {
-                                            live = true
+                                            if (total_minutes < 11) {
+                                                live = true
+                                            }
+                                            else{
+                                                ended = true
+                                            }
                                         }
-                                        else{
-                                            ended = true
-                                        }
-                                    }
 
-                                    if(live){
-                                        if(seller == user){
-                                            myItems.push({...item,isFavorite: true,state:'LIVE',color:'#77e27b'})
-                                        }
-                                        liveGallery.push({...item,state:'LIVE',color:'#77e27b'})
-
-                                    }
-
-                                    if(ended){
-                                        if(seller == user){
-                                            myItems.push({...item,isFavorite: temp,state:'ENDED',color:'#ea000a'})
-                                        }
-                                        withFavoritesGallery.push({...item,isFavorite: temp,state:'ENDED',color:'#ea000a'})
-                                    }
-                                    else{
                                         if(live){
                                             if(seller == user){
-                                                myItems.push({...item,isFavorite: temp,state:'LIVE',color:'#77e27b'})
+                                                myItems.push({...item,isFavorite: true,state:'LIVE',color:'#77e27b'})
                                             }
-                                            withFavoritesGallery.push({...item,isFavorite: temp,state:'LIVE',color:'#77e27b'})
+                                            liveGallery.push({...item,state:'LIVE',color:'#77e27b'})
+
+                                        }
+
+                                        if(ended){
+                                            if(seller == user){
+                                                myItems.push({...item,isFavorite: temp,state:'ENDED',color:'#ea000a'})
+                                            }
+                                            withFavoritesGallery.push({...item,isFavorite: temp,state:'ENDED',color:'#ea000a'})
                                         }
                                         else{
-                                            if(seller == user){
-                                                myItems.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#ff74ad'})
+                                            if(live){
+                                                if(seller == user){
+                                                    myItems.push({...item,isFavorite: temp,state:'LIVE',color:'#77e27b'})
+                                                }
+                                                withFavoritesGallery.push({...item,isFavorite: temp,state:'LIVE',color:'#77e27b'})
                                             }
-                                            upcomingGallery.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#ff74ad'})
-                                            withFavoritesGallery.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#ff74ad'})
+                                            else{
+                                                if(seller == user){
+                                                    myItems.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#ff74ad'})
+                                                }
+                                                upcomingGallery.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#ff74ad'})
+                                                withFavoritesGallery.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#ff74ad'})
+                                            }
+
                                         }
 
-                                    }
+                                    })
+                            }
 
-                                })
 
 
                         })
@@ -145,6 +150,7 @@ class Home extends React.Component {
     render(){
         const {classes} = this.props
         const {value} = this.state
+        console.log("STTE",this.state)
 
         return (
             <div>

@@ -73,3 +73,6 @@ export function newToday(){
 export function endToday(){
     return fetchJSON(`${baseUrl}/new-today`)
 }
+export function userProfile(userId){
+    return fetchJSON(`${baseUrl}/users/${userId}`)
+}

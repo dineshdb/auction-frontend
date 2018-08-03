@@ -9,7 +9,8 @@ export function fetchApi(path, options){
 }
 
 export function fetchJSON(path, options){
-    return fetchApi(path, options).then(res => res.json())
+    return fetchApi(path, options).then(res => {
+        return res.json()})
 }
 export function postForm(url, body){
     let options = {
