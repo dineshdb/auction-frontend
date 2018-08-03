@@ -74,6 +74,11 @@ class Home extends React.Component {
     componentDidMount() {
         let favoritesFromApi = []
         let user = store.getState().user.userId
+        if(this.state.value === 5 ){
+            this.setState({
+                fromCategory: []
+            })
+        }
         getCategories()
             .then(response=>{
                 this.setState({
@@ -260,56 +265,59 @@ class Home extends React.Component {
                         })
                     }}/>
                         <IconButton variant="contained" color="secondary"  onClick={()=>{
-                            getSearched(this.state.searchString)
-                                .then(fetchEach)
-                                .then(gallery => {
-                                    let favorites = []
-                                    gallery.map(item => {
-                                                    let temp = false
-                                                    let live = false
-                                                    let ended = false
-                                                    let res = item.auction
-                                        if(res !== null){
-                                            let timeSlice = Number(res.auctionDuration)/60
-                                            let eventDateTime=  moment(res.auctionDate+' '+res.auctionTime)
-                                            let duration_ = moment.duration(eventDateTime-moment())
-                                            let duration=duration_._data
-                                            let total_minutes = Number(Math.abs(Number(duration.hours))*60+Math.abs(Number(duration.minutes))+Math.abs(Number(duration.seconds/60)))
-                                            let minutes = Math.floor(total_minutes)
-                                            let seconds = Math.floor((total_minutes-minutes)*60)
-                                            if(duration_ < 0) {
+                            if(this.state.searchString.length > 0){
+                                getSearched(this.state.searchString)
+                                    .then(fetchEach)
+                                    .then(gallery => {
+                                        let favorites = []
+                                        gallery.map(item => {
+                                            let temp = false
+                                            let live = false
+                                            let ended = false
+                                            let res = item.auction
+                                            if(res !== null){
+                                                let timeSlice = Number(res.auctionDuration)/60
+                                                let eventDateTime=  moment(res.auctionDate+' '+res.auctionTime)
+                                                let duration_ = moment.duration(eventDateTime-moment())
+                                                let duration=duration_._data
+                                                let total_minutes = Number(Math.abs(Number(duration.hours))*60+Math.abs(Number(duration.minutes))+Math.abs(Number(duration.seconds/60)))
+                                                let minutes = Math.floor(total_minutes)
+                                                let seconds = Math.floor((total_minutes-minutes)*60)
+                                                if(duration_ < 0) {
 
-                                                if (total_minutes < timeSlice) {
-                                                    live = true
+                                                    if (total_minutes < timeSlice) {
+                                                        live = true
+                                                    }
+                                                    else{
+                                                        ended = true
+                                                    }
+                                                }
+
+                                                if(ended){
+
+                                                    favorites.push({...item,isFavorite: temp,state:'ENDED',color:'#ea000a'})
                                                 }
                                                 else{
-                                                    ended = true
-                                                }
-                                            }
+                                                    if(live){
+                                                        favorites.push({...item,isFavorite: temp,state:'LIVE',color:'#77e27b'})
+                                                    }
+                                                    else{
+                                                        favorites.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#ff74ad'})
+                                                    }
 
-                                            if(ended){
-
-                                                favorites.push({...item,isFavorite: temp,state:'ENDED',color:'#ea000a'})
-                                            }
-                                            else{
-                                                if(live){
-                                                    favorites.push({...item,isFavorite: temp,state:'LIVE',color:'#77e27b'})
-                                                }
-                                                else{
-                                                    favorites.push({...item,isFavorite: temp,state:'ON AUCTION',color:'#ff74ad'})
                                                 }
 
                                             }
-
-                                        }
 
 
 
 
                                         })
-                                    console.log("fAV",favorites)
-                                    this.setState({search:favorites,searchValue: true,value: 5})
+                                        console.log("fAV",favorites)
+                                        this.setState({search:favorites,searchValue: true,value: 5})
                                     })
+                            }
+
 
 
                         }}><Search/>
