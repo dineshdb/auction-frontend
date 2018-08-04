@@ -36,7 +36,7 @@ export function addNewCategory(categoryName){
     return fetchJSON(`${baseUrl}/categories`, {method: 'POST', body: JSON.stringify({categoryName})})
 }
 export function getSearched(search){
-    return fetchJSON(`${baseUrl}/items/query/${search}`)
+    return fetchJSON(`${baseUrl}/search/${search}`)
 }
 export function getFavorites(){
     return fetchJSON(`${baseUrl}/users/${store.getState().user.userId}/favorites`)
