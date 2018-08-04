@@ -154,15 +154,13 @@ class LoginForm extends React.Component{
                         console.log("favorites",favorite)
                         subscribeAuction(favorite)
                     })
+                }).catch(err =>{
+                    console.log("Could not log in", err)
+                    this.setState({
+                        error: "Could not log in",
+                        userOnline: false
+                    })
                 })
-
-            .catch(err => {
-                console.log("Error",err)
-                this.setState({
-                    userOnline: false
-                })
-                throw err
-            })
         }
         handleRedirect= () =>{
             this.setState({
@@ -230,6 +228,7 @@ class LoginForm extends React.Component{
                                 }}
 
                             />
+                            <div >{this.state.error}  </div>
                             <div style={{float: "right", margin: "5px"}}>
                                 <Button
 

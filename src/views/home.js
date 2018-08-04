@@ -26,7 +26,6 @@ import store, {
     updateFavorites
 } from '../store'
 
-
 const styles = (theme) =>({
     margin: {
         margin: theme.spacing.unit*5
@@ -186,7 +185,7 @@ class Home extends React.Component {
         const {value} = this.state
         const sideList = (
             <div className={classes.list}>
-                <List>
+                {/* <List>
                     <ListItem disabled>Categories</ListItem>
                     {this.state.categories.map((category, key) => {
                             return <ListItem button onClick={()=>{
@@ -240,7 +239,7 @@ class Home extends React.Component {
                         }
                     )
                     }
-                </List>
+                </List> */}
             </div>
         );
         return (

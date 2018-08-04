@@ -1,7 +1,7 @@
 import fetch, {postForm, fetchJSON} from './fetch'
 import store from './store'
 import {apiUrl} from './config'
-
+import axios from 'axios'
 export const baseFavoritesUrl = `${apiUrl}/items`
 export const baseProductUrl = `${apiUrl}/items`
 export const categoriesUrl = `${apiUrl}/categories`
@@ -34,7 +34,14 @@ export function getCategories(){
 }
 
 export function addNewCategory(categoryName){
-    return fetchJSON(`${apiUrl}/categories`, {method: 'POST', body: JSON.stringify({categoryName})})
+    return axios.post({
+        data: {categoryName},
+        url: `${apiUrl}/categories`,
+        headers: {
+            'Authorization': store.getState().user.header
+        },
+        cors: true
+    })
 }
 export function getSearched(search){
     return fetchJSON(`${apiUrl}/search/${search}`)
