@@ -95,3 +95,7 @@ export function signup(body){
         // "Content-Type": "application/x-www-form-urlencoded",
     },})
 }
+
+export function createAuction(body){
+    return fetchJSON(`${baseUrl}/auctions/createAuction`, {method: 'POST', body: JSON.stringify(body)})
+}

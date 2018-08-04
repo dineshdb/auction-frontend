@@ -4,7 +4,6 @@ import { withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
-import axios from 'axios'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import ToolBar from '@material-ui/core/Toolbar'
@@ -17,7 +16,7 @@ import {Redirect} from 'react-router-dom'
 import store from '../store'
 import CloseIcon from "@material-ui/icons/Close"
 import IconButton from '@material-ui/core/IconButton'
-import {getCategories, uploadFile, addNewCategory} from '../products'
+import {getCategories, uploadFile, addNewCategory, createAuction} from '../products'
 
 const styles = theme => ({
     root: {
@@ -306,7 +305,6 @@ class SellProductForm extends React.Component {
                                             handler={this.handleAddItem}
                                             property={classes.button}
                                         />
-
                                        <SelectItem open={this.state.openItemMenu}
                                                    category={this.state.itemCategory}
                                                    categories={this.state.categories}
@@ -321,7 +319,6 @@ class SellProductForm extends React.Component {
                                                        this.setState({
                                                            openItemMenu: false
                                                        })
-
                                                        const {
                                                            itemName,
                                                            itemCategory,
@@ -425,14 +422,16 @@ class SellProductForm extends React.Component {
                                                             //  items: this.state.itemObject
                                                         }
                                                         console.log("AUCTION OBJECT",auctionObject)
-                                                        axios({
-                                                            method: 'POST',
-                                                            url: `http://localhost:8080/auctions/createAuction`,
-                                                            headers: {
-                                                                'Authorization':store.getState().user.header,
-                                                            },
-                                                            data: auctionObject
-                                                        }).then(response=>{
+                                                        createAuction(auctionObject)
+                                                        // axios({
+                                                        //     method: 'POST',
+                                                        //     url: `http://localhost:8080/auctions/createAuction`,
+                                                        //     headers: {
+                                                        //         'Authorization':store.getState().user.header,
+                                                        //     },
+                                                        //     data: auctionObject
+                                                        // })
+                                                        .then(response=>{
                                                             console.log("SUCCESSFUL",response)
                                                             this.setState({
                                                                 fireSuccessful: true
@@ -465,21 +464,22 @@ class SellProductForm extends React.Component {
                                                         //  items: this.state.itemObject
                                                     }
                                                     console.log("AUCTION OBJECT",auctionObject)
-                                                    axios({
-                                                        method: 'POST',
-                                                        url: `http://localhost:8080/auctions/createAuction`,
-                                                        headers: {
-                                                            'Authorization':store.getState().user.header,
-                                                        },
-                                                        data: auctionObject
-                                                    }).then(response=>{
+                                                    createAuction(auctionObject)
+                                                    // axios({
+                                                    //     method: 'POST',
+                                                    //     url: `http://localhost:8080/auctions/createAuction`,
+                                                    //     headers: {
+                                                    //         'Authorization':store.getState().user.header,
+                                                    //     },
+                                                    //     data: auctionObject
+                                                    // })
+                                                    .then(response=>{
                                                         console.log("SUCCESSFUL",response)
                                                         this.setState({
                                                             fireSuccessful: true
                                                         })}
                                                     )
                                                 }
-
                                             }}
                                         />
                                     </Grid>

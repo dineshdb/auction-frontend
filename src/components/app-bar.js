@@ -40,7 +40,6 @@ const styles = theme => ({
     }
 });
 
-const Site = "BidStellar.com"
 class HomeBar extends React.Component {
     constructor(props){
         super(props)
