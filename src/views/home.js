@@ -36,6 +36,9 @@ const styles = (theme) =>({
     root: {
         flexGrow: 1,
         backgroundColor: theme.palette.background.paper,
+    },
+    right: {
+        marginLeft: 'auto'
     }
 })
 class Home extends React.Component {
@@ -254,7 +257,7 @@ class Home extends React.Component {
                         this.setState({
                             searchString: event.target.value
                         })
-                    }}/>
+                    }} className={classes.right}/>
                         <IconButton variant="contained" color="secondary"  onClick={()=>{
                             if(this.state.searchString.length > 0){
                                 getSearched(this.state.searchString)
