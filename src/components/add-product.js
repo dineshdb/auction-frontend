@@ -35,7 +35,7 @@ const styles = theme => ({
         margin: theme.spacing.unit*3,
     },
     close:{
-        marginLeft: theme.spacing.unit*80
+        marginLeft: theme.spacing.unit*90
     },
     card: {
         marginTop: "8%",

@@ -32,6 +32,7 @@ import Animate from 'react-simple-animate'
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Result from '../components/result'
 import DropDown from '@material-ui/icons/ArrowDropDown'
+
 let styles = (theme)=>{
     return {
         paper: {
@@ -40,9 +41,9 @@ let styles = (theme)=>{
 
         },
         biddingForm: {
-            margin: theme.spacing.unit,
+           margin: theme.spacing.unit,
             height: 350,
-            opacity: "0.7"
+            opacity: 0.9,
 
         },
         card: {
@@ -422,7 +423,7 @@ class ProductDetails extends React.Component {
                                     </Grid>
                                     <Grid item xs={5}>
                                         {
-                                            !this.state.eventEnded ? (!this.state.eventStarted ?  <Typography className={classes.description} style={{color: "red"}}>
+                                            !this.state.eventEnded ? (!this.state.eventStarted ?  <Typography className={classes.description} style={{color: "#abacff"}}>
                                                 starts in  {`${this.state.totalTime.days}d ${this.state.totalTime.hours}h ${this.state.totalTime.minutes}m ${this.state.totalTime.seconds}s  `}
 
                                             </Typography> : <div>
@@ -443,7 +444,7 @@ class ProductDetails extends React.Component {
                                     <div>
                                         {!this.state.openResult && <Button
                                             variant="contained"
-                                            color="primary"
+                                            color="secondary"
                                             onClick={()=>{
                                                 this.setState({
                                                     openResult: true

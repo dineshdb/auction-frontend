@@ -152,13 +152,15 @@ class LoginForm extends React.Component{
                     })
                     return getFavorites()
                 }).then(res =>{
+                    console.log("res",res)
                     res.map(favorite=>{
+                        console.log("favorites",favorite)
                         subscribeAuction(favorite)
                     })
                 })
 
             .catch(err => {
-                console.log("Error")
+                console.log("Error",err)
                 this.setState({
                     userOnline: false
                 })
