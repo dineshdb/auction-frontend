@@ -20,9 +20,8 @@ class Favorites extends React.Component {
     componentDidMount(){
         let favoritesFromApi = []
         getFavorites().then(res=>{
-            console.log("FAVS",res)
             store.dispatch(updateFavorites({favorites:res}))
-//            res.forEach(subscribeAuction)
+//
         }).catch(console.log)
         getFavorites()
             .then(res=> {
