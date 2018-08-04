@@ -25,7 +25,8 @@
     "react-simple-animate": "^1.9.8",
     "react-star-rating-component": "^1.4.1",
     "redux": "^4.0.0",
-    "stompjs": "^2.3.3"
+    "stompjs": "^2.3.3",
+    "typeface-roboto": "0.0.54"
   },
   "scripts": {
     "start": "react-scripts start",

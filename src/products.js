@@ -47,13 +47,13 @@ export function favorite(auctionId){
     return participateInAuction(auctionId)
 }
 export function getRating(itemId){
-    return fetchJSON(`${baseUrl}/getUsers/item/${itemId}`)
+    return fetchJSON(`${apiUrl}/getUsers/item/${itemId}`)
 }
 export function Rate(itemId,rating){
-    return fetchJSON(`${baseUrl}/rate/user/${store.getState().user.userId}/item/${itemId}/${rating}`)
+    return fetchJSON(`${apiUrl}/rate/user/${store.getState().user.userId}/item/${itemId}/${rating}`)
 }
 export function updateRate(itemId,rating){
-    return fetchJSON(`${baseUrl}/updateRating/user/${store.getState().user.userId}/item/${itemId}/${rating}`)
+    return fetchJSON(`${apiUrl}/updateRating/user/${store.getState().user.userId}/item/${itemId}/${rating}`)
 }
 
 export function unfavorite(auctionId){
