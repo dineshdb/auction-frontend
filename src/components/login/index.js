@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography'
 import {withStyles} from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import axios from 'axios'
 import {Redirect } from 'react-router-dom'
 import {getFavorites} from "../../products";
 import {subscribeAuction} from "../../socket";
@@ -133,9 +132,7 @@ class LoginForm extends React.Component{
             const {userEmailValid,userPasswordValid} = this.state
            this.setState({
                submitValid: (userEmailValid && userPasswordValid)
-           })
-            
-             
+           }) 
         }
 
         handleSubmit(event){           
