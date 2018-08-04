@@ -16,7 +16,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import axios from 'axios'
 import IconButton from '@material-ui/core/IconButton'
 import Collapse from '@material-ui/core/Collapse'
 import TextField from '@material-ui/core/TextField'
@@ -32,11 +31,9 @@ const styles = (theme) => {
             marginTop: "5%"
         },
         card: {
-
             marginTop: "8%",
             height: "250px",
             width: "100%",
-
         },
         media: {
             height: 0,
@@ -47,14 +44,12 @@ const styles = (theme) => {
             marginTop: theme.spacing.unit
         },
     }
-
 }
 
 function Transition(props) {
     return <Slide direction="up" {...props} />;
 }
 class SelectItem  extends React.Component{
-
     constructor(props){
         super(props)
         this.state={
@@ -247,7 +242,6 @@ class SelectItem  extends React.Component{
 
                     </DialogContent>
                     <DialogActions>
-
                         <CustomButton
                             name="Submit"
                             handler={handleSubmit}

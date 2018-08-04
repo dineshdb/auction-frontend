@@ -14,13 +14,8 @@ import ProductDetails from './components/product-details'
 import Notifications from './components/notifications'
 import Favorites from './views/favs'
 import UserProfile from './components/user-profile'
-import {getFavorites} from "./products";
-import {subscribeAuction} from "./socket";
 
 import store, {
-    subscribeAuctionAction,
-    updateAuctionListAction,
-    auctionStartedAction, updateFavorites
 } from './store'
 
 import AppBar from './components/app-bar'

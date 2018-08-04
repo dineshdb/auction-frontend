@@ -17,6 +17,9 @@ export function fetchFavorites(){
 export function fetchItemsFromCategory(id){
     return fetchJSON(`${baseUrl}/categories/${id}/items`)
 }
+export function fetchItemDetails(id){
+    return fetchJSON(`${baseUrl}/items/${id}`)
+}
 
 export function fetchProduct(id){
     return fetchJSON(`${baseProductUrl}/${id}`)
@@ -29,8 +32,12 @@ export function fetchEach(items){
 export function getCategories(){
     return fetchJSON(categoriesUrl)
 }
+
+export function addNewCategory(categoryName){
+    return fetchJSON(`${baseUrl}/categories`, {method: 'POST', body: JSON.stringify({categoryName})})
+}
 export function getSearched(search){
-    return fetchJSON(`${baseUrl}/items/query/${search}`)
+    return fetchJSON(`${baseUrl}/search/${search}`)
 }
 export function getFavorites(){
     return fetchJSON(`${baseUrl}/users/${store.getState().user.userId}/favorites`)
@@ -58,8 +65,8 @@ export function participateInAuction(auctionId){
     return fetch(url)
 }
 
-export function uploadFile(file){
-    return postForm(`${baseUrl}/uploadFile`, file)
+export function uploadFile(body){
+    return fetchJSON(`${baseUrl}/uploadFile`, {method: 'POST', body})
 }
 
 export function getAuctionDetails(auctionId){
@@ -90,4 +97,15 @@ export function endToday(){
 }
 export function userProfile(userId){
     return fetchJSON(`${baseUrl}/users/${userId}`)
+}
+
+export function signup(body){
+    return fetchJSON(`${baseUrl}/users/sign-up`, {method:'POST', body:JSON.stringify(body), mode:'cors', headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        // "Content-Type": "application/x-www-form-urlencoded",
+    },})
+}
+
+export function createAuction(body){
+    return fetchJSON(`${baseUrl}/auctions/createAuction`, {method: 'POST', body: JSON.stringify(body)})
 }

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
-import axios from 'axios'
 import Card from '@material-ui/core/Card'
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
@@ -14,6 +13,7 @@ import {CustomButton} from "./buttons";
 import Divider from '@material-ui/core/Divider'
 import store, {subscribeAuctionAction,updateAuctionListAction,getHighestBid,newBid} from '../store'
 import {Redirect } from 'react-router-dom'
+
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -25,13 +25,11 @@ import Favorite from '@material-ui/icons/FavoriteBorder'
 import Button from '@material-ui/core/Button'
 import {getRating} from "../products";
 import {baseUrl} from "../config";
-import {getFavorites} from "../products";
+import {getFavorites, fetchItemDetails} from "../products";
 import {subscribeAuction} from "../socket";
-import ToolTip from '@material-ui/core/Tooltip'
 import SnackBar from '@material-ui/core/Snackbar'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
-import Animate from 'react-simple-animate'
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Result from '../components/result'
 import DropDown from '@material-ui/icons/ArrowDropDown'
@@ -275,33 +273,21 @@ class ProductDetails extends React.Component {
         const {classes, match} = this.props
         const id = this.props.match.params.id
         const userId = store.getState().user.userId
+        
         let oneRating=0,twoRating=0,threeRating=0,fourRating=0,fiveRating=0
         let found = false
-        if (this.state.count === 0) {
-            axios({
-                method: 'GET',
-                url: `http://localhost:8080/items/${id}`,
-                headers: {
-                    'Authorization': store.getState().user.header
-                },
-            }).then((res) => {
-                let details = res.data
+        if (this.state.count === 0){
+            fetchItemDetails(id)
+            .then((res)=>{
+                let details = res
                 this.setState({
                     details: details,
                     count: 1
                 })
-                axios({
-                    method: 'GET',
-                    url: details.image,
-                    headers: {
-                        'Authorization': store.getState().user.header
-                    },
-                    responseType: 'blob'
-                }).then((response) => {
-                    const url = window.URL.createObjectURL(new Blob([response.data]))
-                    this.setState({
-                        image: url
-                    })
+
+                this.setState({
+                    image: details.image
+                })
                     let auction = details.auction
                     let participated = false
                     let buttonName = "Participate"
@@ -372,7 +358,6 @@ class ProductDetails extends React.Component {
                         }).catch(err => console.log(err))
 
 
-                })
             })
 
 
@@ -565,8 +550,6 @@ class ProductDetails extends React.Component {
                                     <Paper square className={classes.biddingForm}>
                                         <div className={classes.innerDiv}>
                                             <br/>
-
-
                                             {this.state.alreadyParticipated ?  (<div>
                                                 <Typography className={classes.subTitle} style={{marginTop: "20px"}}>
                                                     Highest Bid Rs.{highestBid > localHighest? highestBid: localHighest}
@@ -650,26 +633,12 @@ class ProductDetails extends React.Component {
                                                                 })
                                                         }
                                                         else{
-                                                            axios({
-                                                                method: 'POST',
-                                                                url: `http://localhost:8080/bids/saveBid`,
-                                                                headers: {
-                                                                    'Authorization':store.getState().user.header
-                                                                },
-                                                                data: biddingObject
-                                                            })
-
+                                                            setBid(biddingObject)
+                                                                .catch(console.log)
                                                         }
-
-
-
                                                     }
-
-
                                                 }
                                                 }
-
-
                                             />
                                             <Divider className={classes.subTitle}/>
                                             <Button

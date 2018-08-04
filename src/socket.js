@@ -1,4 +1,5 @@
 import {WebSocketUrl} from './config'
+import Stomp from 'stompjs'
 import store, {
     auctionStartedAction, 
     newBid, 
@@ -6,7 +7,6 @@ import store, {
     updateAuctionListAction
 } from './store'
 
-let Stomp = window.Stomp
 let subscriptions = {}
 let futureList = []
 

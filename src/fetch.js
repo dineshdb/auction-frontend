@@ -1,26 +1,28 @@
 import store from './store'
 
 export function fetchApi(path, options){
-    let headers = {
-        'Authorization': store.getState().user.header,
+    let defaults = {
+        headers : {
+            'Authorization': store.getState().user.header,    
+        },
+        mode : 'cors'
     }
-    options = Object.assign({}, options, {headers, mode: 'cors'})
-    return fetch(path, options)
+    return fetch(path, Object.assign(defaults, options))
 }
 
 export function fetchJSON(path, options){
-    return fetchApi(path, options).then(res => {
-        return res.json()})
+    return fetchApi(path, options).then(res => res.json())
 }
 export function postForm(url, body){
     let options = {
         method: 'POST',
         headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            'Authorization': store.getState().user.header,
         },
         body,
     }
-    return fetchApi(url, options)
+    return fetchJSON(url, options)
 }
 
 export default fetchApi

@@ -14,7 +14,6 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import List from '@material-ui/core/List'
 import Browse from '@material-ui/icons/Menu'
-import Favorite from '@material-ui/icons/Favorite'
 import Gallery from '@material-ui/icons/PhotoAlbum'
 import Live from '@material-ui/icons/LiveTv'
 import Upcoming from '@material-ui/icons/NewReleases'
@@ -24,11 +23,8 @@ import Search from '@material-ui/icons/Search'
 import {getSearched} from "../products";
 import moment from 'moment'
 import store, {
-    subscribeAuctionAction,
-    updateAuctionListAction,
-    auctionStartedAction, updateFavorites
+    updateFavorites
 } from '../store'
-import categories from "../reducers/categories";
 
 
 const styles = (theme) =>({
@@ -41,6 +37,9 @@ const styles = (theme) =>({
     root: {
         flexGrow: 1,
         backgroundColor: theme.palette.background.paper,
+    },
+    right: {
+        marginLeft: 'auto'
     }
 })
 class Home extends React.Component {
@@ -69,7 +68,8 @@ class Home extends React.Component {
             categories: [],
             fromCategory: [],
             left: false,
-            categoryRender: false
+            categoryRender: false,
+            recommendations: []
         }
     }
     componentDidMount() {
@@ -232,16 +232,11 @@ class Home extends React.Component {
                                                 }
 
                                             }
-
-
-
-
                                         })
                                         console.log("fAV",favorites)
                                         this.setState({fromCategory:favorites,categoryRender: true})
                                     })
                             }} key = {key} >{category.categoryName}</ListItem>
-
                         }
                     )
                     }
@@ -258,14 +253,13 @@ class Home extends React.Component {
                         <Tab label="Upcoming Auctions" icon = {<Upcoming/>}href="#basic-tabs" />
                         <Tab label="My Items" icon = {<MyItems/>}href="#basic-tabs" />
                         <Tab label="Categories" icon = {<Browse/>}href="#basic-tabs" />
-                        <Tab label="Searched" icon = {<Search/>}href="#basic-tabs" />
 
                     </Tabs>
                     <TextField placeholder="Search" onChange={(event)=>{
                         this.setState({
                             searchString: event.target.value
                         })
-                    }}/>
+                    }} className={classes.right}/>
                         <IconButton variant="contained" color="secondary"  onClick={()=>{
                             this.setState({
                                 categoryRender: false
@@ -313,10 +307,6 @@ class Home extends React.Component {
                                                 }
 
                                             }
-
-
-
-
                                         })
                                         console.log("fAV",favorites)
                                         this.setState({search:favorites,searchValue: true,value: 5})
@@ -356,8 +346,7 @@ class Home extends React.Component {
                 </div>}
                 {this.state.searchValue && value === 5 &&<div><Typography style={{margin: 5,fontWeight: "lighter"}}variant="display2" align="center">Search Results</Typography><TileView items={this.state.search} basePath={'/product/'}/></div>}
                 {value === 5 && this.state.categoryRender && <div><Typography style={{margin: 5,fontWeight: "lighter"}}variant="display2" align="center">Search Results</Typography><TileView items={this.state.fromCategory} basePath={"/product/"}/></div>}
-
-
+                <TileView items={this.state.recommendations} title="Recommendations" basePath={"/product/"}/>
             </div>
         )
     }
