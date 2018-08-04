@@ -278,40 +278,6 @@ class ProductDetails extends React.Component {
         let oneRating=0,twoRating=0,threeRating=0,fourRating=0,fiveRating=0
         let found = false
         if (this.state.count === 0) {
-            getRating(id)
-                .then(ratings => {
-                   if(!found){
-                       ratings.map((rating) => {
-                           if(rating.userId === store.getState().user.userId){
-                               this.setState({
-                                   hasRated: true,
-                                   rate: rating.rating,
-                               })
-                           }
-                           if (rating.rating === 5) {
-                               fiveRating += 1
-                           }
-                           if (rating.rating === 1) {
-                               oneRating += 1
-                           }
-                           if (rating.rating === 2) {
-                               twoRating += 1
-                           }
-                           if (rating.rating === 3) {
-                               threeRating += 1
-                           }
-                           if (rating.rating === 4) {
-                               fourRating += 1
-                           }
-                       })
-                   }
-
-                    ratings =[oneRating,twoRating,threeRating,fourRating,fiveRating]
-                    this.setState({
-                       ratings: ratings
-                    })
-
-                }).catch(err => console.log(err))
             axios({
                 method: 'GET',
                 url: `http://localhost:8080/items/${id}`,
@@ -370,10 +336,46 @@ class ProductDetails extends React.Component {
                         timeSlice: Number(data.auctionDuration) / 60,
                         eventDateTime: moment(data.auctionDate + ' ' + data.auctionTime)
                     })
+                    getRating(id)
+                        .then(ratings => {
+                            ratings.map((rating) => {
+                                if(rating.userId === store.getState().user.userId){
+                                    this.setState({
+                                        hasRated: true,
+                                        rate: rating.rating,
+                                    })
+
+                                }
+                                if (rating.rating === 5) {
+                                    fiveRating += 1
+                                }
+                                if (rating.rating === 1) {
+                                    oneRating += 1
+                                }
+                                if (rating.rating === 2) {
+                                    twoRating += 1
+                                }
+                                if (rating.rating === 3) {
+                                    threeRating += 1
+                                }
+                                if (rating.rating === 4) {
+                                    fourRating += 1
+                                }
+                            })
+
+
+                            ratings =[oneRating,twoRating,threeRating,fourRating,fiveRating]
+                            this.setState({
+                                ratings: ratings
+                            })
+
+                        }).catch(err => console.log(err))
 
 
                 })
             })
+
+
         }
         const {details,auctionDetails,bids,forHighestBid,forHighestBidder} = this.state
 
@@ -444,6 +446,7 @@ class ProductDetails extends React.Component {
                                         style={{fontSize: 17}}
                                     >Rs. {details.startingBid}
                                     </Typography>
+                                    <br/>
                                     {[5,4,3,2,1].map((x,key)=>{
                                         return <div>
                                            <Grid spacing={24}>
