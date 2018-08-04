@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
-import axios from 'axios'
 import Card from '@material-ui/core/Card'
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
@@ -260,31 +259,15 @@ class ProductDetails extends React.Component {
         const userId = store.getState().user.userId
         if (this.state.count === 0){
             fetchItemDetails(id)
-            // axios({
-            //     method: 'GET',
-            //     url: `http://localhost:8080/items/${id}`,
-            //     headers: {
-            //         'Authorization':store.getState().user.header
-            //     },
-            // })
             .then((res)=>{
                 let details = res
                 this.setState({
                     details: details,
                     count: 1
                 })
-                axios({
-                    method: 'GET',
-                    url: details.image,
-                    headers: {
-                        'Authorization':store.getState().user.header
-                    },
-                    responseType: 'blob'
-                }).then((response)=>{
-                    const url = window.URL.createObjectURL(new Blob([response.data]))
-                    this.setState({
-                        image: url
-                    })
+                this.setState({
+                    image: details.image
+                })
                     let auction = details.auction
                         let participated = false
                         let buttonName = "Participate"
@@ -323,7 +306,6 @@ class ProductDetails extends React.Component {
 
 
 
-                })
             })
         }
 
@@ -476,8 +458,6 @@ class ProductDetails extends React.Component {
                                     <Paper square className={classes.biddingForm}>
                                         <div className={classes.innerDiv}>
                                             <br/>
-
-
                                             {this.state.alreadyParticipated ?  (<div>
                                                 <Typography className={classes.subTitle} style={{marginTop: "20px"}}>
                                                     Highest Bid Rs.{highestBid > localHighest? highestBid: localHighest}
@@ -562,26 +542,12 @@ class ProductDetails extends React.Component {
                                                                 })
                                                         }
                                                         else{
-                                                            axios({
-                                                                method: 'POST',
-                                                                url: `http://localhost:8080/bids/saveBid`,
-                                                                headers: {
-                                                                    'Authorization':store.getState().user.header
-                                                                },
-                                                                data: biddingObject
-                                                            })
-
+                                                            setBid(biddingObject)
+                                                                .catch(console.log)
                                                         }
-
-
-
                                                     }
-
-
                                                 }
                                                 }
-
-
                                             />
                                             <Divider className={classes.subTitle}/>
                                             <Button

@@ -424,14 +424,6 @@ class SellProductForm extends React.Component {
                                                         }
                                                         console.log("AUCTION OBJECT",auctionObject)
                                                         createAuction(auctionObject)
-                                                        // axios({
-                                                        //     method: 'POST',
-                                                        //     url: `http://localhost:8080/auctions/createAuction`,
-                                                        //     headers: {
-                                                        //         'Authorization':store.getState().user.header,
-                                                        //     },
-                                                        //     data: auctionObject
-                                                        // })
                                                         .then(response=>{
                                                             console.log("SUCCESSFUL",response)
                                                             this.setState({
@@ -466,14 +458,6 @@ class SellProductForm extends React.Component {
                                                     }
                                                     console.log("AUCTION OBJECT",auctionObject)
                                                     createAuction(auctionObject)
-                                                    // axios({
-                                                    //     method: 'POST',
-                                                    //     url: `http://localhost:8080/auctions/createAuction`,
-                                                    //     headers: {
-                                                    //         'Authorization':store.getState().user.header,
-                                                    //     },
-                                                    //     data: auctionObject
-                                                    // })
                                                     .then(response=>{
                                                         console.log("SUCCESSFUL",response)
                                                         this.setState({
