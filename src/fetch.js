@@ -7,7 +7,7 @@ export function fetchApi(path, options){
         },
         mode : 'cors'
     }
-    return fetch(path, Object.assign({}, defaults, options))
+    return fetch(path, Object.assign(defaults, options))
 }
 
 export function fetchJSON(path, options){

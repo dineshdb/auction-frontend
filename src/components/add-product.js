@@ -339,8 +339,6 @@ class SellProductForm extends React.Component {
                                                         let imagePostObject = new FormData()
                                                         imagePostObject.append('file',selectedImage)
                                                         uploadFile( imagePostObject)
-                                                        .then(res => {
-                                                            return res.json()})
                                                         .then(res =>{
                                                             this.setState({
                                                                 image:res.fileDownloadUri

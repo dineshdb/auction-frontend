@@ -17,11 +17,6 @@ export function fetchFavorites(){
 export function fetchItemsFromCategory(id){
     return fetchJSON(`${baseUrl}/categories/${id}/items`)
 }
-
-(async function a(){
-    let b = await fetch("/hello")
-})()
-
 export function fetchItemDetails(id){
     return fetchJSON(`${baseUrl}/items/${id}`)
 }
