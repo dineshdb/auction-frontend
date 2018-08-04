@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import {Redirect} from 'react-router-dom'
 import Toolbar from '@material-ui/core/Toolbar'
 import Paper from '@material-ui/core/Paper'
-
+import {signup} from '../../products'
 const styles = theme => ({
     bootstrapRoot: {
         padding: 0,
@@ -199,6 +199,11 @@ class SignUpForm extends React.Component{
                 userPhone: phone,
                 userAddress: address
             }
+            // signup(signUpObject).then(res =>{
+            //     this.setState({
+            //         triggerSubmit: true
+            //     })
+            // })
             axios.post('http://localhost:8080/users/sign-up'
             ,(signUpObject),{crossDomain: true})
             .then(response => {

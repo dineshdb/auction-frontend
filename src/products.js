@@ -81,3 +81,7 @@ export function endToday(){
 export function userProfile(userId){
     return fetchJSON(`${baseUrl}/users/${userId}`)
 }
+
+export function signup(body){
+    return fetchJSON(`${baseUrl}/users/sign-up`, {method:'POST', body:JSON.stringify(body), mode:'cors'})
+}
