@@ -6,16 +6,25 @@ import Paper from '@material-ui/core/Paper'
 import Card from '@material-ui/core/Card'
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
+import Toolbar from '@material-ui/core/Toolbar'
+import {Rate,updateRate} from "../products";
 import Grid from '@material-ui/core/Grid'
 import {CustomButton} from "./buttons";
 import Divider from '@material-ui/core/Divider'
 import store, {subscribeAuctionAction,updateAuctionListAction,getHighestBid,newBid} from '../store'
 import {Redirect } from 'react-router-dom'
-import {participateInAuction,getAuctionDetails,setBid,getBidDetails} from '../products'
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import {participateInAuction, getAuctionDetails, setBid, getBidDetails, fetchEach} from '../products'
+import BootStrappedInput from '../components/textFields'
 import moment from 'moment'
 import TextField from '@material-ui/core/TextField'
 import Favorite from '@material-ui/icons/FavoriteBorder'
 import Button from '@material-ui/core/Button'
+import {getRating} from "../products";
+import {baseUrl} from "../config";
 import {getFavorites, fetchItemDetails} from "../products";
 import {subscribeAuction} from "../socket";
 import SnackBar from '@material-ui/core/Snackbar'
@@ -24,6 +33,9 @@ import CloseIcon from '@material-ui/icons/Close'
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Result from '../components/result'
 import DropDown from '@material-ui/icons/ArrowDropDown'
+import Rating from 'react-rating'
+import Red from '../../src/assets/images/red.png'
+import Grey from '../../src/assets/images/grey.png'
 let styles = (theme)=>{
     return {
         paper: {
@@ -32,9 +44,9 @@ let styles = (theme)=>{
 
         },
         biddingForm: {
-            margin: theme.spacing.unit,
+           margin: theme.spacing.unit,
             height: 350,
-            opacity: "0.7"
+            opacity: 0.9,
 
         },
         card: {
@@ -160,7 +172,10 @@ class ProductDetails extends React.Component {
             currentHighest:0,
             timeSlice: 0,
             localHighest:0,
-            openResult: false
+            openResult: false,
+            rate: 0,
+            ratings: [0,0,0,0,0],
+            hasRated: false
 
 
 
@@ -176,7 +191,8 @@ class ProductDetails extends React.Component {
                     })
                 }
 
-            })
+            }).catch(err=>console.log(err))
+
         }
 
         this.tick()
@@ -257,6 +273,9 @@ class ProductDetails extends React.Component {
         const {classes, match} = this.props
         const id = this.props.match.params.id
         const userId = store.getState().user.userId
+        
+        let oneRating=0,twoRating=0,threeRating=0,fourRating=0,fiveRating=0
+        let found = false
         if (this.state.count === 0){
             fetchItemDetails(id)
             .then((res)=>{
@@ -265,50 +284,84 @@ class ProductDetails extends React.Component {
                     details: details,
                     count: 1
                 })
+
                 this.setState({
                     image: details.image
                 })
                     let auction = details.auction
-                        let participated = false
-                        let buttonName = "Participate"
-                        auction.bidders.map((bidder)=>{
-                            if(bidder == userId){
-                                participated=true,
-                                    buttonName="Bid"
-                            }
-                        })
+                    let participated = false
+                    let buttonName = "Participate"
+                    auction.bidders.map((bidder) => {
+                        if (bidder == userId) {
+                            participated = true,
+                                buttonName = "Bid"
+                        }
+                    })
 
-                            auction.bids.map((bid)=>{
-                                getBidDetails(bid.bidId)
-                                    .then((res)=>{
+                    auction.bids.map((bid) => {
+                        getBidDetails(bid.bidId)
+                            .then((res) => {
 
-                                        this.setState({
-                                            bids: [...this.state.bids,{
-                                                auctionId: res.auction.auctionId,
-                                                userId: res.bidder,
-                                                bidAmount: res.bidAmount
-                                            }],
-                                            forHighestBidder: [...this.state.forHighestBidder,res.bidder],
-                                            forHighestBid: [...this.state.forHighestBid,res.bidAmount]
-                                        })
+                                this.setState({
+                                    bids: [...this.state.bids, {
+                                        auctionId: res.auction.auctionId,
+                                        userId: res.bidder,
+                                        bidAmount: res.bidAmount
+                                    }],
+                                    forHighestBidder: [...this.state.forHighestBidder, res.bidder],
+                                    forHighestBid: [...this.state.forHighestBid, res.bidAmount]
+                                })
+                            })
+                    })
+                    let data = auction
+                    this.setState({
+                        auctionDetails: auction,
+                        alreadyParticipated: participated,
+                        buttonName: buttonName,
+                        minutes: Number(data.auctionDuration) * 60,
+                        timeSlice: Number(data.auctionDuration) / 60,
+                        eventDateTime: moment(data.auctionDate + ' ' + data.auctionTime)
+                    })
+                    getRating(id)
+                        .then(ratings => {
+                            ratings.map((rating) => {
+                                if(rating.userId === store.getState().user.userId){
+                                    this.setState({
+                                        hasRated: true,
+                                        rate: rating.rating,
                                     })
+
+                                }
+                                if (rating.rating === 5) {
+                                    fiveRating += 1
+                                }
+                                if (rating.rating === 1) {
+                                    oneRating += 1
+                                }
+                                if (rating.rating === 2) {
+                                    twoRating += 1
+                                }
+                                if (rating.rating === 3) {
+                                    threeRating += 1
+                                }
+                                if (rating.rating === 4) {
+                                    fourRating += 1
+                                }
                             })
-                            let data = auction
+
+
+                            ratings =[oneRating,twoRating,threeRating,fourRating,fiveRating]
                             this.setState({
-                                auctionDetails: auction,
-                                alreadyParticipated: participated,
-                                buttonName: buttonName,
-                                minutes: Number(data.auctionDuration)*60,
-                                timeSlice: Number(data.auctionDuration)/60,
-                                eventDateTime: moment(data.auctionDate+' '+data.auctionTime)
+                                ratings: ratings
                             })
 
-
+                        }).catch(err => console.log(err))
 
 
             })
-        }
 
+
+        }
         const {details,auctionDetails,bids,forHighestBid,forHighestBidder} = this.state
 
         let localHighest = this.state.details.startingBid
@@ -378,6 +431,31 @@ class ProductDetails extends React.Component {
                                         style={{fontSize: 17}}
                                     >Rs. {details.startingBid}
                                     </Typography>
+                                    <br/>
+                                    {[5,4,3,2,1].map((x,key)=>{
+                                        return <div>
+                                           <Grid spacing={24}>
+                                               <Grid item xs={6}>
+
+                                                   <Rating
+                                                       readonly
+                                                       initialRating={x}
+                                                       emptySymbol={<img  src={Grey} style={{width:20,height:20}} className="icon" />}
+                                                       fullSymbol={<img  src={Red} style={{width:20,height:20}} className="icon" />}
+                                                   />
+                                               </Grid>
+                                               <Grid item xs={6}>
+                                                   <Typography style={{margin: 1}}>
+                                                       {this.state.ratings[key]} people rated {x}
+                                                   </Typography>
+                                               </Grid>
+
+
+
+                                            </Grid>
+
+                                        </div>
+                                    })}
                                 </div>
 
                             </Grid>
@@ -391,6 +469,20 @@ class ProductDetails extends React.Component {
                                 <Typography className={classes.title} style={{marginTop: "20px"}}>
                                     Rs.{this.state.details.startingBid}
                                 </Typography>
+                                <Rating
+                                    readonly={this.state.hasRated}
+                                    initialRating={this.state.rate}
+                                    onChange={(rate)=>{
+                                        console.log("RATE",rate)
+                                            Rate(this.props.match.params.id,rate).then(res=>{console.log(res)})
+                                        this.setState({
+                                            rate: rate,
+                                            hasRated: true
+                                        })
+                                    }}
+                                    emptySymbol={<img  src={Grey} style={{width:20,height:20}} className="icon" />}
+                                    fullSymbol={<img  src={Red} style={{width:20,height:20}} className="icon" />}
+                                />
 
 
                                 <Grid container spacing={24}>
@@ -398,7 +490,7 @@ class ProductDetails extends React.Component {
                                     </Grid>
                                     <Grid item xs={5}>
                                         {
-                                            !this.state.eventEnded ? (!this.state.eventStarted ?  <Typography className={classes.description} style={{color: "red"}}>
+                                            !this.state.eventEnded ? (!this.state.eventStarted ?  <Typography className={classes.description} style={{color: "#abacff"}}>
                                                 starts in  {`${this.state.totalTime.days}d ${this.state.totalTime.hours}h ${this.state.totalTime.minutes}m ${this.state.totalTime.seconds}s  `}
 
                                             </Typography> : <div>
@@ -419,7 +511,7 @@ class ProductDetails extends React.Component {
                                     <div>
                                         {!this.state.openResult && <Button
                                             variant="contained"
-                                            color="primary"
+                                            color="secondary"
                                             onClick={()=>{
                                                 this.setState({
                                                     openResult: true
@@ -492,10 +584,9 @@ class ProductDetails extends React.Component {
                                                 property={classes.textMargin}
                                                 handler={()=>{
 
-                                                    if((this.state.participated || this.state.alreadyParticipated) &&  (this.state.bidAmount < details.startingBid)){
-                                                        console.log("LESS")
+                                                    if((this.state.participated || this.state.alreadyParticipated) &&  ((this.state.bidAmount < details.startingBid) || (this.state.bidAmount <= highestBid))){
                                                         this.setState({
-                                                            bidReject: true
+                                                            bidReject: true,
                                                         })
                                                     }
                                                     else{
@@ -595,7 +686,7 @@ class ProductDetails extends React.Component {
                     ContentProps={{
                         'aria-describedby': 'message-id',
                     }}
-                    message={<span id="message-id">Oops!!! You must bid greater than starting bid </span>}
+                    message={<span id="message-id">Oops!!! You bid is less than the current bid </span>}
                     action={[
                         <IconButton
                             key="close"

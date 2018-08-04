@@ -1,11 +1,12 @@
 import { createMuiTheme } from '@material-ui/core/styles';
+import 'typeface-roboto'
 
 export default createMuiTheme({
     palette: {
         primary: {
             light: '#536bea',
-            main: '#f8fbe4',
-            dark: '#abacff',
+            main: '#caf6fb',
+            dark: '#238fcb',
             contrastText: '#5b5b5b',
         },
         secondary: {
@@ -26,12 +27,14 @@ export default createMuiTheme({
             }}},
     typography: {
         fontFamily: [
+            'typeface-roboto',
             '-apple-system',
             'BlinkMacSystemFont',
             '"Segoe UI"',
             'Roboto',
             '"Helvetica Neue"',
             'sans-serif',
+            'Comic-sans',
             '"Apple Color Emoji"',
             '"Segoe UI Emoji"',
             '"Segoe UI Symbol"',

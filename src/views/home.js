@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import {connect} from 'react-redux'
 import TileView from '../components/tile-view'
+import Typography from '@material-ui/core/Typography'
 import {fetchProducts, fetchEach, getAuctionDetails, getFavorites, fetchProduct, getCategories,fetchItemsFromCategory} from '../products'
 import Drawer from '@material-ui/core/Drawer'
 import IconButton from '@material-ui/core/IconButton'
@@ -172,7 +173,8 @@ class Home extends React.Component {
     toggleDrawer = (side, open) => () => {
         this.setState({
             [side]: open,
-            value: 5
+            value: 5,
+            searchValue: false
         });
     };
     handleChange = (event, value) => {
@@ -243,7 +245,7 @@ class Home extends React.Component {
         );
         return (
             <div>
-                <AppBar position="sticky">
+                <AppBar position="sticky" style={{opacity: 1}} elevation="0">
                     <Toolbar>
                     <Tabs value={value} onChange={this.handleChange}>
                         <Tab label="Gallery" icon = {<Gallery/>} href="#basic-tabs"/>
@@ -259,6 +261,9 @@ class Home extends React.Component {
                         })
                     }} className={classes.right}/>
                         <IconButton variant="contained" color="secondary"  onClick={()=>{
+                            this.setState({
+                                categoryRender: false
+                            })
                             if(this.state.searchString.length > 0){
                                 getSearched(this.state.searchString)
                                     .then(fetchEach)
@@ -307,6 +312,11 @@ class Home extends React.Component {
                                         this.setState({search:favorites,searchValue: true,value: 5})
                                     })
                             }
+                            else{
+                                this.setState({
+                                    search: [],searchValue: false,value:5
+                                })
+                            }
                         }}><Search/>
                         </IconButton>
                     </Toolbar>
@@ -331,11 +341,9 @@ class Home extends React.Component {
                         </div>
                     </Drawer>
                 </div>}
-                {this.state.searchValue && value === 5 && <TileView title="Search Results" items={this.state.search} basePath={'/product/'}/>}
-                {value === 5 && this.state.categoryRender && <TileView items={this.state.fromCategory} basePath={"/product/"}/>}
+                {this.state.searchValue && value === 5 &&<div><Typography style={{margin: 5,fontWeight: "lighter"}}variant="display2" align="center">Search Results</Typography><TileView items={this.state.search} basePath={'/product/'}/></div>}
+                {value === 5 && this.state.categoryRender && <div><Typography style={{margin: 5,fontWeight: "lighter"}}variant="display2" align="center">Search Results</Typography><TileView items={this.state.fromCategory} basePath={"/product/"}/></div>}
                 <TileView items={this.state.recommendations} title="Recommendations" basePath={"/product/"}/>
-
-
             </div>
         )
     }

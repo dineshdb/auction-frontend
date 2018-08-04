@@ -149,13 +149,15 @@ class LoginForm extends React.Component{
                     })
                     return getFavorites()
                 }).then(res =>{
+                    console.log("res",res)
                     res.map(favorite=>{
+                        console.log("favorites",favorite)
                         subscribeAuction(favorite)
                     })
                 })
 
             .catch(err => {
-                console.log("Error")
+                console.log("Error",err)
                 this.setState({
                     userOnline: false
                 })
@@ -229,18 +231,20 @@ class LoginForm extends React.Component{
 
                             />
                             <div style={{float: "right", margin: "5px"}}>
-                            <Button
-                                variant = "contained"
-                                type="submit"
-                                color="primary"
-                                className={classes.button}
-                            ><Typography style={{fontWeight: "lighter"}}>
-                                Login
-                            </Typography>
-                            </Button>
+                                <Button
+
+                                    style={{width: "100%",borderRadius: 0,color: "black"}}
+                                    variant = "contained"
+                                    type="submit"
+                                    color="primary"
+                                    className={classes.button}
+                                >LOGIN
+                                </Button>
                             </div>
                         </div>
+
                             </Grid>
+
 
 
                             </Grid>
