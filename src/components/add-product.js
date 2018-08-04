@@ -17,7 +17,7 @@ import {Redirect} from 'react-router-dom'
 import store from '../store'
 import CloseIcon from "@material-ui/icons/Close"
 import IconButton from '@material-ui/core/IconButton'
-import {getCategories, uploadFile} from '../products'
+import {getCategories, uploadFile, addNewCategory} from '../products'
 
 const styles = theme => ({
     root: {
@@ -400,14 +400,8 @@ class SellProductForm extends React.Component {
                                                 let catId = null
                                                 if(this.state.newCategory !== null){
                                                     console.log("NEW CATEGORY",this.state.newCategory)
-                                                    axios({
-                                                        method: 'POST',
-                                                        url: `http://localhost:8080/categories`,
-                                                        headers: {
-                                                            'Authorization':store.getState().user.header,
-                                                        },
-                                                        data: {categoryName: this.state.newCategory}
-                                                    }).then(res=>{
+                                                    addNewCategory(this.state.newCategory)
+                                                    .then(res=>{
                                                         console.log('res',res)
                                                         let auctionObject = {
                                                             auctionName: this.state.title,
@@ -424,7 +418,7 @@ class SellProductForm extends React.Component {
                                                                     image: this.state.image,
                                                                     auction: null,
                                                                     bids: [],
-                                                                    itemCategories: [res.data.categoryId]
+                                                                    itemCategories: [res.categoryId]
                                                                 }
                                                             ],
                                                             seller: store.getState().user.userId,

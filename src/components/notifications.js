@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography'
 import {connect} from 'react-redux'
 import store,{newBid} from '../store'
-import axios from 'axios'
 import BiddingTemplate from '../components/biddingTemplate'
 import {getAuctionDetails} from '../products'
 let styles = {

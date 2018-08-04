@@ -12,23 +12,16 @@ import {CustomButton} from "./buttons";
 import Divider from '@material-ui/core/Divider'
 import store, {subscribeAuctionAction,updateAuctionListAction,getHighestBid,newBid} from '../store'
 import {Redirect } from 'react-router-dom'
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import {participateInAuction,getAuctionDetails,setBid,getBidDetails} from '../products'
-import BootStrappedInput from '../components/textFields'
 import moment from 'moment'
 import TextField from '@material-ui/core/TextField'
 import Favorite from '@material-ui/icons/FavoriteBorder'
 import Button from '@material-ui/core/Button'
-import {baseUrl} from "../config";
-import {getFavorites} from "../products";
+import {getFavorites, fetchItemDetails} from "../products";
 import {subscribeAuction} from "../socket";
-import ToolTip from '@material-ui/core/Tooltip'
 import SnackBar from '@material-ui/core/Snackbar'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
-import Animate from 'react-simple-animate'
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Result from '../components/result'
 import DropDown from '@material-ui/icons/ArrowDropDown'
@@ -266,15 +259,16 @@ class ProductDetails extends React.Component {
         const id = this.props.match.params.id
         const userId = store.getState().user.userId
         if (this.state.count === 0){
-
-            axios({
-                method: 'GET',
-                url: `http://localhost:8080/items/${id}`,
-                headers: {
-                    'Authorization':store.getState().user.header
-                },
-            }).then((res)=>{
-                let details = res.data
+            fetchItemDetails(id)
+            // axios({
+            //     method: 'GET',
+            //     url: `http://localhost:8080/items/${id}`,
+            //     headers: {
+            //         'Authorization':store.getState().user.header
+            //     },
+            // })
+            .then((res)=>{
+                let details = res
                 this.setState({
                     details: details,
                     count: 1

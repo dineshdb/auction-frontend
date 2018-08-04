@@ -18,6 +18,10 @@ export function fetchItemsFromCategory(id){
     return fetchJSON(`${baseUrl}/categories/${id}/items`)
 }
 
+export function fetchItemDetails(id){
+    return fetchJSON(`${baseUrl}/items/${id}`)
+}
+
 export function fetchProduct(id){
     return fetchJSON(`${baseProductUrl}/${id}`)
 }
@@ -27,6 +31,10 @@ export function fetchEach(items){
 
 export function getCategories(){
     return fetchJSON(categoriesUrl)
+}
+
+export function addNewCategory(categoryName){
+    return fetchJSON(`${baseUrl}/categories`, {method: 'POST', body: JSON.stringify({categoryName})})
 }
 export function getSearched(search){
     return fetchJSON(`${baseUrl}/items/query/${search}`)

@@ -60,7 +60,6 @@ class TileView extends React.Component {
                 )}
             </Grid>
             </Paper>
-
         )
     }
 }

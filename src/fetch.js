@@ -7,8 +7,7 @@ export function fetchApi(path, options){
         },
         mode : 'cors'
     }
-    options = Object.assign({}, defaults, options)
-    return fetch(path, options)
+    return fetch(path, Object.assign({}, defaults, options))
 }
 
 export function fetchJSON(path, options){
@@ -18,11 +17,12 @@ export function postForm(url, body){
     let options = {
         method: 'POST',
         headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            'Authorization': store.getState().user.header,
         },
         body,
     }
-    return fetchApi(url, options)
+    return fetchJSON(url, options)
 }
 
 export default fetchApi
