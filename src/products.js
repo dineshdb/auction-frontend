@@ -55,8 +55,8 @@ export function participateInAuction(auctionId){
     return fetch(url)
 }
 
-export function uploadFile(file){
-    return postForm(`${baseUrl}/uploadFile`, file)
+export function uploadFile(body){
+    return fetchJSON(`${baseUrl}/uploadFile`, {method: 'POST', body})
 }
 
 export function getAuctionDetails(auctionId){

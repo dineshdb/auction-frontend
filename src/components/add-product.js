@@ -332,10 +332,11 @@ class SellProductForm extends React.Component {
                                                            itemCategory: itemCategory,
                                                            startingBid: startingBid
                                                        }
-                                                       //TODO LOTS OF CRABS
-                                                        let imagePostObject = new FormData()
-                                                        imagePostObject.append('file',selectedImage)
-                                                        uploadFile( imagePostObject)
+                                                        
+                                                        let data = new FormData()
+                                                        data.append("file", selectedImage)
+                                                        console.log(data)
+                                                        uploadFile( data)
                                                         .then(res =>{
                                                             this.setState({
                                                                 image:res.fileDownloadUri

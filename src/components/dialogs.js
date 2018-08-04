@@ -31,11 +31,9 @@ const styles = (theme) => {
             marginTop: "5%"
         },
         card: {
-
             marginTop: "8%",
             height: "250px",
             width: "100%",
-
         },
         media: {
             height: 0,
@@ -46,14 +44,12 @@ const styles = (theme) => {
             marginTop: theme.spacing.unit
         },
     }
-
 }
 
 function Transition(props) {
     return <Slide direction="up" {...props} />;
 }
 class SelectItem  extends React.Component{
-
     constructor(props){
         super(props)
         this.state={
@@ -246,7 +242,6 @@ class SelectItem  extends React.Component{
 
                     </DialogContent>
                     <DialogActions>
-
                         <CustomButton
                             name="Submit"
                             handler={handleSubmit}
