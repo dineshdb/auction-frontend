@@ -307,9 +307,6 @@ class Home extends React.Component {
                                         this.setState({search:favorites,searchValue: true,value: 5})
                                     })
                             }
-
-
-
                         }}><Search/>
                         </IconButton>
                     </Toolbar>
