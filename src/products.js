@@ -83,5 +83,8 @@ export function userProfile(userId){
 }
 
 export function signup(body){
-    return fetchJSON(`${baseUrl}/users/sign-up`, {method:'POST', body:JSON.stringify(body), mode:'cors'})
+    return fetchJSON(`${baseUrl}/users/sign-up`, {method:'POST', body:JSON.stringify(body), mode:'cors', headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        // "Content-Type": "application/x-www-form-urlencoded",
+    },})
 }

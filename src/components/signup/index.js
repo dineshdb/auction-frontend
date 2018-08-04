@@ -5,7 +5,6 @@ import {Link } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
-import axios from 'axios'
 import Typography from '@material-ui/core/Typography'
 import {Redirect} from 'react-router-dom'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -199,17 +198,12 @@ class SignUpForm extends React.Component{
                 userPhone: phone,
                 userAddress: address
             }
-            // signup(signUpObject).then(res =>{
-            //     this.setState({
-            //         triggerSubmit: true
-            //     })
-            // })
-            axios.post('http://localhost:8080/users/sign-up'
-            ,(signUpObject),{crossDomain: true})
-            .then(response => {
+            signup(signUpObject).then(res =>{
                 this.setState({
                     triggerSubmit: true
                 })    
+            }).catch(err =>{
+                console.log("Could not signup", err)
             })
         }
 
