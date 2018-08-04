@@ -317,9 +317,6 @@ class Home extends React.Component {
                                     search: [],searchValue: false,value:5
                                 })
                             }
-
-
-
                         }}><Search/>
                         </IconButton>
                     </Toolbar>
