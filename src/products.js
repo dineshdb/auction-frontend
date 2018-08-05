@@ -22,6 +22,7 @@ export function fetchProduct(id){
     return fetchJSON(`${baseProductUrl}/${id}`)
 }
 export function fetchEach(items){
+    console.log("ITEMS",items)
     return Promise.all(items.map(fetchProduct))
 }
 
@@ -37,6 +38,15 @@ export function getFavorites(){
 
 export function favorite(auctionId){
     return participateInAuction(auctionId)
+}
+export function getRating(itemId){
+    return fetchJSON(`${baseUrl}/getUsers/item/${itemId}`)
+}
+export function Rate(itemId,rating){
+    return fetchJSON(`${baseUrl}/rate/user/${store.getState().user.userId}/item/${itemId}/${rating}`)
+}
+export function updateRate(itemId,rating){
+    return fetchJSON(`${baseUrl}/updateRating/user/${store.getState().user.userId}/item/${itemId}/${rating}`)
 }
 
 export function unfavorite(auctionId){
