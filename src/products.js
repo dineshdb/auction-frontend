@@ -29,7 +29,7 @@ export function getCategories(){
     return fetchJSON(categoriesUrl)
 }
 export function getSearched(search){
-    return fetchJSON(`${baseUrl}/items/query/${search}`)
+    return fetchJSON(`${baseUrl}/search/${search}`)
 }
 export function getFavorites(){
     return fetchJSON(`${baseUrl}/users/${store.getState().user.userId}/favorites`)

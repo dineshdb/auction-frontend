@@ -352,6 +352,7 @@ class ProductDetails extends React.Component {
                 highestBidder = bid.maximumBidder
             }
         })
+    
 
 
 
